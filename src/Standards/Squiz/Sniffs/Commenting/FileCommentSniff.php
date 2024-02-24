@@ -45,11 +45,11 @@ class FileCommentSniff implements Sniff
         if ($tokens[$commentStart]['code'] === T_COMMENT) {
             $phpcsFile->addError('You must use "/**" style comments for a file comment', $commentStart, 'WrongStyle');
             $phpcsFile->recordMetric($stackPtr, 'File has doc comment', 'yes');
-            return ($phpcsFile->numTokens + 1);
+            return $phpcsFile->numTokens;
         } else if ($commentStart === false || $tokens[$commentStart]['code'] !== T_DOC_COMMENT_OPEN_TAG) {
             $phpcsFile->addError('Missing file doc comment', $stackPtr, 'Missing');
             $phpcsFile->recordMetric($stackPtr, 'File has doc comment', 'no');
-            return ($phpcsFile->numTokens + 1);
+            return $phpcsFile->numTokens;
         }
 
         if (isset($tokens[$commentStart]['comment_closer']) === false
@@ -57,7 +57,7 @@ class FileCommentSniff implements Sniff
             && $tokens[$commentStart]['comment_closer'] === ($phpcsFile->numTokens - 1))
         ) {
             // Don't process an unfinished file comment during live coding.
-            return ($phpcsFile->numTokens + 1);
+            return $phpcsFile->numTokens;
         }
 
         $commentEnd = $tokens[$commentStart]['comment_closer'];
@@ -106,7 +106,7 @@ class FileCommentSniff implements Sniff
         if (in_array($tokens[$nextToken]['code'], $ignore, true) === true) {
             $phpcsFile->addError('Missing file doc comment', $stackPtr, 'Missing');
             $phpcsFile->recordMetric($stackPtr, 'File has doc comment', 'no');
-            return ($phpcsFile->numTokens + 1);
+            return $phpcsFile->numTokens;
         }
 
         $phpcsFile->recordMetric($stackPtr, 'File has doc comment', 'yes');
@@ -210,7 +210,7 @@ class FileCommentSniff implements Sniff
         }//end foreach
 
         // Ignore the rest of the file.
-        return ($phpcsFile->numTokens + 1);
+        return $phpcsFile->numTokens;
 
     }//end process()
 

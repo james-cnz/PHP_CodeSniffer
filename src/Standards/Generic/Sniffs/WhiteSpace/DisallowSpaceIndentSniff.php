@@ -201,7 +201,7 @@ class DisallowSpaceIndentSniff implements Sniff
         }//end for
 
         // Ignore the rest of the file.
-        return ($phpcsFile->numTokens + 1);
+        return $phpcsFile->numTokens;
 
     }//end process()
 
