@@ -139,7 +139,7 @@ final class GitModifiedTest extends AbstractFilterTestCase
                 'outputGitModified' => [
                     '.gitignore',
                     'phpcs.xml.dist',
-                    'src/Standards/Squiz/Tests/WhiteSpace/OperatorSpacingUnitTest.inc.fixed',
+                    'src/Standards/Squiz/Tests/WhiteSpace/OperatorSpacingUnitTest.1.inc.fixed',
                 ],
                 'expectedOutput'    => [
                     $basedir.'/src',
@@ -175,8 +175,8 @@ final class GitModifiedTest extends AbstractFilterTestCase
                     '.yamllint.yml',
                     'autoload.php',
                     'src/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php',
-                    'src/Standards/Squiz/Tests/WhiteSpace/OperatorSpacingUnitTest.inc',
-                    'src/Standards/Squiz/Tests/WhiteSpace/OperatorSpacingUnitTest.inc.fixed',
+                    'src/Standards/Squiz/Tests/WhiteSpace/OperatorSpacingUnitTest.1.inc',
+                    'src/Standards/Squiz/Tests/WhiteSpace/OperatorSpacingUnitTest.1.inc.fixed',
                     'src/Standards/Squiz/Tests/WhiteSpace/OperatorSpacingUnitTest.php',
                 ],
                 'expectedOutput'    => [
@@ -189,7 +189,7 @@ final class GitModifiedTest extends AbstractFilterTestCase
                     $basedir.'/src/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php',
                     $basedir.'/src/Standards/Squiz/Tests',
                     $basedir.'/src/Standards/Squiz/Tests/WhiteSpace',
-                    $basedir.'/src/Standards/Squiz/Tests/WhiteSpace/OperatorSpacingUnitTest.inc',
+                    $basedir.'/src/Standards/Squiz/Tests/WhiteSpace/OperatorSpacingUnitTest.1.inc',
                     $basedir.'/src/Standards/Squiz/Tests/WhiteSpace/OperatorSpacingUnitTest.php',
                 ],
             ],
