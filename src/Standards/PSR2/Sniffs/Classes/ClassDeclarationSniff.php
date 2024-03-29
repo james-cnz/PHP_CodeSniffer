@@ -393,7 +393,7 @@ class ClassDeclarationSniff extends PEARClassDeclarationSniff
                     }
                 }//end if
             } else {
-                // Not part of a longer fully qualified class name.
+                // Not part of a longer fully qualified or namespace relative class name.
                 if ($tokens[($className - 1)]['code'] === T_COMMA) {
                     $error = 'Expected 1 space before "%s"; 0 found';
                     $data  = [$tokens[$className]['content']];
