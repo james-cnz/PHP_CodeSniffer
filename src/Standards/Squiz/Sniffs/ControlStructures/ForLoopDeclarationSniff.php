@@ -66,7 +66,7 @@ class ForLoopDeclarationSniff implements Sniff
         $tokens = $phpcsFile->getTokens();
 
         $openingBracket = $phpcsFile->findNext(T_OPEN_PARENTHESIS, $stackPtr);
-        if ($openingBracket === false) {
+        if ($openingBracket === false || isset($tokens[$openingBracket]['parenthesis_closer']) === false) {
             // Parse error or live coding.
             return;
         }
