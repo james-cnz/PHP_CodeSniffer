@@ -26,42 +26,50 @@ final class ForLoopDeclarationUnitTest extends AbstractSniffUnitTest
      * The key of the array should represent the line number and the value
      * should represent the number of errors that should occur on that line.
      *
+     * @param string $testFile The name of the file being tested.
+     *
      * @return array<int, int>
      */
-    public function getErrorList()
+    public function getErrorList($testFile='')
     {
-        return [
-            8   => 2,
-            11  => 2,
-            14  => 2,
-            17  => 2,
-            21  => 6,
-            27  => 1,
-            30  => 1,
-            37  => 2,
-            39  => 2,
-            43  => 1,
-            49  => 1,
-            50  => 1,
-            53  => 1,
-            54  => 1,
-            59  => 4,
-            62  => 1,
-            63  => 1,
-            64  => 1,
-            66  => 1,
-            69  => 1,
-            74  => 1,
-            77  => 1,
-            82  => 2,
-            86  => 2,
-            91  => 1,
-            95  => 1,
-            101 => 2,
-            105 => 2,
-            110 => 1,
-            116 => 2,
-        ];
+        switch ($testFile) {
+        case 'ForLoopDeclarationUnitTest.1.inc':
+            return [
+                8   => 2,
+                11  => 2,
+                14  => 2,
+                17  => 2,
+                21  => 6,
+                27  => 1,
+                30  => 1,
+                37  => 2,
+                39  => 2,
+                43  => 1,
+                49  => 1,
+                50  => 1,
+                53  => 1,
+                54  => 1,
+                59  => 4,
+                62  => 1,
+                63  => 1,
+                64  => 1,
+                66  => 1,
+                69  => 1,
+                74  => 1,
+                77  => 1,
+                82  => 2,
+                86  => 2,
+                91  => 1,
+                95  => 1,
+                101 => 2,
+                105 => 2,
+                110 => 1,
+                116 => 2,
+            ];
+
+        default:
+            return [];
+        }//end switch
 
     }//end getErrorList()
 
