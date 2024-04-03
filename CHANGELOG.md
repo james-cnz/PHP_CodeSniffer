@@ -6440,14 +6440,13 @@ Additionally, thanks to [Alexander Turek][@derrabus] for consulting on the repo 
 
 ## 0.7.0 - 2007-07-02
 ### Changed
-- BC BREAK: EOL character is now auto-detected and used instead of hard-coded \n
+- :warning: **BC BREAK**: EOL character is now auto-detected and used instead of hard-coded \n
     - Pattern sniffs must now specify "EOL" instead of "\n" or "\r\n" to use auto-detection
     - Please use $phpcsFile->eolChar to check for newlines instead of hard-coding "\n" or "\r\n"
     - Comment parser classes now require you to pass $phpcsFile as an additional argument
-- BC BREAK: Included and excluded sniffs now require .php extension
+- :warning: **BC BREAK**: Included and excluded sniffs now require .php extension
     - Please update your coding standard classes and add ".php" to all sniff entries
     - See CodeSniffer/Standards/PEAR/PEARCodingStandard.php for an example
-
 - Fixed error where including a directory of sniffs in a coding standard class did not work
 - Coding standard classes can now specify a list of sniffs to exclude as well as include (feature request [#11056][pear-11056])
 - Two uppercase characters can now be placed side-by-side in class names in Squiz ValidClassNameSniff
@@ -6520,9 +6519,8 @@ Additionally, thanks to [Alexander Turek][@derrabus] for consulting on the repo 
 
 ## 0.5.0 - 2007-04-17
 ### Changed
-- BC BREAK: Coding standards now require a class to be added so PHP_CodeSniffer can get information from them
+- :warning: **BC BREAK**: Coding standards now require a class to be added so PHP_CodeSniffer can get information from them
     - Please read the end user docs for info about the new class required for all coding standards
-
 - Coding standards can now include sniffs from other standards, or whole standards, without writing new sniff files
 - PHP_CodeSniffer_File::isReference() now correctly returns for references in function declarations
 - PHP_CodeSniffer_File::isReference() now returns false if you don't pass it a T_BITWISE_AND token
