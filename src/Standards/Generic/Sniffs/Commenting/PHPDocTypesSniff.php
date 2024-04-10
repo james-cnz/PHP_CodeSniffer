@@ -18,6 +18,8 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use PHP_CodeSniffer\Util\PHPDocTypeParser;
 
+class CanIHasMoreClasses {}
+
 /**
  * Check PHPDoc Types.
  */
