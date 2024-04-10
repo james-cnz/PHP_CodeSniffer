@@ -7,9 +7,9 @@
  * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
-namespace PHP_CodeSniffer\tests\Core\Util;
+namespace PHP_CodeSniffer\Tests\Core\Util;
 
-use PHP_CodeSniffer\tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 /**
  * Unit test class for the PHPDoc Type Parser utility.
