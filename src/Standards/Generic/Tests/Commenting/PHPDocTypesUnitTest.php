@@ -42,7 +42,6 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
                 17 => 1,
                 23 => 1,
                 24 => 1,
-                28 => 1,
                 30 => 1,
                 31 => 1,
                 32 => 1,
@@ -75,11 +74,26 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
      * The key of the array should represent the line number and the value
      * should represent the number of warnings that should occur on that line.
      *
+     * @param string $testFile The name of the file being tested.
+     *
      * @return array<int, int>
      */
-    public function getWarningList()
+    public function getWarningList($testFile='')
     {
-        return [];
+        switch ($testFile) {
+            case 'PHPDocTypesUnitTest.right.inc':
+                return [];
+            case 'PHPDocTypesUnitTest.right_namespace.inc':
+                return [];
+            case 'PHPDocTypesUnitTest.wrong.inc':
+                return [
+                    28 => 1,
+                ];
+            case 'PHPDocTypesUnitTest.wrong_parse.inc':
+                return [];
+            default:
+                return [];
+            }//end switch
 
     }//end getWarningList()
 
