@@ -7,7 +7,7 @@
  * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
-namespace PHP_CodeSniffer\Tests\Core\Util;
+namespace PHP_CodeSniffer\tests\Core\Util;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
