@@ -7,7 +7,7 @@
  * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
-namespace PHP_CodeSniffer\Standards\PSR5\Tests\Commenting;
+namespace PHP_CodeSniffer\Standards\PSR5\Tests;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
@@ -15,6 +15,7 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
  * Unit test class for the PHPDoc Types sniff.
  *
  * @covers \PHP_CodeSniffer\Standards\Generic\Sniffs\Commenting\PHPDocTypesSniff
+ * @covers \PHP_CodeSniffer\Util\PHPDocTypeParser
  */
 final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
 {
