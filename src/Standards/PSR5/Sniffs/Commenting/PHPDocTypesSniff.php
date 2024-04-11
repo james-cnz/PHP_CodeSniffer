@@ -19,9 +19,10 @@ use PHP_CodeSniffer\Standards\Generic\Sniffs\Commenting\PHPDocTypesSniff as Snif
  */
 class PHPDocTypesSniff extends SniffBase
 {
+
     /**
      * Throw an error and stop if we can't parse the file.
-     * 
+     *
      * @var boolean
      */
     public bool $debugMode = false;
@@ -76,4 +77,4 @@ class PHPDocTypesSniff extends SniffBase
      */
     public bool $checkPassSplat = true;
 
-}
+}//end class

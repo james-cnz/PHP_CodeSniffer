@@ -66,27 +66,27 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
             ];
         case 'PHPDocTypesUnitTest.wrong_types.inc':
             return [
-                22 => 1,
-                30 => 1,
-                37 => 1,
-                40 => 1,
-                44 => 1,
-                48 => 1,
-                52 => 1,
-                55 => 1,
-                58 => 1,
-                61 => 1,
-                64 => 1,
-                67 => 1,
-                70 => 1,
-                74 => 1,
-                77 => 1,
-                80 => 1,
-                83 => 1,
-                86 => 1,
-                89 => 1,
-                92 => 1,
-                95 => 1,
+                22  => 1,
+                30  => 1,
+                37  => 1,
+                40  => 1,
+                44  => 1,
+                48  => 1,
+                52  => 1,
+                55  => 1,
+                58  => 1,
+                61  => 1,
+                64  => 1,
+                67  => 1,
+                70  => 1,
+                74  => 1,
+                77  => 1,
+                80  => 1,
+                83  => 1,
+                86  => 1,
+                89  => 1,
+                92  => 1,
+                95  => 1,
                 100 => 1,
                 107 => 1,
                 110 => 1,
@@ -111,23 +111,23 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
     public function getWarningList($testFile='')
     {
         switch ($testFile) {
-            case 'PHPDocTypesUnitTest.right.inc':
-                return [];
-            case 'PHPDocTypesUnitTest.right_namespace.inc':
-                return [];
-            case 'PHPDocTypesUnitTest.right_types.inc':
-                return [];
-            case 'PHPDocTypesUnitTest.wrong.inc':
-                return [
-                    28 => 1,
-                ];
-            case 'PHPDocTypesUnitTest.wrong_parse.inc':
-                return [];
-            case 'PHPDocTypesUnitTest.wrong_types.inc':
-                return [];
-            default:
-                return [];
-            }//end switch
+        case 'PHPDocTypesUnitTest.right.inc':
+            return [];
+        case 'PHPDocTypesUnitTest.right_namespace.inc':
+            return [];
+        case 'PHPDocTypesUnitTest.right_types.inc':
+            return [];
+        case 'PHPDocTypesUnitTest.wrong.inc':
+            return [
+                28 => 1,
+            ];
+        case 'PHPDocTypesUnitTest.wrong_parse.inc':
+            return [];
+        case 'PHPDocTypesUnitTest.wrong_types.inc':
+            return [];
+        default:
+            return [];
+        }//end switch
 
     }//end getWarningList()
 
