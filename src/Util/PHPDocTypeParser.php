@@ -1264,7 +1264,7 @@ class PHPDocTypeParser
             $this->correctToken($lowernext);
             $this->parseToken();
             if ($this->scope->classname !== null) {
-                $type = "static({$this->scope->classname})"
+                $type = "static({$this->scope->classname})";
             } else {
                 $type = 'static';
             }
