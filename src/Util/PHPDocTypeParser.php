@@ -999,7 +999,7 @@ class PHPDocTypeParser
             || (ctype_digit($nextchar) || $nextchar === '-') && strpos($next, '.') === false
         ) {
             // Int.
-            if (!in_array($lowernext, ['int', 'integer'])) {
+            if (in_array($lowernext, ['int', 'integer']) === false) {
                 $this->phpfig = false;
             }
 
@@ -1011,8 +1011,8 @@ class PHPDocTypeParser
                 $this->parseToken('<');
                 $next = $this->next;
                 if ($next === null
-                    || !(strtolower($next) === 'min'
-                    || (ctype_digit($next[0]) || $next[0] === '-') && strpos($next, '.') === false)
+                    || (strtolower($next) === 'min'
+                    || ((ctype_digit($next[0]) === true || $next[0] === '-') && strpos($next, '.') === false)) === false
                 ) {
                     throw new \Exception("Error parsing type, expected int min, saw \"{$next}\".");
                 }
@@ -1021,8 +1021,8 @@ class PHPDocTypeParser
                 $this->parseToken(',');
                 $next = $this->next;
                 if ($next === null
-                    || !(strtolower($next) === 'max'
-                    || (ctype_digit($next[0]) || $next[0] === '-') && strpos($next, '.') === false)
+                    || (strtolower($next) === 'max'
+                    || ((ctype_digit($next[0]) === true || $next[0] === '-') && strpos($next, '.') === false)) === false
                 ) {
                     throw new \Exception("Error parsing type, expected int max, saw \"{$next}\".");
                 }
@@ -1034,21 +1034,21 @@ class PHPDocTypeParser
                 $this->parseToken('<');
                 do {
                     $mask = $this->parseBasicType();
-                    if (!$this->compareTypes('int', $mask)) {
+                    if ($this->compareTypes('int', $mask) === false) {
                         throw new \Exception('Error parsing type, invalid int mask.');
                     }
 
                     $haveseperator = $this->next === ',';
-                    if ($haveseperator) {
+                    if ($haveseperator === true) {
                         $this->parseToken(',');
                     }
-                } while ($haveseperator);
+                } while ($haveseperator === true);
                 $this->parseToken('>');
             } else if ($inttype === 'int-mask-of') {
                 // Integer mask of.
                 $this->parseToken('<');
                 $mask = $this->parseBasicType();
-                if (!$this->compareTypes('int', $mask)) {
+                if ($this->compareTypes('int', $mask) === false) {
                     throw new \Exception('Error parsing type, invalid int mask.');
                 }
 
@@ -1056,11 +1056,11 @@ class PHPDocTypeParser
             }//end if
 
             $type = 'int';
-        } else if (in_array($lowernext, ['float', 'double'])
-            || (ctype_digit($nextchar) || $nextchar === '-') && strpos($next, '.') !== false
+        } else if (in_array($lowernext, ['float', 'double']) === true
+            || ((ctype_digit($nextchar) === true || $nextchar === '-') && strpos($next, '.') !== false)
         ) {
             // Float.
-            if (!in_array($lowernext, ['float', 'double'])) {
+            if (in_array($lowernext, ['float', 'double']) === false) {
                 $this->phpfig = false;
             }
 
@@ -1078,7 +1078,7 @@ class PHPDocTypeParser
                 'non-falsy-string',
                 'truthy-string',
             ]
-        )
+        ) === true
             || $nextchar === '"' || $nextchar === "'"
         ) {
             // String.
@@ -1094,7 +1094,7 @@ class PHPDocTypeParser
             if ($strtype === 'class-string' && $this->next === '<') {
                 $this->parseToken('<');
                 $stringtype = $this->parseBasicType();
-                if (!$this->compareTypes('object', $stringtype)) {
+                if ($this->compareTypes('object', $stringtype) === false) {
                     throw new \Exception("Error parsing type, class-string type isn't class.");
                 }
 
@@ -1108,7 +1108,7 @@ class PHPDocTypeParser
             $this->correctToken($lowernext);
             $this->parseToken('callable-string');
             $type = 'callable-string';
-        } else if (in_array($lowernext, ['array', 'non-empty-array', 'list', 'non-empty-list'])) {
+        } else if (in_array($lowernext, ['array', 'non-empty-array', 'list', 'non-empty-list']) === true) {
             // Array.
             if ($lowernext !== 'array') {
                 $this->phpfig = false;
@@ -1122,12 +1122,12 @@ class PHPDocTypeParser
                 $this->parseToken('<');
                 $firsttype = $this->parseAnyType();
                 if ($this->next === ',') {
-                    if (in_array($arraytype, ['list', 'non-empty-list'])) {
+                    if (in_array($arraytype, ['list', 'non-empty-list']) === true) {
                         throw new \Exception('Error parsing type, lists cannot have keys specified.');
                     }
 
                     $key = $firsttype;
-                    if (!$this->compareTypes('array-key', $key)) {
+                    if ($this->compareTypes('array-key', $key) === false) {
                         throw new \Exception('Error parsing type, invalid array key.');
                     }
 
@@ -1142,7 +1142,7 @@ class PHPDocTypeParser
             } else if ($this->next === '{') {
                 // Array shape.
                 $this->phpfig = false;
-                if (in_array($arraytype, ['non-empty-array', 'non-empty-list'])) {
+                if (in_array($arraytype, ['non-empty-array', 'non-empty-list']) === true) {
                     throw new \Exception('Error parsing type, non-empty-arrays cannot have shapes.');
                 }
 
@@ -1150,9 +1150,9 @@ class PHPDocTypeParser
                 do {
                     $next = $this->next;
                     if ($next !== null
-                        && (ctype_alpha($next) || $next[0] === '_' || $next[0] === "'" || $next[0] === '"'
-                        || (ctype_digit($next[0]) || $next[0] === '-') && strpos($next, '.') === false)
-                        && ($this->next(1) === ':' || $this->next(1) === '?' && $this->next(2) === ':')
+                        && (ctype_alpha($next) === true || $next[0] === '_' || $next[0] === "'" || $next[0] === '"'
+                        || ((ctype_digit($next[0]) === true || $next[0] === '-') && strpos($next, '.') === false))
+                        && ($this->next(1) === ':' || ($this->next(1) === '?' && $this->next(2) === ':'))
                     ) {
                         $this->parseToken();
                         if ($this->next === '?') {
@@ -1164,10 +1164,10 @@ class PHPDocTypeParser
 
                     $this->parseAnyType();
                     $havecomma = $this->next === ',';
-                    if ($havecomma) {
+                    if ($havecomma === true) {
                         $this->parseToken(',');
                     }
-                } while ($havecomma);
+                } while ($havecomma === true);
                 $this->parseToken('}');
             }//end if
 
@@ -1183,7 +1183,7 @@ class PHPDocTypeParser
                 do {
                     $next = $this->next;
                     if ($next === null
-                        || !(ctype_alpha($next) || $next[0] === '_' || $next[0] === "'" || $next[0] === '"')
+                        || (ctype_alpha($next) || $next[0] === '_' || $next[0] === "'" || $next[0] === '"') === false
                     ) {
                         throw new \Exception('Error parsing type, invalid object key.');
                     }
@@ -1196,10 +1196,10 @@ class PHPDocTypeParser
                     $this->parseToken(':');
                     $this->parseAnyType();
                     $havecomma = $this->next === ',';
-                    if ($havecomma) {
+                    if ($havecomma === true) {
                         $this->parseToken(',');
                     }
-                } while ($havecomma);
+                } while ($havecomma === true);
                 $this->parseToken('}');
             }//end if
 
@@ -1209,7 +1209,7 @@ class PHPDocTypeParser
             $this->correctToken($lowernext);
             $this->parseToken('resource');
             $type = 'resource';
-        } else if (in_array($lowernext, ['never', 'never-return', 'never-returns', 'no-return'])) {
+        } else if (in_array($lowernext, ['never', 'never-return', 'never-returns', 'no-return']) === true) {
             // Never.
             $this->correctToken('never');
             $this->parseToken();
@@ -1228,20 +1228,20 @@ class PHPDocTypeParser
             // Self.
             $this->correctToken($lowernext);
             $this->parseToken('self');
-            $type = $this->scope->classname ? $this->scope->classname : 'self';
+            $type = $this->scope->classname ?? 'self';
         } else if ($lowernext === 'parent') {
             // Parent.
             $this->phpfig = false;
             $this->correctToken($lowernext);
             $this->parseToken('parent');
-            $type = $this->scope->parentname ? $this->scope->parentname : 'parent';
-        } else if (in_array($lowernext, ['static', '$this'])) {
+            $type = $this->scope->parentname ?? 'parent';
+        } else if (in_array($lowernext, ['static', '$this']) === true) {
             // Static.
             $this->correctToken($lowernext);
             $this->parseToken();
-            $type = $this->scope->classname ? "static({$this->scope->classname})" : 'static';
+            $type = ($this->scope->classname !== null) ? "static({$this->scope->classname})" : 'static';
         } else if ($lowernext === 'callable'
-            || $next === '\\Closure' || $next === 'Closure' && $this->scope->namespace === ''
+            || $next === '\\Closure' || ($next === 'Closure' && $this->scope->namespace === '')
         ) {
             // Callable.
             if ($lowernext === 'callable') {
@@ -1335,12 +1335,12 @@ class PHPDocTypeParser
             $this->parseToken('key-of');
             $this->parseToken('<');
             $iterable = $this->parseAnyType();
-            if (!($this->compareTypes('iterable', $iterable) || $this->compareTypes('object', $iterable))) {
+            if (($this->compareTypes('iterable', $iterable) || $this->compareTypes('object', $iterable)) === false) {
                 throw new \Exception("Error parsing type, can't get key of non-iterable.");
             }
 
             $this->parseToken('>');
-            $type = $this->gowide ? 'mixed' : 'never';
+            $type = ($this->gowide === true) ? 'mixed' : 'never';
         } else if ($lowernext === 'value-of') {
             // Value-of.
             $this->phpfig = false;
@@ -1348,13 +1348,13 @@ class PHPDocTypeParser
             $this->parseToken('value-of');
             $this->parseToken('<');
             $iterable = $this->parseAnyType();
-            if (!($this->compareTypes('iterable', $iterable) || $this->compareTypes('object', $iterable))) {
+            if (($this->compareTypes('iterable', $iterable) || $this->compareTypes('object', $iterable)) === false) {
                 throw new \Exception("Error parsing type, can't get value of non-iterable.");
             }
 
             $this->parseToken('>');
-            $type = $this->gowide ? 'mixed' : 'never';
-        } else if ((ctype_alpha($next[0]) || $next[0] === '_' || $next[0] === '\\')
+            $type = ($this->gowide === true) ? 'mixed' : 'never';
+        } else if ((ctype_alpha($next[0]) === true || $next[0] === '_' || $next[0] === '\\')
             && strpos($next, '-') === false && strpos($next, '\\\\') === false
         ) {
             // Class name.
@@ -1364,9 +1364,9 @@ class PHPDocTypeParser
             }
 
             if ($type[0] !== '\\') {
-                if (array_key_exists($type, $this->scope->uses)) {
+                if (array_key_exists($type, $this->scope->uses) === true) {
                     $type = $this->scope->uses[$type];
-                } else if (array_key_exists($type, $this->scope->templates)) {
+                } else if (array_key_exists($type, $this->scope->templates) === true) {
                     $type = $this->scope->templates[$type];
                 } else {
                     $type = $this->scope->namespace.'\\'.$type;
@@ -1379,7 +1379,8 @@ class PHPDocTypeParser
         }//end if
 
         // Suffixes.  We can't embed these in the class name section, because they could apply to relative classes.
-        if ($this->next === '<' && (in_array('object', $this->superTypes($type)))) {
+        if ($this->next === '<'
+                && (in_array('object', $this->superTypes($type)) === true)) {
             // Generics.
             $this->phpfig = false;
             $this->parseToken('<');
@@ -1387,26 +1388,27 @@ class PHPDocTypeParser
             do {
                 $this->parseAnyType();
                 $more = ($this->next === ',');
-                if ($more) {
+                if ($more === true) {
                     $this->parseToken(',');
                 }
-            } while ($more);
+            } while ($more === true);
             $this->parseToken('>');
-        } else if ($this->next === '::' && (in_array('object', $this->superTypes($type)))) {
+        } else if ($this->next === '::'
+                && (in_array('object', $this->superTypes($type)) === true)) {
             // Class constant.
             $this->phpfig = false;
             $this->parseToken('::');
             $nextchar         = ($this->next === null) ? null : $this->next[0];
             $haveconstantname = $nextchar !== null && (ctype_alpha($nextchar) || $nextchar === '_');
-            if ($haveconstantname) {
+            if ($haveconstantname === true) {
                 $this->parseToken();
             }
 
-            if ($this->next === '*' || !$haveconstantname) {
+            if ($this->next === '*' || $haveconstantname === false) {
                 $this->parseToken('*');
             }
 
-            $type = $this->gowide ? 'mixed' : 'never';
+            $type = ($this->gowide === true) ? 'mixed' : 'never';
         }//end if
 
         return $type;
