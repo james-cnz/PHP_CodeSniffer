@@ -223,7 +223,7 @@ class PHPDocTypeParser
      *
      * @var string
      */
-    protected bool $unknown = 'never';
+    protected string $unknown = 'never';
 
     /**
      * Whether the type complies with the PHP-FIG PHPDoc standard.
