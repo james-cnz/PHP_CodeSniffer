@@ -51,36 +51,36 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
     public function getWarningList($testFile='')
     {
         switch ($testFile) {
-            case 'PHPDocTypesUnitTest.right.inc':
-                return [];
-            case 'PHPDocTypesUnitTest.warn_complex.inc':
-                return [
-                    23 => 1,
-                    24 => 1,
-                    30 => 1,
-                    35 => 1,
-                ];
-            case 'PHPDocTypesUnitTest.warn_docs_missing.inc':
-                return [
-                    21 => 1,
-                    24 => 2,
-                    33 => 1,
-                    35 => 1,
-                ];
-            case 'PHPDocTypesUnitTest.warn_style.inc':
-                return [
-                    18 => 1,
-                    23 => 1,
-                    24 => 1,
-                    25 => 1,
-                    31 => 1,
-                    34 => 1,
-                    38 => 1,
-                    45 => 1,
-                ];
-            default:
-                return [];
-            }//end switch
+        case 'PHPDocTypesUnitTest.right.inc':
+            return [];
+        case 'PHPDocTypesUnitTest.warn_complex.inc':
+            return [
+                23 => 1,
+                24 => 1,
+                30 => 1,
+                35 => 1,
+            ];
+        case 'PHPDocTypesUnitTest.warn_docs_missing.inc':
+            return [
+                21 => 1,
+                24 => 2,
+                33 => 1,
+                35 => 1,
+            ];
+        case 'PHPDocTypesUnitTest.warn_style.inc':
+            return [
+                18 => 1,
+                23 => 1,
+                24 => 1,
+                25 => 1,
+                31 => 1,
+                34 => 1,
+                38 => 1,
+                45 => 1,
+            ];
+        default:
+            return [];
+        }//end switch
 
     }//end getWarningList()
 

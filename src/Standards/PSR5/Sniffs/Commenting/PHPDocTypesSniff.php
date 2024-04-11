@@ -1,12 +1,11 @@
 <?php
-
 /**
  * Check PHPDoc Types for PSR-5.
  *
+ * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic
- * @author    James Calder
  * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @license   CC BY-SA v4 or later
+ *            CC BY-SA v4 or later
  */
 
 declare(strict_types=1);
@@ -20,29 +19,61 @@ use PHP_CodeSniffer\Standards\Generic\Sniffs\Commenting\PHPDocTypesSniff as Snif
  */
 class PHPDocTypesSniff extends SniffBase
 {
-    /** @var bool throw an error and stop if we can't parse the file */
+    /**
+     * Throw an error and stop if we can't parse the file.
+     * 
+     * @var boolean
+     */
     public bool $debugMode = false;
 
-    /** @var bool check named functions (except void ones with no params), and class variables and constants are documented
-     *              unless using this sniff standalone to just check types, probably disable this and use other sniffs */
+    /**
+     * Check named functions (except void ones with no params), and class variables and constants are documented.
+     * Unless using this sniff standalone to just check types, probably disable this and use other sniffs.
+     *
+     * @var boolean
+     */
     public bool $checkHasDocBlocks = true;
 
-    /** @var bool check doc blocks, if present, contain appropriate param, return, or var tags */
+    /**
+     * Check doc blocks, if present, contain appropriate param, return, or var tags.
+     *
+     * @var boolean
+     */
     public bool $checkHasTags = true;
 
-    /** @var bool check there are no misplaced type tags--doesn't check for misplaced var tags */
+    /**
+     * Check there are no misplaced type tags--doesn't check for misplaced var tags.
+     *
+     * @var boolean
+     */
     public bool $checkNoMisplaced = true;
 
-    /** @var bool check the types match--isn't aware of class heirarchies from other files */
+    /**
+     * Check the types match--isn't aware of class heirarchies from other files.
+     *
+     * @var boolean
+     */
     public bool $checkTypeMatch = true;
 
-    /** @var bool check built-in types are lower case, and short forms are used */
+    /**
+     * Check built-in types are lower case, and short forms are used.
+     *
+     * @var boolean
+     */
     public bool $checkStyle = true;
 
-    /** @var bool check the types used conform to the PHP-FIG PHPDoc standard */
+    /**
+     * Check the types used conform to the PHP-FIG PHPDoc standard.
+     *
+     * @var boolean
+     */
     public bool $checkPhpFig = true;
 
-    /** @var bool check pass by reference and splat usage matches for param tags */
+    /**
+     * Check pass by reference and splat usage matches for param tags.
+     *
+     * @var boolean
+     */
     public bool $checkPassSplat = true;
 
 }
