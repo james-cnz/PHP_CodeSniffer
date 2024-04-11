@@ -38,6 +38,8 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
             return [];
         case 'PHPDocTypesUnitTest.right_namespace.inc':
             return [];
+        case 'PHPDocTypesUnitTest.right_types.inc':
+            return [];
         case 'PHPDocTypesUnitTest.wrong.inc':
             return [
                 17 => 1,
@@ -61,6 +63,33 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
         case 'PHPDocTypesUnitTest.wrong_parse.inc':
             return [
                 72 => 1,
+            ];
+        case 'PHPDocTypesUnitTest.wrong_types.inc':
+            return [
+                21 => 1,
+                29 => 1,
+                36 => 1,
+                39 => 1,
+                43 => 1,
+                47 => 1,
+                51 => 1,
+                54 => 1,
+                57 => 1,
+                60 => 1,
+                63 => 1,
+                66 => 1,
+                69 => 1,
+                73 => 1,
+                76 => 1,
+                79 => 1,
+                82 => 1,
+                85 => 1,
+                88 => 1,
+                91 => 1,
+                94 => 1,
+                99 => 1,
+                106 => 1,
+                109 => 1,
             ];
         default:
             return [];
@@ -86,11 +115,15 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
                 return [];
             case 'PHPDocTypesUnitTest.right_namespace.inc':
                 return [];
+            case 'PHPDocTypesUnitTest.right_types.inc':
+                return [];
             case 'PHPDocTypesUnitTest.wrong.inc':
                 return [
                     28 => 1,
                 ];
             case 'PHPDocTypesUnitTest.wrong_parse.inc':
+                return [];
+            case 'PHPDocTypesUnitTest.wrong_types.inc':
                 return [];
             default:
                 return [];
