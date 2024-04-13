@@ -1740,7 +1740,7 @@ class PHPDocTypesSniff implements Sniff
                         false
                     );
 
-                    if ($docvarparsed->type === false) {
+                    if ($docvarparsed->type === null) {
                         $this->file->addError(
                             'PHPDoc var type missing or malformed',
                             $docvar->ptr,
