@@ -262,12 +262,10 @@ class PHPDocTypeParser
     /**
      * Parse a type and possibly variable name
      *
-     * @param ?object{
-     *              namespace: string, uses: string[], templates: string[], classname: ?string, parentname: ?string
-     *          }      $scope   the scope
-     * @param string   $text    the text to parse
-     * @param 0|1|2|3  $getwhat what to get 0=type only 1=also name 2=also modifiers (& ...) 3=also default
-     * @param bool     $gowide  if we can't determine the type, should we assume wide (for native type) or narrow (for PHPDoc)?
+     * @param ?object{namespace: string, uses: string[], templates: string[], classname: ?string, parentname: ?string} $scope   the scope
+     * @param string                                                                                                   $text    the text to parse
+     * @param 0|1|2|3                                                                                                  $getwhat what to get 0=type only 1=also name 2=also modifiers (& ...) 3=also default
+     * @param bool                                                                                                     $gowide  if we can't determine the type, should we assume wide (for native type) or narrow (for PHPDoc)?
      *
      * @return object{
      *              type: ?string, passsplat: string, name: ?string,
@@ -298,9 +296,9 @@ class PHPDocTypeParser
             $this->unknown = 'never';
         }
 
-        $this->phpfig       = true;
-        $this->nexts        = [];
-        $this->next         = $this->next();
+        $this->phpfig = true;
+        $this->nexts  = [];
+        $this->next   = $this->next();
 
         // Try to parse type.
         $savednexts = $this->nexts;
@@ -350,7 +348,7 @@ class PHPDocTypeParser
                     throw new \Exception('Warning parsing type, no space after variable name.');
                 }
 
-                // Implicit nullable
+                // Implicit nullable.
                 if ($getwhat >= 3) {
                     if ($this->next === '='
                         && strtolower(($this->next(1) ?? '')) === 'null'
@@ -390,10 +388,8 @@ class PHPDocTypeParser
     /**
      * Parse a template
      *
-     * @param ?object{
-     *              namespace: string, uses: string[], templates: string[], classname: ?string, parentname: ?string
-     *          }    $scope the scope
-     * @param string $text  the text to parse
+     * @param ?object{namespace: string, uses: string[], templates: string[], classname: ?string, parentname: ?string} $scope the scope
+     * @param string                                                                                                   $text  the text to parse
      *
      * @return object{
      *              type: ?string, name: ?string, rem: string, fixed: ?string, phpfig: bool

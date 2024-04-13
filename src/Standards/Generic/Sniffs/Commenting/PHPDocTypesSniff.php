@@ -1600,14 +1600,14 @@ class PHPDocTypesSniff implements Sniff
             $properties = ($scope->type === 'classish' && !$const) ? $this->file->getMemberProperties($this->fileptr) : null;
             $vartype    = ($properties && $properties['type']) ? $properties['type'] : 'mixed';
 
-            if ($this->checkHasDocBlocks && !$comment && $scope->type === 'classish') {
+            if ($this->checkHasDocBlocks === true && $comment === null && $scope->type === 'classish') {
                 // Require comments for class variables and constants.
                 $this->file->addWarning(
                     'PHPDoc variable or constant is not documented',
                     $this->fileptr,
                     'phpdoc_var_doc_missing'
                 );
-            } else if ($comment) {
+            } else if ($comment !== null) {
                 // Check for misplaced tags.
                 $this->checkNo(
                     $comment,
@@ -1621,12 +1621,12 @@ class PHPDocTypesSniff implements Sniff
                     ]
                 );
 
-                if (!isset($comment->tags['@var'])) {
+                if (isset($comment->tags['@var']) === false) {
                     $comment->tags['@var'] = [];
                 }
 
                 // Missing var tag.
-                if ($this->checkHasTags && count($comment->tags['@var']) < 1) {
+                if ($this->checkHasTags === true && count($comment->tags['@var']) < 1) {
                     $this->file->addWarning(
                         'PHPDoc variable missing @var tag',
                         $comment->ptr,
@@ -1638,29 +1638,27 @@ class PHPDocTypesSniff implements Sniff
                 $varparsed = $this->typeparser->parseTypeAndName(
                     $scope,
                     $vartype,
-                    0/*type only*/,
+                    0,
                     true
-                    // native php
                 );
 
                 foreach ($comment->tags['@var'] as $docvar) {
                     $docvarparsed = $this->typeparser->parseTypeAndName(
                         $scope,
                         $docvar->content,
-                        0/*type only*/,
+                        0,
                         false
-                        // phpdoc
                     );
 
-                    if (!$docvarparsed->type) {
+                    if ($docvarparsed->type === null) {
                         $this->file->addError(
                             'PHPDoc var type missing or malformed',
                             $docvar->ptr,
                             'phpdoc_var_type'
                         );
                     } else {
-                        if ($this->checkTypeMatch
-                            && !$this->typeparser->comparetypes($varparsed->type, $docvarparsed->type)
+                        if ($this->checkTypeMatch === true
+                            && $this->typeparser->comparetypes($varparsed->type, $docvarparsed->type) === false
                         ) {
                             $this->file->addError(
                                 'PHPDoc var type mismatch',
@@ -1669,7 +1667,7 @@ class PHPDocTypesSniff implements Sniff
                             );
                         }
 
-                        if ($this->checkPhpFig && !$docvarparsed->phpfig) {
+                        if ($this->checkPhpFig === true && $docvarparsed->phpfig === false) {
                             $this->file->addWarning(
                                 "PHPDoc var type doesn't conform to PHP-FIG PHPDoc",
                                 $docvar->ptr,
@@ -1677,13 +1675,13 @@ class PHPDocTypesSniff implements Sniff
                             );
                         }
 
-                        if ($this->checkStyle && $docvarparsed->fixed) {
+                        if ($this->checkStyle === true && $docvarparsed->fixed !== null) {
                             $fix = $this->file->addFixableWarning(
                                 "PHPDoc var type doesn't conform to recommended style",
                                 $docvar->ptr,
                                 'phpdoc_var_type_style'
                             );
-                            if ($fix) {
+                            if ($fix === true) {
                                 $this->fixCommentTag(
                                     $docvar,
                                     $docvarparsed->fixed
@@ -1697,7 +1695,7 @@ class PHPDocTypesSniff implements Sniff
 
         $this->advance();
 
-        if (!in_array($this->token['code'], [T_EQUAL, T_COMMA, T_SEMICOLON, T_CLOSE_PARENTHESIS])) {
+        if (in_array($this->token['code'], [T_EQUAL, T_COMMA, T_SEMICOLON, T_CLOSE_PARENTHESIS]) === false) {
             throw new \Exception('Expected one of: = , ; )');
         }
 
@@ -1711,22 +1709,15 @@ class PHPDocTypesSniff implements Sniff
      * If we find a PHPDoc var comment that's not attached to something we're looking for,
      * we'll just check the type is well formed, and assume it's otherwise OK.
      *
-     * @param          \stdClass&object{
-     *      namespace: string, uses: array<string, string>, templates: array<string, string>,
-     *      classname: ?string, parentname: ?string, type: string, closer: ?int
-     * } $scope  We don't actually need the scope, because we're not doing a type comparison.
-     * @param          ?(
-     *      \stdClass&object{
-     *          ptr: int,
-     *          tags: array<string, object{ptr: int, content: string, cstartptr: ?int, cendptr: ?int}[]>
-     *      }
-     * ) $comment
+     * @param          \stdClass&object{namespace: string, uses: array<string, string>, templates: array<string, string>, classname: ?string, parentname: ?string, type: string, closer: ?int} $scope  We don't actually need the scope, because we're not doing a type comparison.
+     * @param          ?(\stdClass&object{ptr: int, tags: array<string, object{ptr: int, content: string, cstartptr: ?int, cendptr: ?int}[]>}) $comment
+     *
      * @return         void
      * @phpstan-impure
      */
     protected function processPossVarComment(?object $scope, ?object $comment): void
     {
-        if ($this->pass === 2 && $comment) {
+        if ($this->pass === 2 && $comment !== null) {
             $this->checkNo(
                 $comment,
                 [
@@ -1740,24 +1731,23 @@ class PHPDocTypesSniff implements Sniff
             );
 
             // Check @var tags if any.
-            if (isset($comment->tags['@var'])) {
+            if (isset($comment->tags['@var']) === true) {
                 foreach ($comment->tags['@var'] as $docvar) {
                     $docvarparsed = $this->typeparser->parseTypeAndName(
                         $scope,
                         $docvar->content,
-                        0/*type only*/,
+                        0,
                         false
-                        // phpdoc
                     );
 
-                    if (!$docvarparsed->type) {
+                    if ($docvarparsed->type === false) {
                         $this->file->addError(
                             'PHPDoc var type missing or malformed',
                             $docvar->ptr,
                             'phpdoc_var_type'
                         );
                     } else {
-                        if ($this->checkPhpFig && !$docvarparsed->phpfig) {
+                        if ($this->checkPhpFig === true && $docvarparsed->phpfig === false) {
                             $this->file->addWarning(
                                 "PHPDoc var type doesn't conform to PHP-FIG PHPDoc",
                                 $docvar->ptr,
@@ -1765,13 +1755,13 @@ class PHPDocTypesSniff implements Sniff
                             );
                         }
 
-                        if ($this->checkStyle && $docvarparsed->fixed) {
+                        if ($this->checkStyle === true && $docvarparsed->fixed !== null) {
                             $fix = $this->file->addFixableWarning(
                                 "PHPDoc var type doesn't conform to recommended style",
                                 $docvar->ptr,
                                 'phpdoc_var_type_style'
                             );
-                            if ($fix) {
+                            if ($fix === true) {
                                 $this->fixCommentTag(
                                     $docvar,
                                     $docvarparsed->fixed
