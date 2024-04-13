@@ -25,7 +25,7 @@ class PHPDocTypesSniff extends SniffBase
      *
      * @var boolean
      */
-    public bool $debugMode = false;
+    public $debugMode = false;
 
     /**
      * Check named functions (except void ones with no params), and class variables and constants are documented.
@@ -33,48 +33,48 @@ class PHPDocTypesSniff extends SniffBase
      *
      * @var boolean
      */
-    public bool $checkHasDocBlocks = true;
+    public $checkHasDocBlocks = true;
 
     /**
      * Check doc blocks, if present, contain appropriate param, return, or var tags.
      *
      * @var boolean
      */
-    public bool $checkHasTags = true;
+    public $checkHasTags = true;
 
     /**
      * Check there are no misplaced type tags--doesn't check for misplaced var tags.
      *
      * @var boolean
      */
-    public bool $checkNoMisplaced = true;
+    public $checkNoMisplaced = true;
 
     /**
      * Check the types match--isn't aware of class heirarchies from other files.
      *
      * @var boolean
      */
-    public bool $checkTypeMatch = true;
+    public $checkTypeMatch = true;
 
     /**
      * Check built-in types are lower case, and short forms are used.
      *
      * @var boolean
      */
-    public bool $checkStyle = true;
+    public $checkStyle = true;
 
     /**
      * Check the types used conform to the PHP-FIG PHPDoc standard.
      *
      * @var boolean
      */
-    public bool $checkPhpFig = true;
+    public $checkPhpFig = true;
 
     /**
      * Check pass by reference and splat usage matches for param tags.
      *
      * @var boolean
      */
-    public bool $checkPassSplat = true;
+    public $checkPassSplat = true;
 
 }//end class
