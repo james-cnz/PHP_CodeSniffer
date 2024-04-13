@@ -250,7 +250,7 @@ class PHPDocTypeParser
     /**
      * Constructor
      *
-     * @param ?array<string, object{extends: ?string, implements: string[]}> $artifacts
+     * @param ?array<string, object{extends: ?string, implements: string[]}> $artifacts Classish things
      */
     public function __construct(?array $artifacts=null)
     {
@@ -278,7 +278,7 @@ class PHPDocTypeParser
     {
 
         // Initialise variables.
-        if ($scope) {
+        if ($scope !== null) {
             $this->scope = $scope;
         } else {
             $this->scope = (object) [
@@ -292,7 +292,12 @@ class PHPDocTypeParser
 
         $this->text         = $text;
         $this->replacements = [];
-        $this->unknown      = $gowide ? 'mixed' : 'never';
+        if ($gowide === true) {
+            $this->unknown = 'mixed';
+        } else {
+            $this->unknown = 'never';
+        }
+
         $this->phpfig       = true;
         $this->nexts        = [];
         $this->next         = $this->next();
@@ -301,9 +306,9 @@ class PHPDocTypeParser
         $savednexts = $this->nexts;
         try {
             $type = $this->parseAnyType();
-            if (!($this->next === null
-                || ctype_space(substr($this->text, ($this->nexts[0]->startpos - 1), 1))
-                || in_array($this->next, [',', ';', ':', '.']))
+            if (($this->next === null
+                || ctype_space(substr($this->text, ($this->nexts[0]->startpos - 1), 1)) === true
+                || in_array($this->next, [',', ';', ':', '.']) === true) === false
             ) {
                 // Code smell check.
                 throw new \Exception('Warning parsing type, no space after type.');
@@ -331,21 +336,21 @@ class PHPDocTypeParser
         if ($getwhat >= 1) {
             $savednexts = $this->nexts;
             try {
-                if (!($this->next !== null && $this->next[0] === '$')) {
+                if (($this->next !== null && $this->next[0] === '$') === false) {
                     throw new \Exception("Error parsing type, expected variable, saw \"{$this->next}\".");
                 }
 
                 $name = $this->parseToken();
-                if (!($this->next === null || $getwhat >= 3 && $this->next === '='
-                    || ctype_space(substr($this->text, ($this->nexts[0]->startpos - 1), 1))
-                    || in_array($this->next, [',', ';', ':', '.']))
+                if (($this->next === null
+                    || ($getwhat >= 3 && $this->next === '=')
+                    || ctype_space(substr($this->text, ($this->nexts[0]->startpos - 1), 1)) === true
+                    || in_array($this->next, [',', ';', ':', '.']) === true) === false
                 ) {
                     // Code smell check.
                     throw new \Exception('Warning parsing type, no space after variable name.');
                 }
 
                 // Implicit nullable
-                // TODO: This is deprecated in PHP 8.4, so this should be removed at some stage.
                 if ($getwhat >= 3) {
                     if ($this->next === '='
                         && strtolower(($this->next(1) ?? '')) === 'null'
@@ -387,8 +392,8 @@ class PHPDocTypeParser
      *
      * @param ?object{
      *              namespace: string, uses: string[], templates: string[], classname: ?string, parentname: ?string
-     *          }     $scope the scope
-     * @param string   $text the text to parse
+     *          }    $scope the scope
+     * @param string $text  the text to parse
      *
      * @return object{
      *              type: ?string, name: ?string, rem: string, fixed: ?string, phpfig: bool
@@ -706,7 +711,7 @@ class PHPDocTypeParser
                     } else {
                         $nextchar = null;
                     }
-                } while ($nextchar !== null && (ctype_digit($nextchar) || ($nextchar === '.' && $havepoint === false) || $nextchar === '_'));
+                } while ($nextchar !== null && (ctype_digit($nextchar) === true || ($nextchar === '.' && $havepoint === false) || $nextchar === '_'));
             } else if ($firstchar === '"' || $firstchar === "'") {
                 // String token.
                 $endpos = ($startpos + 1);
