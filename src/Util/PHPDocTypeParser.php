@@ -26,7 +26,7 @@ class PHPDocTypeParser
      *
      * @var array<string, string[]>
      */
-    protected array $library = [
+    protected $library = [
         // Predefined general.
         '\\ArrayAccess'                     => [],
         '\\BackedEnum'                      => ['\\UnitEnum'],
@@ -195,56 +195,56 @@ class PHPDocTypeParser
      *
      * @var array<string, object{extends: ?string, implements: string[]}>
      */
-    protected array $artifacts;
+    protected $artifacts;
 
     /**
      * Scope.
      *
      * @var object{namespace: string, uses: string[], templates: string[], classname: ?string, parentname: ?string}
      */
-    protected object $scope;
+    protected $scope;
 
     /**
      * The text to be parsed.
      *
      * @var string
      */
-    protected string $text = '';
+    protected $text = '';
 
     /**
      * Replacements.
      *
      * @var array<object{pos: non-negative-int, len: non-negative-int, replacement: string}>
      */
-    protected array $replacements = [];
+    protected $replacements = [];
 
     /**
      * When we encounter an unknown type, what should we use?
      *
      * @var string
      */
-    protected string $unknown = 'never';
+    protected $unknown = 'never';
 
     /**
      * Whether the type complies with the PHP-FIG PHPDoc standard.
      *
      * @var boolean
      */
-    protected bool $phpfig = true;
+    protected $phpfig = true;
 
     /**
      * Next tokens.
      *
      * @var object{startpos: non-negative-int, endpos: non-negative-int, text: ?string}[]
      */
-    protected array $nexts = [];
+    protected $nexts = [];
 
     /**
      * The next token.
      *
      * @var ?string
      */
-    protected ?string $next = null;
+    protected $next = null;
 
 
     /**
@@ -262,14 +262,17 @@ class PHPDocTypeParser
     /**
      * Parse a type and possibly variable name
      *
-     * @param  ?object{namespace: string, uses: string[], templates: string[], classname: ?string, parentname: ?string} $scope
-     * @param  string                                                                                                   $text    the text to parse
-     * @param  0|1|2|3                                                                                                  $getwhat what to get 0=type only 1=also name 2=also modifiers (& ...) 3=also default
-     * @param  bool                                                                                                     $gowide  if we can't determine the type, should we assume wide (for native type) or narrow (for PHPDoc)?
+     * @param ?object{
+     *              namespace: string, uses: string[], templates: string[], classname: ?string, parentname: ?string
+     *          }      $scope   the scope
+     * @param string   $text    the text to parse
+     * @param 0|1|2|3  $getwhat what to get 0=type only 1=also name 2=also modifiers (& ...) 3=also default
+     * @param bool     $gowide  if we can't determine the type, should we assume wide (for native type) or narrow (for PHPDoc)?
      *
-     * @return object{type: ?string, passsplat: string, name: ?string,
-     *              rem: string, fixed: ?string, phpfig: bool}
-     *          the simplified type, pass by reference & splat, variable name, remaining text, fixed text, and whether PHP-FIG
+     * @return object{
+     *              type: ?string, passsplat: string, name: ?string,
+     *              rem: string, fixed: ?string, phpfig: bool
+     *          } the simplified type, pass by reference & splat, variable name, remaining text, fixed text, and whether PHP-FIG
      */
     public function parseTypeAndName(?object $scope, string $text, int $getwhat, bool $gowide): object
     {
@@ -361,12 +364,18 @@ class PHPDocTypeParser
             $name = null;
         }//end if
 
+        if ($type !== null) {
+            $fixed = $this->getFixed();
+        } else {
+            $fixed = null;
+        }
+
         return (object) [
             'type'      => $type,
             'passsplat' => $passsplat,
             'name'      => $name,
             'rem'       => trim(substr($text, $this->nexts[0]->startpos)),
-            'fixed'     => $type ? $this->getFixed() : null,
+            'fixed'     => $fixed,
             'phpfig'    => $this->phpfig,
         ];
 
@@ -376,17 +385,20 @@ class PHPDocTypeParser
     /**
      * Parse a template
      *
-     * @param  ?object{namespace: string, uses: string[], templates: string[], classname: ?string, parentname: ?string} $scope
-     * @param  string                                                                                                   $text  the text to parse
+     * @param ?object{
+     *              namespace: string, uses: string[], templates: string[], classname: ?string, parentname: ?string
+     *          }     $scope the scope
+     * @param string   $text the text to parse
      *
-     * @return object{type: ?string, name: ?string, rem: string, fixed: ?string, phpfig: bool}
-     *          the simplified type, template name, remaining text, fixed text, and whether PHP-FIG
+     * @return object{
+     *              type: ?string, name: ?string, rem: string, fixed: ?string, phpfig: bool
+     *          } the simplified type, template name, remaining text, fixed text, and whether PHP-FIG
      */
     public function parseTemplate(?object $scope, string $text): object
     {
 
         // Initialise variables.
-        if ($scope) {
+        if ($scope !== null) {
             $this->scope = $scope;
         } else {
             $this->scope = (object) [
@@ -408,14 +420,14 @@ class PHPDocTypeParser
         // Try to parse template name.
         $savednexts = $this->nexts;
         try {
-            if (!($this->next !== null && (ctype_alpha($this->next[0]) || $this->next[0] === '_'))) {
+            if (($this->next !== null && (ctype_alpha($this->next[0]) === true || $this->next[0] === '_')) === false) {
                 throw new \Exception("Error parsing type, expected variable, saw \"{$this->next}\".");
             }
 
             $name = $this->parseToken();
-            if (!($this->next === null
-                || ctype_space(substr($this->text, ($this->nexts[0]->startpos - 1), 1))
-                || in_array($this->next, [',', ';', ':', '.']))
+            if (($this->next === null
+                || ctype_space(substr($this->text, ($this->nexts[0]->startpos - 1), 1)) === true
+                || in_array($this->next, [',', ';', ':', '.']) === true) === false
             ) {
                 // Code smell check.
                 throw new \Exception('Warning parsing type, no space after variable name.');
@@ -432,9 +444,9 @@ class PHPDocTypeParser
             $savednexts = $this->nexts;
             try {
                 $type = $this->parseAnyType();
-                if (!($this->next === null
-                    || ctype_space(substr($this->text, ($this->nexts[0]->startpos - 1), 1))
-                    || in_array($this->next, [',', ';', ':', '.']))
+                if (($this->next === null
+                    || ctype_space(substr($this->text, ($this->nexts[0]->startpos - 1), 1)) === true
+                    || in_array($this->next, [',', ';', ':', '.']) === true) === false
                 ) {
                     // Code smell check.
                     throw new \Exception('Warning parsing type, no space after type.');
@@ -449,11 +461,17 @@ class PHPDocTypeParser
             $type = 'mixed';
         }//end if
 
+        if ($type !== null) {
+            $fixed = $this->getFixed();
+        } else {
+            $fixed = null;
+        }
+
         return (object) [
             'type'   => $type,
             'name'   => $name,
             'rem'    => trim(substr($text, $this->nexts[0]->startpos)),
-            'fixed'  => $type ? $this->getFixed() : null,
+            'fixed'  => $fixed,
             'phpfig' => $this->phpfig,
         ];
 
@@ -463,8 +481,8 @@ class PHPDocTypeParser
     /**
      * Compare types
      *
-     * @param  ?string $widetype   the type that should be wider, e.g. PHP type
-     * @param  ?string $narrowtype the type that should be narrower, e.g. PHPDoc type
+     * @param ?string $widetype   the type that should be wider, e.g. PHP type
+     * @param ?string $narrowtype the type that should be narrower, e.g. PHPDoc type
      *
      * @return bool whether $narrowtype has the same or narrower scope as $widetype
      */
@@ -504,19 +522,19 @@ class PHPDocTypeParser
                 // And find all parts of one of them.
                 $haveallsingles = true;
                 foreach ($widesingles as $widesingle) {
-                    if (!in_array($widesingle, $narrowsingles)) {
+                    if (in_array($widesingle, $narrowsingles) === false) {
                         $haveallsingles = false;
                         break;
                     }
                 }
 
-                if ($haveallsingles) {
+                if ($haveallsingles === true) {
                     $havethisintersection = true;
                     break;
                 }
             }
 
-            if (!$havethisintersection) {
+            if ($havethisintersection === false) {
                 $haveallintersections = false;
                 break;
             }
@@ -530,13 +548,13 @@ class PHPDocTypeParser
     /**
      * Get super types
      *
-     * @param  string $basetype
+     * @param string $basetype What type do we want the supers for?
      *
      * @return string[] super types
      */
     protected function superTypes(string $basetype): array
     {
-        if (in_array($basetype, ['int', 'string'])) {
+        if (in_array($basetype, ['int', 'string']) === true) {
             $supertypes = [
                 'array-key',
                 'scaler',
@@ -548,7 +566,7 @@ class PHPDocTypeParser
                 'array-key',
                 'scalar',
             ];
-        } else if (in_array($basetype, ['array-key', 'float', 'bool'])) {
+        } else if (in_array($basetype, ['array-key', 'float', 'bool']) === true) {
             $supertypes = ['scalar'];
         } else if ($basetype === 'array') {
             $supertypes = ['iterable'];
@@ -582,20 +600,20 @@ class PHPDocTypeParser
                 // We don't want to include the class itself, just super types of it.
             }
 
-            while ($supertype = array_shift($supertypequeue)) {
-                if (in_array($supertype, $supertypes)) {
+            while (($supertype = array_shift($supertypequeue)) !== null) {
+                if (in_array($supertype, $supertypes) === true) {
                     $ignore = false;
                     continue;
                 }
 
-                if (!$ignore) {
+                if ($ignore === false) {
                     $supertypes[] = $supertype;
                 }
 
-                if ($librarysupers = $this->library[$supertype] ?? null) {
+                if (($librarysupers = $this->library[$supertype] ?? null) !== null) {
                     $supertypequeue = array_merge($supertypequeue, $librarysupers);
-                } else if ($supertypeobj = $this->artifacts[$supertype] ?? null) {
-                    if ($supertypeobj->extends) {
+                } else if (($supertypeobj = ($this->artifacts[$supertype] ?? null)) !== null) {
+                    if ($supertypeobj->extends !== null) {
                         $supertypequeue[] = $supertypeobj->extends;
                     }
 
@@ -604,7 +622,7 @@ class PHPDocTypeParser
                             $supertypequeue[] = $implements;
                         }
                     }
-                } else if (!$ignore) {
+                } else if ($ignore === false) {
                     $supertypes = array_merge($supertypes, $this->superTypes($supertype));
                 }
 
@@ -624,7 +642,7 @@ class PHPDocTypeParser
     /**
      * Prefetch next token
      *
-     * @param          non-negative-int $lookahead
+     * @param non-negative-int $lookahead How far ahead is the token we want?
      *
      * @return         ?string
      * @phpstan-impure
@@ -634,34 +652,47 @@ class PHPDocTypeParser
 
         // Fetch any more tokens we need.
         while (count($this->nexts) < ($lookahead + 1)) {
-            $startpos           = $this->nexts ? end($this->nexts)->endpos : 0;
+            if (count($this->nexts) > 0) {
+                $startpos = end($this->nexts)->endpos;
+            } else {
+                $startpos = 0;
+            }
+
             $stringunterminated = false;
 
             // Ignore whitespace.
-            while ($startpos < strlen($this->text) && ctype_space($this->text[$startpos])) {
+            while ($startpos < strlen($this->text) && ctype_space($this->text[$startpos]) === true) {
                 $startpos++;
             }
 
-            $firstchar = ($startpos < strlen($this->text)) ? $this->text[$startpos] : null;
+            if ($startpos < strlen($this->text)) {
+                $firstchar = $this->text[$startpos];
+            } else {
+                $firstchar = null;
+            }
 
             // Deal with different types of tokens.
             if ($firstchar === null) {
                 // No more tokens.
                 $endpos = $startpos;
-            } else if (ctype_alpha($firstchar) || $firstchar === '_' || $firstchar === '$' || $firstchar === '\\'
+            } else if (ctype_alpha($firstchar) === true || $firstchar === '_' || $firstchar === '$' || $firstchar === '\\'
                 || ord($firstchar) >= 0x7F
             ) {
                 // Identifier token.
                 $endpos = $startpos;
                 do {
-                    $endpos   = ($endpos + 1);
-                    $nextchar = ($endpos < strlen($this->text)) ? $this->text[$endpos] : null;
-                } while ($nextchar !== null && (ctype_alnum($nextchar) || $nextchar === '_'
+                    $endpos = ($endpos + 1);
+                    if ($endpos < strlen($this->text)) {
+                        $nextchar = $this->text[$endpos];
+                    } else {
+                        $nextchar = null;
+                    }
+                } while ($nextchar !== null && (ctype_alnum($nextchar) === true || $nextchar === '_'
                                         || ord($nextchar) >= 0x7F
-                                        || $firstchar !== '$' && ($nextchar === '-' || $nextchar === '\\'))
+                                        || ($firstchar !== '$' && ($nextchar === '-' || $nextchar === '\\')))
                 );
-            } else if (ctype_digit($firstchar)
-                || $firstchar === '-' && strlen($this->text) >= ($startpos + 2) && ctype_digit($this->text[($startpos + 1)])
+            } else if (ctype_digit($firstchar) === true
+                || ($firstchar === '-' && strlen($this->text) >= ($startpos + 2) && ctype_digit($this->text[($startpos + 1)]) === true)
             ) {
                 // Number token.
                 $nextchar  = $firstchar;
@@ -670,12 +701,21 @@ class PHPDocTypeParser
                 do {
                     $havepoint = $havepoint || $nextchar === '.';
                     $endpos    = ($endpos + 1);
-                    $nextchar  = ($endpos < strlen($this->text)) ? $this->text[$endpos] : null;
-                } while ($nextchar !== null && (ctype_digit($nextchar) || $nextchar === '.' && !$havepoint || $nextchar === '_'));
+                    if ($endpos < strlen($this->text)) {
+                        $nextchar = $this->text[$endpos];
+                    } else {
+                        $nextchar = null;
+                    }
+                } while ($nextchar !== null && (ctype_digit($nextchar) || ($nextchar === '.' && $havepoint === false) || $nextchar === '_'));
             } else if ($firstchar === '"' || $firstchar === "'") {
                 // String token.
-                $endpos   = ($startpos + 1);
-                $nextchar = ($endpos < strlen($this->text)) ? $this->text[$endpos] : null;
+                $endpos = ($startpos + 1);
+                if ($endpos < strlen($this->text)) {
+                    $nextchar = $this->text[$endpos];
+                } else {
+                    $nextchar = null;
+                }
+
                 while ($nextchar !== $firstchar && $nextchar !== null) {
                     // There may be unterminated strings.
                     if ($nextchar === '\\' && strlen($this->text) >= ($endpos + 2)) {
@@ -684,7 +724,11 @@ class PHPDocTypeParser
                         $endpos++;
                     }
 
-                    $nextchar = ($endpos < strlen($this->text)) ? $this->text[$endpos] : null;
+                    if ($endpos < strlen($this->text)) {
+                        $nextchar = $this->text[$endpos];
+                    } else {
+                        $nextchar = null;
+                    }
                 }
 
                 if ($nextchar !== null) {
@@ -727,7 +771,7 @@ class PHPDocTypeParser
     /**
      * Fetch the next token
      *
-     * @param          ?string $expect the expected text, or null for any
+     * @param ?string $expect the expected text, or null for any
      *
      * @return         string
      * @phpstan-impure
@@ -758,7 +802,7 @@ class PHPDocTypeParser
     /**
      * Correct the next token
      *
-     * @param          string $correct the corrected text
+     * @param string $correct the corrected text
      *
      * @return         void
      * @phpstan-impure
@@ -800,7 +844,7 @@ class PHPDocTypeParser
     /**
      * Parse a list of types seperated by | and/or &, single nullable type, or conditional return type
      *
-     * @param          bool $inbrackets are we immediately inside brackets?
+     * @param bool $inbrackets are we immediately inside brackets?
      *
      * @return         string the simplified type
      * @phpstan-impure
@@ -988,7 +1032,6 @@ class PHPDocTypeParser
 
         if (in_array($lowernext, ['bool', 'boolean', 'true', 'false']) === true) {
             // Bool.
-
             if ($lowernext === 'boolean') {
                 $this->correctToken('bool');
             } else {
@@ -1252,13 +1295,13 @@ class PHPDocTypeParser
             // Self.
             $this->correctToken($lowernext);
             $this->parseToken('self');
-            $type = $this->scope->classname ?? 'self';
+            $type = ($this->scope->classname ?? 'self');
         } else if ($lowernext === 'parent') {
             // Parent.
             $this->phpfig = false;
             $this->correctToken($lowernext);
             $this->parseToken('parent');
-            $type = $this->scope->parentname ?? 'parent';
+            $type = ($this->scope->parentname ?? 'parent');
         } else if (in_array($lowernext, ['static', '$this']) === true) {
             // Static.
             $this->correctToken($lowernext);
@@ -1268,7 +1311,6 @@ class PHPDocTypeParser
             } else {
                 $type = 'static';
             }
-
         } else if ($lowernext === 'callable'
             || $next === '\\Closure' || ($next === 'Closure' && $this->scope->namespace === '')
         ) {
@@ -1414,7 +1456,8 @@ class PHPDocTypeParser
 
         // Suffixes.  We can't embed these in the class name section, because they could apply to relative classes.
         if ($this->next === '<'
-                && (in_array('object', $this->superTypes($type)) === true)) {
+            && (in_array('object', $this->superTypes($type)) === true)
+        ) {
             // Generics.
             $this->phpfig = false;
             $this->parseToken('<');
@@ -1428,7 +1471,8 @@ class PHPDocTypeParser
             } while ($more === true);
             $this->parseToken('>');
         } else if ($this->next === '::'
-                && (in_array('object', $this->superTypes($type)) === true)) {
+            && (in_array('object', $this->superTypes($type)) === true)
+        ) {
             // Class constant.
             $this->phpfig = false;
             $this->parseToken('::');
@@ -1437,6 +1481,7 @@ class PHPDocTypeParser
             } else {
                 $nextchar = $this->next[0];
             }
+
             $haveconstantname = $nextchar !== null && (ctype_alpha($nextchar) || $nextchar === '_');
             if ($haveconstantname === true) {
                 $this->parseToken();

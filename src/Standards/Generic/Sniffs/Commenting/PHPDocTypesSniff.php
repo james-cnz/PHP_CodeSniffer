@@ -28,7 +28,7 @@ class PHPDocTypesSniff implements Sniff
      *
      * @var boolean
      */
-    public bool $debugMode = false;
+    public $debugMode = false;
 
     /**
      * Check named functions (except void ones with no params), and class variables and constants are documented.
@@ -36,56 +36,56 @@ class PHPDocTypesSniff implements Sniff
      *
      * @var boolean
      */
-    public bool $checkHasDocBlocks = false;
+    public $checkHasDocBlocks = false;
 
     /**
      * Check doc blocks, if present, contain appropriate param, return, or var tags.
      *
      * @var boolean
      */
-    public bool $checkHasTags = false;
+    public $checkHasTags = false;
 
     /**
      * Check there are no misplaced type tags--doesn't check for misplaced var tags.
      *
      * @var boolean
      */
-    public bool $checkNoMisplaced = true;
+    public $checkNoMisplaced = true;
 
     /**
      * Check the types match--isn't aware of class heirarchies from other files.
      *
      * @var boolean
      */
-    public bool $checkTypeMatch = true;
+    public $checkTypeMatch = true;
 
     /**
      * Check built-in types are lower case, and short forms are used.
      *
      * @var boolean
      */
-    public bool $checkStyle = false;
+    public $checkStyle = false;
 
     /**
      * Check the types used conform to the PHP-FIG PHPDoc standard.
      *
      * @var boolean
      */
-    public bool $checkPhpFig = false;
+    public $checkPhpFig = false;
 
     /**
      * Check pass by reference and splat usage matches for param tags.
      *
      * @var boolean
      */
-    public bool $checkPassSplat = true;
+    public $checkPassSplat = true;
 
     /**
      * The current file.
      *
      * @var ?File
      */
-    protected ?File $file = null;
+    protected $file = null;
 
     /**
      * File tokens.
@@ -97,35 +97,35 @@ class PHPDocTypesSniff implements Sniff
      *      'comment_tags'?: array<int>, 'comment_closer'?: int
      *  }[]
      */
-    protected array $tokens = [];
+    protected $tokens = [];
 
     /**
      * Classish things: classes, interfaces, traits, and enums.
      *
      * @var array<string, object{extends: ?string, implements: string[]}>
      */
-    protected array $artifacts = [];
+    protected $artifacts = [];
 
     /**
      * For parsing and comparing types.
      *
      * @var ?PHPDocTypeParser
      */
-    protected ?PHPDocTypeParser $typeparser = null;
+    protected $typeparser = null;
 
     /**
      * Pass 1 for gathering artifact/classish info, 2 for checking.
      *
      * @var 1|2
      */
-    protected int $pass = 1;
+    protected $pass = 1;
 
     /**
      * Current token pointer in the file.
      *
      * @var integer
      */
-    protected int $fileptr = 0;
+    protected $fileptr = 0;
 
     /**
      * PHPDoc comment for upcoming declaration
@@ -137,7 +137,7 @@ class PHPDocTypesSniff implements Sniff
      *      }
      *  )
      */
-    protected ?object $commentpending = null;
+    protected $commentpending = null;
 
     /**
      * The current token.
@@ -149,7 +149,7 @@ class PHPDocTypesSniff implements Sniff
      *      'comment_tags'?: array<int>, 'comment_closer'?: int
      *  }
      */
-    protected array $token = [
+    protected $token = [
         'code'    => null,
         'content' => '',
     ];
@@ -164,7 +164,7 @@ class PHPDocTypesSniff implements Sniff
      *      'comment_tags'?: array<int>, 'comment_closer'?: int
      *  }
      */
-    protected array $tokenprevious = [
+    protected $tokenprevious = [
         'code'    => null,
         'content' => '',
     ];
