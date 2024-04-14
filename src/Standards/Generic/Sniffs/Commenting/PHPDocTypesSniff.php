@@ -445,8 +445,6 @@ class PHPDocTypesSniff implements Sniff
             throw new \Exception('Malformed scope closer');
         }
 
-        // We can't consume the last token.  Arrow functions close on the token following their body.
-
     }//end processBlock()
 
 
