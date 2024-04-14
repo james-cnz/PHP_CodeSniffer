@@ -1171,7 +1171,7 @@ class PHPDocTypesSniff implements Sniff
         $scope->closer = null;
 
         // Get details.
-        if ($token['code' !== T_FN]) {
+        if ($token['code'] !== T_FN) {
             $name = $this->file->getDeclarationName($ptr);
         } else {
             $name = null;
@@ -1584,7 +1584,7 @@ class PHPDocTypesSniff implements Sniff
             // Get properties, unless it's a function static variable or constant.
             if ($scope->type === 'classish' && $const === false) {
                 $properties = $this->file->getMemberProperties($this->fileptr);
-                if ($properties['types'] !== '') {
+                if ($properties['type'] !== '') {
                     $vartype = $properties['type'];
                 } else {
                     $vartype = 'mixed';
