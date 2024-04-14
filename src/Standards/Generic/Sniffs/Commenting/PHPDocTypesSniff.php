@@ -1550,7 +1550,6 @@ class PHPDocTypesSniff implements Sniff
 
         // Parse type.
         if ($const === false) {
-            // TODO: Add T_TYPE_OPEN_PARENTHESIS and T_TYPE_CLOSE_PARENTHESIS if/when this change happens.
             while (in_array(
                 $this->token['code'],
                 [
