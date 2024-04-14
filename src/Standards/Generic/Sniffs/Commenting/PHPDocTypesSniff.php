@@ -288,7 +288,7 @@ class PHPDocTypesSniff implements Sniff
             // Parameters.
             if (isset($this->token['parenthesis_opener']) === false
                 || $this->token['parenthesis_opener'] !== $this->fileptr
-                || isset($this->token['parenthesis_closer'] === false)
+                || isset($this->token['parenthesis_closer']) === false
             ) {
                 throw new \Exception('Malformed parameters');
             }
