@@ -211,7 +211,7 @@ class PHPDocTypesSniff implements Sniff
             // We should only end up here in debug mode.
             $this->file->addError(
                 'The PHPDoc type sniff failed to parse the file.  PHPDoc type checks were not performed.  Error: '.$e->getMessage(),
-                min($this->fileptr, count($this->tokens) - 1),
+                min($this->fileptr, (count($this->tokens) - 1)),
                 'phpdoc_type_parse'
             );
         }//end try
@@ -446,6 +446,7 @@ class PHPDocTypesSniff implements Sniff
         }
 
         // We can't consume the last token.  Arrow functions close on the token following their body.
+
     }//end processBlock()
 
 
@@ -568,9 +569,6 @@ class PHPDocTypesSniff implements Sniff
             $this->fileptr = $tagptr;
             $this->fetchToken();
 
-            /**
-             * @var \stdClass&object{ptr: int, content: string, cstartptr: ?int, cendptr: ?int} $tag
-             */
             $tag = (object) [
                 'ptr'       => $tagptr,
                 'content'   => '',
@@ -1002,9 +1000,6 @@ class PHPDocTypesSniff implements Sniff
             }
         }
 
-        /**
-         * @var array<string>|false $interfaces
-         */
         $interfaces = $this->file->findImplementedInterfaceNames($ptr);
         if ($interfaces === false) {
             $interfaces = [];
