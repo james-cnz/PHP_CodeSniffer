@@ -949,16 +949,9 @@ class PHPDocTypesSniff implements Sniff
     /**
      * Process a classish thing.
      *
-     * @param          \stdClass&object{
-     *      namespace: string, uses: array<string, string>, templates: array<string, string>,
-     *      classname: ?string, parentname: ?string, type: string, closer: ?int
-     * } $scope
-     * @param          ?(
-     *      \stdClass&object{
-     *          ptr: int,
-     *          tags: array<string, object{ptr: int, content: string, cstartptr: ?int, cendptr: ?int}[]>
-     *      }
-     * ) $comment
+     * @param \stdClass&object{namespace: string, uses: array<string, string>, templates: array<string, string>, classname: ?string, parentname: ?string, type: string, closer: ?int} $scope   Scope
+     * @param ?(\stdClass&object{ptr: int, tags: array<string, object{ptr: int, content: string, cstartptr: ?int, cendptr: ?int}[]>})                                                 $comment PHPDoc block
+     *
      * @return         void
      * @phpstan-impure
      */
@@ -976,12 +969,14 @@ class PHPDocTypesSniff implements Sniff
 
         // Get details.
         $name   = $this->file->getDeclarationName($ptr);
-        $name   = $name ? $scope->namespace.'\\'.$name : null;
+        if ($name !== null) {
+            $name = $scope->namespace.'\\'.$name;
+        }
         $parent = $this->file->findExtendedClassName($ptr);
         if ($parent === false) {
             $parent = null;
-        } else if ($parent && $parent[0] !== '\\') {
-            if (isset($scope->uses[$parent])) {
+        } else if ($parent !== null && $parent[0] !== '\\') {
+            if (isset($scope->uses[$parent]) === true) {
                 $parent = $scope->uses[$parent];
             } else {
                 $parent = $scope->namespace.'\\'.$parent;
@@ -991,14 +986,15 @@ class PHPDocTypesSniff implements Sniff
         /*
          * @var array<string>|false $interfaces
          */
+
         $interfaces = $this->file->findImplementedInterfaceNames($ptr);
-        if (!is_array($interfaces)) {
+        if ($interfaces === false) {
             $interfaces = [];
         }
 
         foreach ($interfaces as $index => $interface) {
-            if ($interface && $interface[0] !== '\\') {
-                if (isset($scope->uses[$interface])) {
+            if ($interface[0] !== '\\') {
+                if (isset($scope->uses[$interface]) === true) {
                     $interfaces[$index] = $scope->uses[$interface];
                 } else {
                     $interfaces[$index] = $scope->namespace.'\\'.$interface;
@@ -1009,7 +1005,7 @@ class PHPDocTypesSniff implements Sniff
         $scope->classname  = $name;
         $scope->parentname = $parent;
 
-        if ($this->pass === 1 && $name) {
+        if ($this->pass === 1 && $name !== null) {
             // Store details.
             $this->artifacts[$name] = (object) [
                 'extends'    => $parent,
@@ -1018,20 +1014,20 @@ class PHPDocTypesSniff implements Sniff
         } else if ($this->pass === 2) {
             // Checks.
             // Check no misplaced tags.
-            if ($comment) {
+            if ($comment !== null) {
                 $this->checkNo($comment, ['@param', '@return', '@var']);
             }
 
             // Check and store templates.
-            if ($comment && isset($comment->tags['@template'])) {
+            if ($comment !== null && isset($comment->tags['@template']) === true) {
                 $this->processTemplates($scope, $comment);
             }
 
             // Check properties.
-            if ($comment) {
+            if ($comment !== null) {
                 // Check each property type.
                 foreach (['@property', '@property-read', '@property-write'] as $tagname) {
-                    if (!isset($comment->tags[$tagname])) {
+                    if (isset($comment->tags[$tagname]) === false) {
                         $comment->tags[$tagname] = [];
                     }
 
@@ -1040,24 +1036,23 @@ class PHPDocTypesSniff implements Sniff
                         $docpropparsed = $this->typeparser->parseTypeAndName(
                             $scope,
                             $docprop->content,
-                            1/*type and name*/,
+                            1,
                             false
-                            // phpdoc
                         );
-                        if (!$docpropparsed->type) {
+                        if ($docpropparsed->type === null) {
                             $this->file->addError(
                                 'PHPDoc class property type missing or malformed',
                                 $docprop->ptr,
                                 'phpdoc_class_prop_type'
                             );
-                        } else if (!$docpropparsed->name) {
+                        } else if ($docpropparsed->name === null) {
                             $this->file->addError(
                                 'PHPDoc class property name missing or malformed',
                                 $docprop->ptr,
                                 'phpdoc_class_prop_name'
                             );
                         } else {
-                            if ($this->checkPhpFig && !$docpropparsed->phpfig) {
+                            if ($this->checkPhpFig === true && $docpropparsed->phpfig === false) {
                                 $this->file->addWarning(
                                     "PHPDoc class property type doesn't conform to PHP-FIG PHPDoc",
                                     $docprop->ptr,
@@ -1065,13 +1060,13 @@ class PHPDocTypesSniff implements Sniff
                                 );
                             }
 
-                            if ($this->checkStyle && $docpropparsed->fixed) {
+                            if ($this->checkStyle === true && $docpropparsed->fixed !== null) {
                                 $fix = $this->file->addFixableWarning(
                                     "PHPDoc class property type doesn't conform to recommended style",
                                     $docprop->ptr,
                                     'phpdoc_class_prop_type_style'
                                 );
-                                if ($fix) {
+                                if ($fix === true) {
                                     $this->fixCommentTag(
                                         $docprop,
                                         $docpropparsed->fixed
@@ -1084,20 +1079,20 @@ class PHPDocTypesSniff implements Sniff
             }//end if
         }//end if
 
-        $parametersptr = isset($token['parenthesis_opener']) ? $token['parenthesis_opener'] : null;
-        $blockptr      = isset($token['scope_opener']) ? $token['scope_opener'] : null;
+        $parametersptr = ($token['parenthesis_opener'] ?? null);
+        $blockptr      = ($token['scope_opener'] ?? null);
 
         // If it's an anonymous class, it could have parameters.
         // And those parameters could have other anonymous classes or functions in them.
-        if ($parametersptr) {
+        if ($parametersptr !== null) {
             $this->advanceTo($parametersptr);
-            $this->processBlock($scope, 2/*parameters*/);
+            $this->processBlock($scope, 2);
         }
 
         // Process the content.
-        if ($blockptr) {
+        if ($blockptr !== null) {
             $this->advanceTo($blockptr);
-            $this->processBlock($scope, 1/*block*/);
+            $this->processBlock($scope, 1);
         };
 
     }//end processClassish()
@@ -1126,13 +1121,13 @@ class PHPDocTypesSniff implements Sniff
                     T_NS_SEPARATOR,
                     T_STRING,
                 ]
-            )
+            ) === true
             ) {
                 $this->advance();
             }
 
             if ($this->token['code'] === T_OPEN_CURLY_BRACKET) {
-                if (!isset($this->token['bracket_opener']) || !isset($this->token['bracket_closer'])) {
+                if (isset($this->token['bracket_opener']) === false || isset($this->token['bracket_closer']) === false) {
                     throw new \Exception('Malformed class trait use.');
                 }
 
@@ -1141,10 +1136,10 @@ class PHPDocTypesSniff implements Sniff
             }
 
             $more = ($this->token['code'] === T_COMMA);
-            if ($more) {
+            if ($more === true) {
                 $this->advance(T_COMMA);
             }
-        } while ($more);
+        } while ($more === true);
 
     }//end processClassTraitUse()
 
