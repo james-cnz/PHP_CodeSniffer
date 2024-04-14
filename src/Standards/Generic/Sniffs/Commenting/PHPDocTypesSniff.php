@@ -1152,8 +1152,8 @@ class PHPDocTypesSniff implements Sniff
     /**
      * Process a function.
      *
-     * @param \stdClass&object{namespace: string, uses: array<string, string>, templates: array<string, string>, classname: ?string, parentname: ?string, type: string, closer: ?int} $scope Scope
-     * @param ?(\stdClass&object{ptr: int, tags: array<string, object{ptr: int, content: string, cstartptr: ?int, cendptr: ?int}[]>}) $comment PHPDoc block
+     * @param \stdClass&object{namespace: string, uses: array<string, string>, templates: array<string, string>, classname: ?string, parentname: ?string, type: string, closer: ?int} $scope   Scope
+     * @param ?(\stdClass&object{ptr: int, tags: array<string, object{ptr: int, content: string, cstartptr: ?int, cendptr: ?int}[]>})                                                 $comment PHPDoc block
      *
      * @return         void
      * @phpstan-impure
@@ -1177,8 +1177,8 @@ class PHPDocTypesSniff implements Sniff
             $name = null;
         }
 
-        $parametersptr = $token['parenthesis_opener'] ?? null;
-        $blockptr      = $token['scope_opener'] ?? null;
+        $parametersptr = ($token['parenthesis_opener'] ?? null);
+        $blockptr      = ($token['scope_opener'] ?? null);
         if ($parametersptr === null
             || isset($this->tokens[$parametersptr]['parenthesis_opener']) === false
             || isset($this->tokens[$parametersptr]['parenthesis_closer']) === false
@@ -1192,7 +1192,7 @@ class PHPDocTypesSniff implements Sniff
         // Checks.
         if ($this->pass === 2) {
             // Check for missing docs if not anonymous.
-            if ($this->checkHasDocBlocks === true && $name && $comment === null
+            if ($this->checkHasDocBlocks === true && $name !== null && $comment === null
                 && (count($parameters) > 0
                 || ($name !== '__construct' && strtolower(trim($properties['return_type'])) !== 'void'))
             ) {
@@ -1380,6 +1380,7 @@ class PHPDocTypesSniff implements Sniff
                 } else {
                     $retparsed = (object) ['type' => 'mixed'];
                 }
+
                 if (isset($comment->tags['@return']) === false) {
                     $comment->tags['@return'] = [];
                 }
@@ -1468,8 +1469,8 @@ class PHPDocTypesSniff implements Sniff
     /**
      * Process templates.
      *
-     * @param \stdClass&object{namespace: string, uses: array<string, string>, templates: array<string, string>, classname: ?string, parentname: ?string, type: string, closer: ?int} $scope Scope
-     * @param ?(\stdClass&object{ptr: int, tags: array<string, object{ptr: int, content: string, cstartptr: ?int, cendptr: ?int}[]>}) $comment PHPDoc block
+     * @param \stdClass&object{namespace: string, uses: array<string, string>, templates: array<string, string>, classname: ?string, parentname: ?string, type: string, closer: ?int} $scope   Scope
+     * @param ?(\stdClass&object{ptr: int, tags: array<string, object{ptr: int, content: string, cstartptr: ?int, cendptr: ?int}[]>})                                                 $comment PHPDoc block
      *
      * @return         void
      * @phpstan-impure
@@ -1524,8 +1525,8 @@ class PHPDocTypesSniff implements Sniff
     /**
      * Process a variable.
      *
-     * @param \stdClass&object{namespace: string, uses: array<string, string>, templates: array<string, string>, classname: ?string, parentname: ?string, type: string, closer: ?int} $scope Scope
-     * @param ?(\stdClass&object{ptr: int, tags: array<string, object{ptr: int, content: string, cstartptr: ?int, cendptr: ?int}[]>}) $comment PHPDoc block
+     * @param \stdClass&object{namespace: string, uses: array<string, string>, templates: array<string, string>, classname: ?string, parentname: ?string, type: string, closer: ?int} $scope   Scope
+     * @param ?(\stdClass&object{ptr: int, tags: array<string, object{ptr: int, content: string, cstartptr: ?int, cendptr: ?int}[]>})                                                 $comment PHPDoc block
      *
      * @return         void
      * @phpstan-impure
@@ -1575,7 +1576,8 @@ class PHPDocTypesSniff implements Sniff
 
         // Check name.
         if (($const === true && $this->token['code'] !== T_STRING)
-            || ($const === false && $this->token['code'] !== T_VARIABLE)) {
+            || ($const === false && $this->token['code'] !== T_VARIABLE)
+        ) {
             throw new \Exception('Expected declaration.');
         }
 
@@ -1591,7 +1593,7 @@ class PHPDocTypesSniff implements Sniff
                 }
             } else {
                 $properties = null;
-                $vartype = 'mixed';
+                $vartype    = 'mixed';
             }
 
             if ($this->checkHasDocBlocks === true && $comment === null && $scope->type === 'classish') {
@@ -1703,8 +1705,8 @@ class PHPDocTypesSniff implements Sniff
      * If we find a PHPDoc var comment that's not attached to something we're looking for,
      * we'll just check the type is well formed, and assume it's otherwise OK.
      *
-     * @param \stdClass&object{namespace: string, uses: array<string, string>, templates: array<string, string>, classname: ?string, parentname: ?string, type: string, closer: ?int} $scope  We don't actually need the scope, because we're not doing a type comparison.
-     * @param ?(\stdClass&object{ptr: int, tags: array<string, object{ptr: int, content: string, cstartptr: ?int, cendptr: ?int}[]>}) $comment PHPDoc block
+     * @param \stdClass&object{namespace: string, uses: array<string, string>, templates: array<string, string>, classname: ?string, parentname: ?string, type: string, closer: ?int} $scope   We don't actually need the scope, because we're not doing a type comparison.
+     * @param ?(\stdClass&object{ptr: int, tags: array<string, object{ptr: int, content: string, cstartptr: ?int, cendptr: ?int}[]>})                                                 $comment PHPDoc block
      *
      * @return         void
      * @phpstan-impure
