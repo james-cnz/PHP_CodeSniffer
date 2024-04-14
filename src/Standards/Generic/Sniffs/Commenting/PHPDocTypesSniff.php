@@ -1192,7 +1192,7 @@ class PHPDocTypesSniff implements Sniff
         // Checks.
         if ($this->pass === 2) {
             // Check for missing docs if not anonymous.
-            if ($this->checkHasDocBlocks === true && $name && $comment !== null
+            if ($this->checkHasDocBlocks === true && $name && $comment === null
                 && (count($parameters) > 0
                 || ($name !== '__construct' && strtolower(trim($properties['return_type'])) !== 'void'))
             ) {
