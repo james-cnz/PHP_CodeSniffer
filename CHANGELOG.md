@@ -2,7 +2,7 @@
 
 The file documents changes to the PHP_CodeSniffer project.
 
-## [Unreleased 4.x]
+## Unreleased 4.x
 
 ### Added
 - An error message is now displayed if no files were checked during a run
@@ -104,7 +104,7 @@ The file documents changes to the PHP_CodeSniffer project.
         ```
 
 
-## [Unreleased 3.x]
+## [Unreleased]
 
 _Nothing yet._
 
