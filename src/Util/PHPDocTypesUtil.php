@@ -18,7 +18,7 @@ namespace PHP_CodeSniffer\Util;
 /**
  * PHPDoc type parser
  */
-class PHPDocTypeParser
+class PHPDocTypesUtil
 {
 
     /**

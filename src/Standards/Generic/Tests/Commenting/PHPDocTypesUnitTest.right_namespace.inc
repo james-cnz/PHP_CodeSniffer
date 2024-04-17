@@ -1,15 +1,14 @@
 <?php
-
 /**
  * A collection of valid types for testing
  *
  * This file should have no errors when checked with either PHPStan or Psalm.
  * And no errors when checked with the PHPDoc Types sniff.
  *
+ * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic
- * @author    James Calder
  * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @license   CC BY-SA v4 or later
+ *            CC BY-SA v4 or later
  */
 
 namespace MoodleHQ\MoodleCS\moodle\Tests\Sniffs\Commenting\fixtures {
@@ -17,14 +16,23 @@ namespace MoodleHQ\MoodleCS\moodle\Tests\Sniffs\Commenting\fixtures {
     /**
      * A collection of valid types for testing
      */
-    class php_valid {
+    class PhpValid
+    {
+
+
         /**
          * Namespaces recognised
-         * @param \MoodleHQ\MoodleCS\moodle\Tests\Sniffs\Commenting\fixtures\php_valid $x
+         *
+         * @param \MoodleHQ\MoodleCS\moodle\Tests\Sniffs\Commenting\fixtures\PhpValid $x
+         *
          * @return void
          */
-        function namespaces(php_valid $x): void {
-        }
-    }
+        public function namespaces(PhpValid $x): void
+        {
+
+        }//end namespaces()
+
+
+    }//end class
 
 }

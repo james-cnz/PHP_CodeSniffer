@@ -15,7 +15,7 @@ namespace PHP_CodeSniffer\Standards\Generic\Sniffs\Commenting;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
-use PHP_CodeSniffer\Util\PHPDocTypeParser;
+use PHP_CodeSniffer\Util\PHPDocTypesUtil;
 
 /**
  * Check PHPDoc Types.
@@ -24,14 +24,7 @@ class PHPDocTypesSniff implements Sniff
 {
 
     /**
-     * Throw an error and stop if we can't parse the file.
-     *
-     * @var boolean
-     */
-    public $debugMode = false;
-
-    /**
-     * Check named functions (except void ones with no params), and class variables and constants are documented.
+     * Check named functions (except void ones with no params), and class variables and constants have doc blocks.
      * Unless using this sniff standalone to just check types, probably disable this and use other sniffs.
      *
      * @var boolean
@@ -39,7 +32,7 @@ class PHPDocTypesSniff implements Sniff
     public $checkHasDocBlocks = false;
 
     /**
-     * Check doc blocks, if present, contain appropriate param, return, or var tags.
+     * Check doc blocks, if present, contain appropriate tags.
      *
      * @var boolean
      */
@@ -67,11 +60,11 @@ class PHPDocTypesSniff implements Sniff
     public $checkStyle = false;
 
     /**
-     * Check the types used conform to the PHP-FIG PHPDoc standard.
+     * Check the types used conform to the PHP-FIG PSR-5 PHPDoc standard.
      *
      * @var boolean
      */
-    public $checkPhpFig = false;
+    public $checkPhpFigTypes = false;
 
     /**
      * Check pass by reference and splat usage matches for param tags.
@@ -79,6 +72,13 @@ class PHPDocTypesSniff implements Sniff
      * @var boolean
      */
     public $checkPassSplat = true;
+
+    /**
+     * Throw an error and stop if we can't parse the file.
+     *
+     * @var boolean
+     */
+    public $debugMode = false;
 
     /**
      * The current file.
@@ -109,7 +109,7 @@ class PHPDocTypesSniff implements Sniff
     /**
      * For parsing and comparing types.
      *
-     * @var ?PHPDocTypeParser
+     * @var ?PHPDocTypesUtil
      */
     protected $typeparser = null;
 
@@ -199,13 +199,15 @@ class PHPDocTypesSniff implements Sniff
 
             // Gather atifact info.
             $this->artifacts  = [];
-            $this->pass       = 1;
-            $this->typeparser = null;
-            $this->processPass($stackptr);
+            if ($this->checkTypeMatch) {
+                $this->pass       = 1;
+                $this->typeparser = null;
+                $this->processPass($stackptr);
+            }
 
             // Check the PHPDoc types.
             $this->pass       = 2;
-            $this->typeparser = new PHPDocTypeParser($this->artifacts);
+            $this->typeparser = new PHPDocTypesUtil($this->artifacts);
             $this->processPass($stackptr);
         } catch (\Exception $e) {
             // We should only end up here in debug mode.
@@ -521,6 +523,37 @@ class PHPDocTypesSniff implements Sniff
         }
 
     }//end advance()
+
+
+    /**
+     * Find following token
+     *
+     * @return array{
+     *      'code': ?array-key, 'content': string, 'scope_opener'?: int, 'scope_closer'?: int,
+     *      'parenthesis_opener'?: int, 'parenthesis_closer'?: int, 'attribute_closer'?: int,
+     *      'bracket_opener'?: int, 'bracket_closer'?: int,
+     *      'comment_tags'?: array<int>, 'comment_closer'?: int
+     *  }
+     */
+    protected function lookAhead(): array {
+        $fileptr = $this->fileptr + 1;
+
+        // Skip stuff that doesn't affect us.
+        while ($fileptr < count($this->tokens)
+            && in_array($this->tokens[$fileptr]['code'], Tokens::$emptyTokens) === true
+        ) {
+            $fileptr++;
+        }
+
+        if ($fileptr < count($this->tokens)) {
+            return $this->tokens[$fileptr];
+        } else {
+            return [
+                'code'    => null,
+                'content' => '',
+            ];
+        }
+    }
 
 
     /**
@@ -1063,9 +1096,9 @@ class PHPDocTypesSniff implements Sniff
                                 'phpdoc_class_prop_name'
                             );
                         } else {
-                            if ($this->checkPhpFig === true && $docpropparsed->phpfig === false) {
+                            if ($this->checkPhpFigTypes === true && $docpropparsed->phpfig === false) {
                                 $this->file->addWarning(
-                                    "PHPDoc class property type doesn't conform to PHP-FIG PHPDoc",
+                                    "PHPDoc class property type doesn't conform to PHP-FIG PSR-5",
                                     $docprop->ptr,
                                     'phpdoc_class_prop_type_phpfig'
                                 );
@@ -1306,9 +1339,9 @@ class PHPDocTypesSniff implements Sniff
                             );
                         }
 
-                        if ($this->checkPhpFig === true && $docparamparsed->phpfig === false) {
+                        if ($this->checkPhpFigTypes === true && $docparamparsed->phpfig === false) {
                             $this->file->addWarning(
-                                "PHPDoc function parameter type doesn't conform to PHP-FIG PHPDoc",
+                                "PHPDoc function parameter type doesn't conform to PHP-FIG PSR-5",
                                 $docparam->ptr,
                                 'phpdoc_fun_param_type_phpfig'
                             );
@@ -1433,9 +1466,9 @@ class PHPDocTypesSniff implements Sniff
                             );
                         }
 
-                        if ($this->checkPhpFig === true && $docretparsed->phpfig === false) {
+                        if ($this->checkPhpFigTypes === true && $docretparsed->phpfig === false) {
                             $this->file->addWarning(
-                                "PHPDoc function return type doesn't conform to PHP-FIG PHPDoc",
+                                "PHPDoc function return type doesn't conform to PHP-FIG PSR-5",
                                 $docret->ptr,
                                 'phpdoc_fun_ret_type_phpfig'
                             );
@@ -1501,9 +1534,9 @@ class PHPDocTypesSniff implements Sniff
             } else {
                 $scope->templates[$doctemplateparsed->name] = $doctemplateparsed->type;
 
-                if ($this->checkPhpFig === true && $doctemplateparsed->phpfig === false) {
+                if ($this->checkPhpFigTypes === true && $doctemplateparsed->phpfig === false) {
                     $this->file->addWarning(
-                        "PHPDoc template type doesn't conform to PHP-FIG PHPDoc",
+                        "PHPDoc template type doesn't conform to PHP-FIG PSR-5",
                         $doctemplate->ptr,
                         'phpdoc_template_type_phpfig'
                     );
@@ -1549,35 +1582,36 @@ class PHPDocTypesSniff implements Sniff
         }
 
         // Parse type.
-        if ($const === false) {
-            while (in_array(
-                $this->token['code'],
-                [
-                    T_TYPE_UNION,
-                    T_TYPE_INTERSECTION,
-                    T_NULLABLE,
-                    T_OPEN_PARENTHESIS,
-                    T_CLOSE_PARENTHESIS,
-                    T_NAME_FULLY_QUALIFIED,
-                    T_NAME_QUALIFIED,
-                    T_NAME_RELATIVE,
-                    T_NS_SEPARATOR,
-                    T_STRING,
-                    T_NULL,
-                    T_ARRAY,
-                    T_OBJECT,
-                    T_SELF,
-                    T_PARENT,
-                    T_FALSE,
-                    T_TRUE,
-                    T_CALLABLE,
-                    T_STATIC,
-                ]
-            ) === true
-            ) {
-                $this->advance();
-            }
-        }//end if
+        $vartype = '';
+        while (in_array(
+            $this->token['code'],
+            [
+                T_TYPE_UNION,
+                T_TYPE_INTERSECTION,
+                T_NULLABLE,
+                T_OPEN_PARENTHESIS,
+                T_CLOSE_PARENTHESIS,
+                T_NAME_FULLY_QUALIFIED,
+                T_NAME_QUALIFIED,
+                T_NAME_RELATIVE,
+                T_NS_SEPARATOR,
+                T_STRING,
+                T_NULL,
+                T_ARRAY,
+                T_OBJECT,
+                T_SELF,
+                T_PARENT,
+                T_FALSE,
+                T_TRUE,
+                T_CALLABLE,
+                T_STATIC,
+            ]
+        ) === true
+        && ($const === false || $this->lookAhead()['code'] !== T_EQUAL)
+        ) {
+            $vartype .= $this->token['content'];
+            $this->advance();
+        }
 
         // Check name.
         if (($const === true && $this->token['code'] !== T_STRING)
@@ -1588,19 +1622,6 @@ class PHPDocTypesSniff implements Sniff
 
         // Checking.
         if ($this->pass === 2) {
-            // Get properties, unless it's a function static variable or constant.
-            if ($scope->type === 'classish' && $const === false) {
-                $properties = $this->file->getMemberProperties($this->fileptr);
-                if ($properties['type'] !== '') {
-                    $vartype = $properties['type'];
-                } else {
-                    $vartype = 'mixed';
-                }
-            } else {
-                $properties = null;
-                $vartype    = 'mixed';
-            }
-
             if ($this->checkHasDocBlocks === true && $comment === null && $scope->type === 'classish') {
                 // Require comments for class variables and constants.
                 $this->file->addWarning(
@@ -1668,9 +1689,9 @@ class PHPDocTypesSniff implements Sniff
                             );
                         }
 
-                        if ($this->checkPhpFig === true && $docvarparsed->phpfig === false) {
+                        if ($this->checkPhpFigTypes === true && $docvarparsed->phpfig === false) {
                             $this->file->addWarning(
-                                "PHPDoc var type doesn't conform to PHP-FIG PHPDoc",
+                                "PHPDoc var type doesn't conform to PHP-FIG PSR-5",
                                 $docvar->ptr,
                                 'phpdoc_var_type_phpfig'
                             );
@@ -1748,9 +1769,9 @@ class PHPDocTypesSniff implements Sniff
                             'phpdoc_var_type'
                         );
                     } else {
-                        if ($this->checkPhpFig === true && $docvarparsed->phpfig === false) {
+                        if ($this->checkPhpFigTypes === true && $docvarparsed->phpfig === false) {
                             $this->file->addWarning(
-                                "PHPDoc var type doesn't conform to PHP-FIG PHPDoc",
+                                "PHPDoc var type doesn't conform to PHP-FIG PSR-5",
                                 $docvar->ptr,
                                 'phpdoc_var_type_phpfig'
                             );

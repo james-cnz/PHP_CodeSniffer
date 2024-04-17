@@ -15,17 +15,10 @@ namespace PHP_CodeSniffer\Standards\PSR5\Sniffs\Commenting;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Commenting\PHPDocTypesSniff as SniffBase;
 
 /**
- * Check PHPDoc Types for PSR-5.
+ * Check PHPDoc Types for PHP-FIG PSR-5.
  */
 class PHPDocTypesSniff extends SniffBase
 {
-
-    /**
-     * Throw an error and stop if we can't parse the file.
-     *
-     * @var boolean
-     */
-    public $debugMode = false;
 
     /**
      * Check named functions (except void ones with no params), and class variables and constants are documented.
@@ -64,11 +57,11 @@ class PHPDocTypesSniff extends SniffBase
     public $checkStyle = true;
 
     /**
-     * Check the types used conform to the PHP-FIG PHPDoc standard.
+     * Check the types used conform to the PHP-FIG PSR-5 standard.
      *
      * @var boolean
      */
-    public $checkPhpFig = true;
+    public $checkPhpFigTypes = true;
 
     /**
      * Check pass by reference and splat usage matches for param tags.
