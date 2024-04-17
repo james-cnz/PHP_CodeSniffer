@@ -555,7 +555,7 @@ class PHPDocTypesSniff implements Sniff
             ];
         }
 
-    }//end lookAhead();
+    }//end lookAhead()
 
 
     /**
