@@ -198,8 +198,8 @@ class PHPDocTypesSniff implements Sniff
             $this->tokens = $phpcsfile->getTokens();
 
             // Gather atifact info.
-            $this->artifacts  = [];
-            if ($this->checkTypeMatch) {
+            $this->artifacts = [];
+            if ($this->checkTypeMatch === true) {
                 $this->pass       = 1;
                 $this->typeparser = null;
                 $this->processPass($stackptr);
@@ -535,8 +535,9 @@ class PHPDocTypesSniff implements Sniff
      *      'comment_tags'?: array<int>, 'comment_closer'?: int
      *  }
      */
-    protected function lookAhead(): array {
-        $fileptr = $this->fileptr + 1;
+    protected function lookAhead(): array
+    {
+        $fileptr = ($this->fileptr + 1);
 
         // Skip stuff that doesn't affect us.
         while ($fileptr < count($this->tokens)
@@ -553,7 +554,8 @@ class PHPDocTypesSniff implements Sniff
                 'content' => '',
             ];
         }
-    }
+
+    }//end lookAhead();
 
 
     /**
