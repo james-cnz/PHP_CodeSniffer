@@ -105,15 +105,11 @@ function f( : void {
 
 /**
  * No block
- *
- * @return void
  */
 function f(): void
 
 /**
  * No block close
- *
- * @return void
  */
 function f(): void {
 

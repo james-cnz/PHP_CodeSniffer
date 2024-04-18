@@ -62,7 +62,7 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
             ];
         case 'PHPDocTypesUnitTest.wrong_parse.inc':
             return [
-                136 => 1,
+                132 => 1,
             ];
         case 'PHPDocTypesUnitTest.wrong_types.inc':
             return [
