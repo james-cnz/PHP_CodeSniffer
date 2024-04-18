@@ -60,13 +60,13 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
                 38 => 1,
                 40 => 1,
             ];
-            case 'PHPDocTypesUnitTest.warn_non_php_fig.inc':
-                return [
-                    23 => 1,
-                    31 => 1,
-                    33 => 1,
-                    47 => 1,
-                ];
+        case 'PHPDocTypesUnitTest.warn_non_php_fig.inc':
+            return [
+                23 => 1,
+                31 => 1,
+                33 => 1,
+                47 => 1,
+            ];
         case 'PHPDocTypesUnitTest.warn_style.inc':
             return [
                 17 => 1,
