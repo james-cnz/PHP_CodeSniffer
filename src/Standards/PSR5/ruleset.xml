@@ -1,17 +1,4 @@
 <?xml version="1.0"?>
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="PSR5" xsi:noNamespaceSchemaLocation="../../../phpcs.xsd">
     <description>The PSR5 coding standard.</description>
-
-    <rule ref="Generic.Commenting.PHPDocTypes">
-        <properties>
-            <property name="checkHasDocBlocks" value="true"/>
-            <property name="checkHasTags"      value="true"/>
-            <property name="checkNoMisplaced"  value="true"/>
-            <property name="checkTypeMatch"    value="true"/>
-            <property name="checkStyle"        value="true"/>
-            <property name="checkPhpFigTypes"  value="true"/>
-            <property name="checkPassSplat"    value="true"/>
-        </properties>
-    </rule>
-
 </ruleset>
