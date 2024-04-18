@@ -200,7 +200,7 @@ class PHPDocTypesUtil
     /**
      * Scope.
      *
-     * @var object{namespace: string, uses: string[], templates: string[], classname: ?string, parentname: ?string}
+     * @var object{namespace: string, uses: string[], templates: string[], className: ?string, parentName: ?string}
      */
     protected $scope;
 
@@ -230,7 +230,7 @@ class PHPDocTypesUtil
      *
      * @var boolean
      */
-    protected $phpfig = true;
+    protected $phpFig = true;
 
     /**
      * Next tokens.
@@ -262,14 +262,14 @@ class PHPDocTypesUtil
     /**
      * Parse a type and possibly variable name
      *
-     * @param ?object{namespace: string, uses: string[], templates: string[], classname: ?string, parentname: ?string} $scope   the scope
+     * @param ?object{namespace: string, uses: string[], templates: string[], className: ?string, parentName: ?string} $scope   the scope
      * @param string                                                                                                   $text    the text to parse
      * @param 0|1|2|3                                                                                                  $getwhat what to get 0=type only 1=also name 2=also modifiers (& ...) 3=also default
      * @param bool                                                                                                     $gowide  if we can't determine the type, should we assume wide (for native type) or narrow (for PHPDoc)?
      *
      * @return object{
      *              type: ?string, passsplat: string, name: ?string,
-     *              rem: string, fixed: ?string, phpfig: bool
+     *              rem: string, fixed: ?string, phpFig: bool
      *          } the simplified type, pass by reference & splat, variable name, remaining text, fixed text, and whether PHP-FIG
      */
     public function parseTypeAndName(?object $scope, string $text, int $getwhat, bool $gowide): object
@@ -283,8 +283,8 @@ class PHPDocTypesUtil
                 'namespace'  => '',
                 'uses'       => [],
                 'templates'  => [],
-                'classname'  => null,
-                'parentname' => null,
+                'className'  => null,
+                'parentName' => null,
             ];
         }
 
@@ -296,7 +296,7 @@ class PHPDocTypesUtil
             $this->unknown = 'never';
         }
 
-        $this->phpfig = true;
+        $this->phpFig = true;
         $this->nexts  = [];
         $this->next   = $this->next();
 
@@ -315,7 +315,7 @@ class PHPDocTypesUtil
             $this->nexts  = $savednexts;
             $this->next   = $this->next();
             $type         = null;
-            $this->phpfig = true;
+            $this->phpFig = true;
         }
 
         // Try to parse pass by reference and splat.
@@ -379,7 +379,7 @@ class PHPDocTypesUtil
             'name'      => $name,
             'rem'       => trim(substr($text, $this->nexts[0]->startpos)),
             'fixed'     => $fixed,
-            'phpfig'    => $this->phpfig,
+            'phpFig'    => $this->phpFig,
         ];
 
     }//end parseTypeAndName()
@@ -388,11 +388,11 @@ class PHPDocTypesUtil
     /**
      * Parse a template
      *
-     * @param ?object{namespace: string, uses: string[], templates: string[], classname: ?string, parentname: ?string} $scope the scope
+     * @param ?object{namespace: string, uses: string[], templates: string[], className: ?string, parentName: ?string} $scope the scope
      * @param string                                                                                                   $text  the text to parse
      *
      * @return object{
-     *              type: ?string, name: ?string, rem: string, fixed: ?string, phpfig: bool
+     *              type: ?string, name: ?string, rem: string, fixed: ?string, phpFig: bool
      *          } the simplified type, template name, remaining text, fixed text, and whether PHP-FIG
      */
     public function parseTemplate(?object $scope, string $text): object
@@ -406,15 +406,15 @@ class PHPDocTypesUtil
                 'namespace'  => '',
                 'uses'       => [],
                 'templates'  => [],
-                'classname'  => null,
-                'parentname' => null,
+                'className'  => null,
+                'parentName' => null,
             ];
         }
 
         $this->text         = $text;
         $this->replacements = [];
         $this->unknown      = 'never';
-        $this->phpfig       = true;
+        $this->phpFig       = true;
         $this->nexts        = [];
         $this->next         = $this->next();
 
@@ -456,7 +456,7 @@ class PHPDocTypesUtil
                 $this->nexts  = $savednexts;
                 $this->next   = $this->next();
                 $type         = null;
-                $this->phpfig = true;
+                $this->phpFig = true;
             }
         } else {
             $type = 'mixed';
@@ -473,7 +473,7 @@ class PHPDocTypesUtil
             'name'   => $name,
             'rem'    => trim(substr($text, $this->nexts[0]->startpos)),
             'fixed'  => $fixed,
-            'phpfig' => $this->phpfig,
+            'phpFig' => $this->phpFig,
         ];
 
     }//end parseTemplate()
@@ -855,7 +855,7 @@ class PHPDocTypesUtil
 
         if ($inbrackets === true && $this->next !== null && $this->next[0] === '$' && $this->next(1) === 'is') {
             // Conditional return type.
-            $this->phpfig = false;
+            $this->phpFig = false;
             $this->parseToken();
             $this->parseToken('is');
             $this->parseAnyType();
@@ -866,7 +866,7 @@ class PHPDocTypesUtil
             $uniontypes = array_merge(explode('|', $firsttype), explode('|', $secondtype));
         } else if ($this->next === '?') {
             // Single nullable type.
-            $this->phpfig = false;
+            $this->phpFig = false;
             $this->parseToken('?');
             $uniontypes   = explode('|', $this->parseSingleType());
             $uniontypes[] = 'null';
@@ -1058,7 +1058,7 @@ class PHPDocTypesUtil
         ) {
             // Int.
             if (in_array($lowernext, ['int', 'integer']) === false) {
-                $this->phpfig = false;
+                $this->phpFig = false;
             }
 
             if ($lowernext === 'integer') {
@@ -1070,7 +1070,7 @@ class PHPDocTypesUtil
             $inttype = strtolower($this->parseToken());
             if ($inttype === 'int' && $this->next === '<') {
                 // Integer range.
-                $this->phpfig = false;
+                $this->phpFig = false;
                 $this->parseToken('<');
                 $next = $this->next;
                 if ($next === null
@@ -1124,7 +1124,7 @@ class PHPDocTypesUtil
         ) {
             // Float.
             if (in_array($lowernext, ['float', 'double']) === false) {
-                $this->phpfig = false;
+                $this->phpFig = false;
             }
 
             if ($lowernext === 'double') {
@@ -1151,7 +1151,7 @@ class PHPDocTypesUtil
         ) {
             // String.
             if ($lowernext !== 'string') {
-                $this->phpfig = false;
+                $this->phpFig = false;
             }
 
             if ($nextchar !== '"' && $nextchar !== "'") {
@@ -1172,21 +1172,21 @@ class PHPDocTypesUtil
             $type = 'string';
         } else if ($lowernext === 'callable-string') {
             // Callable-string.
-            $this->phpfig = false;
+            $this->phpFig = false;
             $this->correctToken($lowernext);
             $this->parseToken('callable-string');
             $type = 'callable-string';
         } else if (in_array($lowernext, ['array', 'non-empty-array', 'list', 'non-empty-list']) === true) {
             // Array.
             if ($lowernext !== 'array') {
-                $this->phpfig = false;
+                $this->phpFig = false;
             }
 
             $this->correctToken($lowernext);
             $arraytype = strtolower($this->parseToken());
             if ($this->next === '<') {
                 // Typed array.
-                $this->phpfig = false;
+                $this->phpFig = false;
                 $this->parseToken('<');
                 $firsttype = $this->parseAnyType();
                 if ($this->next === ',') {
@@ -1209,7 +1209,7 @@ class PHPDocTypesUtil
                 $this->parseToken('>');
             } else if ($this->next === '{') {
                 // Array shape.
-                $this->phpfig = false;
+                $this->phpFig = false;
                 if (in_array($arraytype, ['non-empty-array', 'non-empty-list']) === true) {
                     throw new \Exception('Error parsing type, non-empty-arrays cannot have shapes.');
                 }
@@ -1246,7 +1246,7 @@ class PHPDocTypesUtil
             $this->parseToken('object');
             if ($this->next === '{') {
                 // Object shape.
-                $this->phpfig = false;
+                $this->phpFig = false;
                 $this->parseToken('{');
                 do {
                     $next = $this->next;
@@ -1296,19 +1296,19 @@ class PHPDocTypesUtil
             // Self.
             $this->correctToken($lowernext);
             $this->parseToken('self');
-            $type = ($this->scope->classname ?? 'self');
+            $type = ($this->scope->className ?? 'self');
         } else if ($lowernext === 'parent') {
             // Parent.
-            $this->phpfig = false;
+            $this->phpFig = false;
             $this->correctToken($lowernext);
             $this->parseToken('parent');
-            $type = ($this->scope->parentname ?? 'parent');
+            $type = ($this->scope->parentName ?? 'parent');
         } else if (in_array($lowernext, ['static', '$this']) === true) {
             // Static.
             $this->correctToken($lowernext);
             $this->parseToken();
-            if ($this->scope->classname !== null) {
-                $type = "static({$this->scope->classname})";
+            if ($this->scope->className !== null) {
+                $type = "static({$this->scope->className})";
             } else {
                 $type = 'static';
             }
@@ -1322,7 +1322,7 @@ class PHPDocTypesUtil
 
             $callabletype = $this->parseToken();
             if ($this->next === '(') {
-                $this->phpfig = false;
+                $this->phpFig = false;
                 $this->parseToken('(');
                 while ($this->next !== ')') {
                     $this->parseAnyType();
@@ -1377,7 +1377,7 @@ class PHPDocTypesUtil
             $this->correctToken($lowernext);
             $this->parseToken('iterable');
             if ($this->next === '<') {
-                $this->phpfig = false;
+                $this->phpFig = false;
                 $this->parseToken('<');
                 $firsttype = $this->parseAnyType();
                 if ($this->next === ',') {
@@ -1395,19 +1395,19 @@ class PHPDocTypesUtil
             $type = 'iterable';
         } else if ($lowernext === 'array-key') {
             // Array-key (int|string).
-            $this->phpfig = false;
+            $this->phpFig = false;
             $this->correctToken($lowernext);
             $this->parseToken('array-key');
             $type = 'array-key';
         } else if ($lowernext === 'scalar') {
             // Scalar can be (bool|int|float|string).
-            $this->phpfig = false;
+            $this->phpFig = false;
             $this->correctToken($lowernext);
             $this->parseToken('scalar');
             $type = 'scalar';
         } else if ($lowernext === 'key-of') {
             // Key-of.
-            $this->phpfig = false;
+            $this->phpFig = false;
             $this->correctToken($lowernext);
             $this->parseToken('key-of');
             $this->parseToken('<');
@@ -1420,7 +1420,7 @@ class PHPDocTypesUtil
             $type = $this->unknown;
         } else if ($lowernext === 'value-of') {
             // Value-of.
-            $this->phpfig = false;
+            $this->phpFig = false;
             $this->correctToken($lowernext);
             $this->parseToken('value-of');
             $this->parseToken('<');
@@ -1460,7 +1460,7 @@ class PHPDocTypesUtil
             && (in_array('object', $this->superTypes($type)) === true)
         ) {
             // Generics.
-            $this->phpfig = false;
+            $this->phpFig = false;
             $this->parseToken('<');
             $more = false;
             do {
@@ -1475,7 +1475,7 @@ class PHPDocTypesUtil
             && (in_array('object', $this->superTypes($type)) === true)
         ) {
             // Class constant.
-            $this->phpfig = false;
+            $this->phpFig = false;
             $this->parseToken('::');
             if ($this->next === null) {
                 $nextchar = null;
