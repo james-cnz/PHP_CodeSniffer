@@ -1,113 +1,207 @@
 <?php
-
 /**
  * A collection of invalid types for testing
  *
  * Every type annotation should give an error either when checked with PHPStan or Psalm.
  * And all should give errors when checked with the PHPDoc Types sniff.
  *
- * @copyright 2023 Otago Polytechnic
- * @author    James Calder
+ * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
+ * @copyright 2023-2024 Otago Polytechnic
  * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @license   CC BY-SA v4 or later
+ *            CC BY-SA v4 or later
  */
 
 /**
  * A collection of invalid types for testing
  */
-class types_invalid {
+class TypesInvalid
+{
+
 
     /**
      * Expecting variable name, saw end
+     *
      * @param int
+     *
      * @return void
      */
-    public function expecting_var_saw_end(int $x): void {
-    }
+    public function expecting_var_saw_end(int $x): void
+    {
+
+    }//end expecting_var_saw_end()
+
 
     /**
      * Expecting variable name, saw other (passes Psalm)
+     *
      * @param int int
+     *
      * @return void
      */
-    public function expecting_var_saw_other(int $x): void {
-    }
+    public function expecting_var_saw_other(int $x): void
+    {
 
-    // Expecting type, saw end.
-    /** @var */
+    }//end expecting_var_saw_other()
+
+
+    /**
+     * Expecting type, saw end
+     *
+     * @var
+     */
     public $expectingtypesawend;
 
-    /** @var $varname Expecting type, saw other */
+    /**
+     * Expecting type, saw other
+     *
+     * @var $varname
+     */
     public $expectingtypesawother;
 
-    // Unterminated string (passes Psalm).
-    /** @var " */
+    /**
+     * Unterminated string (passes Psalm)
+     *
+     * @var "
+     */
     public $unterminatedstring;
 
-    // Unterminated string with escaped quote (passes Psalm).
-    /** @var "\"*/
+    /**
+     * Unterminated string with escaped quote (passes Psalm)
+     *
+     * @var "\"
+     */
     public $unterminatedstringwithescapedquote;
 
-    // String has escape with no following character (passes Psalm).
-    /** @var "\*/
+    /**
+     * String has escape with no following character (passes Psalm)
+     *
+     * @var "\*/
     public $stringhasescapewithnofollowingchar;
 
-    /** @var types_invalid&(a|b) Non-DNF type (passes PHPStan) */
+    /**
+     * Non-DNF type (passes PHPStan)
+     *
+     * @var TypesInvalid&(a|b)
+     */
     public $nondnftype;
 
-    /** @var int&string Invalid intersection */
+    /**
+     * Invalid intersection
+     *
+     * @var integer&string
+     */
     public $invalidintersection;
 
-    /** @var int<0.0, 1> Invalid int min */
+    /**
+     * Invalid int min
+     *
+     * @var int<0.0, 1>
+     */
     public $invalidintmin;
 
-    /** @var int<0, 1.0> Invalid int max */
+    /**
+     * Invalid int max
+     *
+     * @var int<0, 1.0>
+     */
     public $invalidintmax;
 
-    /** @var int-mask<1.0, 2.0> Invalid int mask 1 */
+    /**
+     * Invalid int mask 1
+     *
+     * @var int-mask<1.0, 2.0>
+     */
     public $invalidintmask1;
 
-    /** @var int-mask-of<string> Invalid int mask 2 */
+    /**
+     * Invalid int mask 2
+     *
+     * @var int-mask-of<string>
+     */
     public $invalidintmask2;
 
-    // Expecting class for class-string, saw end.
-    /** @var class-string< */
+    /**
+     * Expecting class for class-string, saw end
+     *
+     * @var class-string<
+     */
     public $expectingclassforclassstringsawend;
 
-    /** @var class-string<int> Expecting class for class-string, saw other */
+    /**
+     * Expecting class for class-string, saw other
+     *
+     * @var class-string<int>
+     */
     public $expectingclassforclassstringsawother;
 
-    /** @var list<int, string> List key */
+    /**
+     * List key
+     *
+     * @var list<int, string>
+     */
     public $listkey;
 
-    /** @var array<object, object> Invalid array key (passes Psalm) */
+    /**
+     * Invalid array key (passes Psalm)
+     *
+     * @var array<object, object>
+     */
     public $invalidarraykey;
 
-    /** @var non-empty-array{'a': int} Non-empty-array shape */
+    /**
+     * Non-empty-array shape
+     *
+     * @var non-empty-array{'a': int}
+     */
     public $nonemptyarrayshape;
 
-    /** @var object{0.0: int} Invalid object key (passes Psalm) */
+    /**
+     * Invalid object key (passes Psalm)
+     *
+     * @var object{0.0: int}
+     */
     public $invalidobjectkey;
 
-    /** @var key-of<int> Can't get key of non-iterable */
+    /**
+     * Can't get key of non-iterable
+     *
+     * @var key-of<int>
+     */
     public $cantgetkeyofnoniterable;
 
-    /** @var value-of<int> Can't get value of non-iterable */
+    /**
+     * Can't get value of non-iterable
+     *
+     * @var value-of<int>
+     */
     public $cantgetvalueofnoniterable;
+
 
     /**
      * Class name has trailing slash
-     * @param types_invalid\ $x
+     *
+     * @param TypesInvalid\ $x
+     *
      * @return void
      */
-    public function class_name_has_trailing_slash(object $x): void {
-    }
+    public function class_name_has_trailing_slash(object $x): void
+    {
 
-    // Expecting closing bracket, saw end.
-    /** @var (types_invalid */
+    }//end class_name_has_trailing_slash()
+
+
+    /**
+     * Expecting closing bracket, saw end.
+     *
+     * @var (TypesInvalid
+     */
     public $expectingclosingbracketsawend;
 
-    /** @var (types_invalid int Expecting closing bracket, saw other*/
+    /**
+     * Expecting closing bracket, saw other
+     *
+     * @var (TypesInvalid int
+     */
     public $expectingclosingbracketsawother;
 
-}
+}//end class

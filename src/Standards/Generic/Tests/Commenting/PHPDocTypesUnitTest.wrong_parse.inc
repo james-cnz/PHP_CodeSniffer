@@ -1,75 +1,146 @@
 <?php
-
 /**
  * A collection of parse errors for testing
  *
+ * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic
- * @author    James Calder
  * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @license   CC BY-SA v4 or later
+ *            CC BY-SA v4 or later
  */
 
 namespace trailing_backslash\;
 
-namespace @ // Malformed.
+// Malformed.
+namespace @
 
-use no_trailing_backslash {something};
+use no_trailing_backslash {something
+};
 
 use trailing_backslash\;
 
-use x\ { ; // No bracket closer.
+// No bracket closer.
+use x\ { ;
 
-use x\ {}; // No content.
+// No content.
+use x\ {};
 
-use x as @; // Malformed as clause.
+// Malformed as clause.
+use x as @;
 
-use x @ // No terminator.
-
-/** @var int */
-public int $wrong_place_1;
-
-/** */
-function wrong_places(): void {
-    namespace ns;
-    use x;
-    /** */
-    class c {}
-    /** @var int */
-    public int $wrong_place_2;
-}
+// No terminator.
+use x @
 
 /**
- * A collection of parse errors for testing
+ * Wrong place
+ *
+ * @var int
  */
-class types_invalid // No block
+public int $wrongPlace1;
 
-/** */
-class c { // No block close
 
-/** */
-class c {
+/**
+ * Wrong places
+ *
+ * @return void
+ */
+function wrong_places(): void
+{
+    namespace ns;
+    use x;
+
+    /**
+     * Wrong place
+     */
+    class C
+    {
+    }//end class
+
+    /**
+     * Wrong place
+     *
+     * @var int
+     */
+    public int $wrongPlace2;
+
+}//end wrong_places()
+
+
+/**
+ * No block
+ */
+class TypesInvalid
+
+/**
+ * No block close
+ */
+class C {
+
+/**
+ * Malformed class trait use
+ */
+class C {
     use T { @
 }
 
-/** */
-function f: void {} // No parameters
 
-/** */
-function f( : void {} // No parameters close
+/**
+ * No parameters
+ *
+ * @return void
+ */
+function f: void {
 
-/** */
-function f(): void // No block
+}//end f()
 
-/** */
-function f(): void { // No block close
 
-/** */
-public @ // Malformed declaration.
+/**
+ * No parameters close
+ *
+ * @return void
+ */
+function f( : void {
 
-/** @var int */
-public int $v @ // Unterminated variable.
+}//end f()
 
-/** @param string $p */
-function f(int $p): void {};  // Do we still reach here, and detect an error?
+
+/**
+ * No block
+ *
+ * @return void
+ */
+function f(): void
+
+/**
+ * No block close
+ *
+ * @return void
+ */
+function f(): void {
+
+/**
+ * Malformed declaration.
+ */
+public @
+
+/**
+ * Unterminated variable
+ *
+ * @var int
+ */
+public int $v @
+
+
+/**
+ * Do we still reach here, and detect an error?
+ *
+ * @param string $p
+ *
+ * @return void
+ */
+function f(int $p): void
+{
+
+}//end f()
+
 
 /** Unclosed Doc comment

@@ -1,15 +1,14 @@
 <?php
-
 /**
  * A collection of types not in recommended style for testing
  *
  * These needn't give errors in PHPStan or Psalm.
- * But the PHPDocTypesSniff should give warnings.
+ * But the PHPDocTypesSniff should give warnings when checkStyle is enabled.
  *
+ * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic
- * @author    James Calder
  * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @license   CC BY-SA v4 or later
+ *            CC BY-SA v4 or later
  */
 
 /**
@@ -17,30 +16,52 @@
  *
  * @property int $p PHPDoc class property type doesn't conform to recommended style
  */
-class types_invalid {
+class WarnStyle
+{
 
     /**
-     * @param bool|T $p PHPDoc function parameter type doesn't conform to recommended style
-     * @return int PHPDoc function return type doesn't conform to recommended style
-     * @template T of int PHPDoc tempate type doesn't conform to recommended style
+     * PHPDoc var type doesn't conform to recommended style
+     *
+     * @var int
      */
-    public function fun_wrong($p): int {
-        return 0;
-    }
-
-    /** @var int PHPDoc var type doesn't conform to recommended style */
     public int $v1;
 
-    /** @var int
-     *      | bool Multiline type, no line break at end */
+    /**
+     * Multiline type, no line break at end
+     *
+     * @var int
+     *      | bool */
     public int|bool $v2;
 
-    /** @var int
-     *      | bool Multiline type, line break at end
+    /**
+     * Multiline type, line break at end
+     *
+     * @var int
+     *      | bool
      */
     public int|bool $v3;
 
-}
 
-/** @var int PHPDoc var type doesn't conform to recommended style (not class var) */
+    /**
+     * Function style
+     *
+     * @param bool|T $p PHPDoc function parameter type doesn't conform to recommended style
+     *
+     * @return   int PHPDoc function return type doesn't conform to recommended style
+     * @template T of int PHPDoc tempate type doesn't conform to recommended style
+     */
+    public function fun_wrong($p): int
+    {
+        return 0;
+
+    }//end fun_wrong()
+
+
+}//end class
+
+/**
+ * PHPDoc var type doesn't conform to recommended style (not class var)
+ *
+ * @var int
+ */
 $v4 = 0;

@@ -6,7 +6,7 @@
  * And no errors when checked with the PHPDoc Types sniff.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
- * @copyright 2023 Otago Polytechnic
+ * @copyright 2023-2024 Otago Polytechnic
  * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  *            CC BY-SA v4 or later
  */
