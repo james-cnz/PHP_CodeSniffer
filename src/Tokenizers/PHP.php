@@ -2540,6 +2540,8 @@ class PHP extends Tokenizer
                         T_NAME_QUALIFIED       => T_NAME_QUALIFIED,
                         T_NAME_RELATIVE        => T_NAME_RELATIVE,
                         T_NULL                 => T_NULL,
+                        T_TRUE                 => T_TRUE,
+                        T_FALSE                => T_FALSE,
                         T_NULLABLE             => T_NULLABLE,
                         T_PARENT               => T_PARENT,
                         T_SELF                 => T_SELF,
