@@ -235,7 +235,7 @@ class PHPDocTypesUtil
     /**
      * Next tokens.
      *
-     * @var object{startpos: non-negative-int, endpos: non-negative-int, text: ?string}[]
+     * @var object{startPos: non-negative-int, endPos: non-negative-int, text: ?string}[]
      */
     protected $nexts = [];
 
@@ -264,15 +264,15 @@ class PHPDocTypesUtil
      *
      * @param ?object{namespace: string, uses: string[], templates: string[], className: ?string, parentName: ?string} $scope   the scope
      * @param string                                                                                                   $text    the text to parse
-     * @param 0|1|2|3                                                                                                  $getwhat what to get 0=type only 1=also name 2=also modifiers (& ...) 3=also default
-     * @param bool                                                                                                     $gowide  if we can't determine the type, should we assume wide (for native type) or narrow (for PHPDoc)?
+     * @param 0|1|2|3                                                                                                  $getWhat what to get 0=type only 1=also name 2=also modifiers (& ...) 3=also default
+     * @param bool                                                                                                     $goWide  if we can't determine the type, should we assume wide (for native type) or narrow (for PHPDoc)?
      *
      * @return object{
-     *              type: ?string, passsplat: string, name: ?string,
+     *              type: ?string, passSplat: string, name: ?string,
      *              rem: string, fixed: ?string, phpFig: bool
      *          } the simplified type, pass by reference & splat, variable name, remaining text, fixed text, and whether PHP-FIG
      */
-    public function parseTypeAndName(?object $scope, string $text, int $getwhat, bool $gowide): object
+    public function parseTypeAndName(?object $scope, string $text, int $getWhat, bool $goWide): object
     {
 
         // Initialise variables.
@@ -290,7 +290,7 @@ class PHPDocTypesUtil
 
         $this->text         = $text;
         $this->replacements = [];
-        if ($gowide === true) {
+        if ($goWide === true) {
             $this->unknown = 'mixed';
         } else {
             $this->unknown = 'never';
@@ -301,38 +301,38 @@ class PHPDocTypesUtil
         $this->next   = $this->next();
 
         // Try to parse type.
-        $savednexts = $this->nexts;
+        $savedNexts = $this->nexts;
         try {
             $type = $this->parseAnyType();
             if (($this->next === null
-                || ctype_space(substr($this->text, ($this->nexts[0]->startpos - 1), 1)) === true
+                || ctype_space(substr($this->text, ($this->nexts[0]->startPos - 1), 1)) === true
                 || in_array($this->next, [',', ';', ':', '.']) === true) === false
             ) {
                 // Code smell check.
                 throw new \Exception('Warning parsing type, no space after type.');
             }
         } catch (\Exception $e) {
-            $this->nexts  = $savednexts;
+            $this->nexts  = $savedNexts;
             $this->next   = $this->next();
             $type         = null;
             $this->phpFig = true;
         }
 
         // Try to parse pass by reference and splat.
-        $passsplat = '';
-        if ($getwhat >= 2) {
+        $passSplat = '';
+        if ($getWhat >= 2) {
             if ($this->next === '&') {
-                $passsplat .= $this->parseToken('&');
+                $passSplat .= $this->parseToken('&');
             }
 
             if ($this->next === '...') {
-                $passsplat .= $this->parseToken('...');
+                $passSplat .= $this->parseToken('...');
             }
         }
 
         // Try to parse name and default value.
-        if ($getwhat >= 1) {
-            $savednexts = $this->nexts;
+        if ($getWhat >= 1) {
+            $savedNexts = $this->nexts;
             try {
                 if (($this->next !== null && $this->next[0] === '$') === false) {
                     throw new \Exception("Error parsing type, expected variable, saw \"{$this->next}\".");
@@ -340,8 +340,8 @@ class PHPDocTypesUtil
 
                 $name = $this->parseToken();
                 if (($this->next === null
-                    || ($getwhat >= 3 && $this->next === '=')
-                    || ctype_space(substr($this->text, ($this->nexts[0]->startpos - 1), 1)) === true
+                    || ($getWhat >= 3 && $this->next === '=')
+                    || ctype_space(substr($this->text, ($this->nexts[0]->startPos - 1), 1)) === true
                     || in_array($this->next, [',', ';', ':', '.']) === true) === false
                 ) {
                     // Code smell check.
@@ -349,17 +349,17 @@ class PHPDocTypesUtil
                 }
 
                 // Implicit nullable.
-                if ($getwhat >= 3) {
+                if ($getWhat >= 3) {
                     if ($this->next === '='
                         && strtolower(($this->next(1) ?? '')) === 'null'
-                        && strtolower(trim(substr($text, $this->nexts[1]->startpos))) === 'null'
+                        && strtolower(trim(substr($text, $this->nexts[1]->startPos))) === 'null'
                         && $type !== null && $type !== 'mixed'
                     ) {
                         $type = $type.'|null';
                     }
                 }
             } catch (\Exception $e) {
-                $this->nexts = $savednexts;
+                $this->nexts = $savedNexts;
                 $this->next  = $this->next();
                 $name        = null;
             }//end try
@@ -375,9 +375,9 @@ class PHPDocTypesUtil
 
         return (object) [
             'type'      => $type,
-            'passsplat' => $passsplat,
+            'passSplat' => $passSplat,
             'name'      => $name,
-            'rem'       => trim(substr($text, $this->nexts[0]->startpos)),
+            'rem'       => trim(substr($text, $this->nexts[0]->startPos)),
             'fixed'     => $fixed,
             'phpFig'    => $this->phpFig,
         ];
@@ -419,7 +419,7 @@ class PHPDocTypesUtil
         $this->next         = $this->next();
 
         // Try to parse template name.
-        $savednexts = $this->nexts;
+        $savedNexts = $this->nexts;
         try {
             if (($this->next !== null && (ctype_alpha($this->next[0]) === true || $this->next[0] === '_')) === false) {
                 throw new \Exception("Error parsing type, expected variable, saw \"{$this->next}\".");
@@ -427,14 +427,14 @@ class PHPDocTypesUtil
 
             $name = $this->parseToken();
             if (($this->next === null
-                || ctype_space(substr($this->text, ($this->nexts[0]->startpos - 1), 1)) === true
+                || ctype_space(substr($this->text, ($this->nexts[0]->startPos - 1), 1)) === true
                 || in_array($this->next, [',', ';', ':', '.']) === true) === false
             ) {
                 // Code smell check.
                 throw new \Exception('Warning parsing type, no space after variable name.');
             }
         } catch (\Exception $e) {
-            $this->nexts = $savednexts;
+            $this->nexts = $savedNexts;
             $this->next  = $this->next();
             $name        = null;
         }
@@ -442,18 +442,18 @@ class PHPDocTypesUtil
         if ($this->next === 'of' || $this->next === 'as') {
             $this->parseToken();
             // Try to parse type.
-            $savednexts = $this->nexts;
+            $savedNexts = $this->nexts;
             try {
                 $type = $this->parseAnyType();
                 if (($this->next === null
-                    || ctype_space(substr($this->text, ($this->nexts[0]->startpos - 1), 1)) === true
+                    || ctype_space(substr($this->text, ($this->nexts[0]->startPos - 1), 1)) === true
                     || in_array($this->next, [',', ';', ':', '.']) === true) === false
                 ) {
                     // Code smell check.
                     throw new \Exception('Warning parsing type, no space after type.');
                 }
             } catch (\Exception $e) {
-                $this->nexts  = $savednexts;
+                $this->nexts  = $savedNexts;
                 $this->next   = $this->next();
                 $type         = null;
                 $this->phpFig = true;
@@ -471,7 +471,7 @@ class PHPDocTypesUtil
         return (object) [
             'type'   => $type,
             'name'   => $name,
-            'rem'    => trim(substr($text, $this->nexts[0]->startpos)),
+            'rem'    => trim(substr($text, $this->nexts[0]->startPos)),
             'fixed'  => $fixed,
             'phpFig' => $this->phpFig,
         ];
@@ -482,66 +482,66 @@ class PHPDocTypesUtil
     /**
      * Compare types
      *
-     * @param ?string $widetype   the type that should be wider, e.g. PHP type
-     * @param ?string $narrowtype the type that should be narrower, e.g. PHPDoc type
+     * @param ?string $wideType   the type that should be wider, e.g. PHP type
+     * @param ?string $narrowType the type that should be narrower, e.g. PHPDoc type
      *
-     * @return bool whether $narrowtype has the same or narrower scope as $widetype
+     * @return bool whether $narrowType has the same or narrower scope as $wideType
      */
-    public function compareTypes(?string $widetype, ?string $narrowtype): bool
+    public function compareTypes(?string $wideType, ?string $narrowType): bool
     {
-        if ($narrowtype === null) {
+        if ($narrowType === null) {
             return false;
-        } else if ($widetype === null || $widetype === 'mixed' || $narrowtype === 'never') {
+        } else if ($wideType === null || $wideType === 'mixed' || $narrowType === 'never') {
             return true;
         }
 
-        $wideintersections   = explode('|', $widetype);
-        $narrowintersections = explode('|', $narrowtype);
+        $wideIntersections   = explode('|', $wideType);
+        $narrowIntersections = explode('|', $narrowType);
 
         // We have to match all narrow intersections.
-        $haveallintersections = true;
-        foreach ($narrowintersections as $narrowintersection) {
-            $narrowsingles = explode('&', $narrowintersection);
+        $haveAllIntersections = true;
+        foreach ($narrowIntersections as $narrowIntersection) {
+            $narrowSingles = explode('&', $narrowIntersection);
 
             // If the wide types are super types, that should match.
-            $narrowadditions = [];
-            foreach ($narrowsingles as $narrowsingle) {
-                assert($narrowsingle !== '');
-                $supertypes      = $this->superTypes($narrowsingle);
-                $narrowadditions = array_merge($narrowadditions, $supertypes);
+            $narrowAdditions = [];
+            foreach ($narrowSingles as $narrowSingle) {
+                assert($narrowSingle !== '');
+                $superTypes      = $this->superTypes($narrowSingle);
+                $narrowAdditions = array_merge($narrowAdditions, $superTypes);
             }
 
-            $narrowsingles = array_merge($narrowsingles, $narrowadditions);
-            sort($narrowsingles);
-            $narrowsingles = array_unique($narrowsingles);
+            $narrowSingles = array_merge($narrowSingles, $narrowAdditions);
+            sort($narrowSingles);
+            $narrowSingles = array_unique($narrowSingles);
 
             // We need to look in each wide intersection.
-            $havethisintersection = false;
-            foreach ($wideintersections as $wideintersection) {
-                $widesingles = explode('&', $wideintersection);
+            $haveThisIntersection = false;
+            foreach ($wideIntersections as $wideIntersection) {
+                $wideSingles = explode('&', $wideIntersection);
 
                 // And find all parts of one of them.
-                $haveallsingles = true;
-                foreach ($widesingles as $widesingle) {
-                    if (in_array($widesingle, $narrowsingles) === false) {
-                        $haveallsingles = false;
+                $haveAllSingles = true;
+                foreach ($wideSingles as $wideSingle) {
+                    if (in_array($wideSingle, $narrowSingles) === false) {
+                        $haveAllSingles = false;
                         break;
                     }
                 }
 
-                if ($haveallsingles === true) {
-                    $havethisintersection = true;
+                if ($haveAllSingles === true) {
+                    $haveThisIntersection = true;
                     break;
                 }
             }
 
-            if ($havethisintersection === false) {
-                $haveallintersections = false;
+            if ($haveThisIntersection === false) {
+                $haveAllIntersections = false;
                 break;
             }
         }//end foreach
 
-        return $haveallintersections;
+        return $haveAllIntersections;
 
     }//end compareTypes()
 
@@ -549,93 +549,93 @@ class PHPDocTypesUtil
     /**
      * Get super types
      *
-     * @param string $basetype What type do we want the supers for?
+     * @param string $baseType What type do we want the supers for?
      *
      * @return string[] super types
      */
-    protected function superTypes(string $basetype): array
+    protected function superTypes(string $baseType): array
     {
-        if (in_array($basetype, ['int', 'string']) === true) {
-            $supertypes = [
+        if (in_array($baseType, ['int', 'string']) === true) {
+            $superTypes = [
                 'array-key',
                 'scaler',
             ];
-        } else if ($basetype === 'callable-string') {
-            $supertypes = [
+        } else if ($baseType === 'callable-string') {
+            $superTypes = [
                 'callable',
                 'string',
                 'array-key',
                 'scalar',
             ];
-        } else if (in_array($basetype, ['array-key', 'float', 'bool']) === true) {
-            $supertypes = ['scalar'];
-        } else if ($basetype === 'array') {
-            $supertypes = ['iterable'];
-        } else if ($basetype === 'static') {
-            $supertypes = [
+        } else if (in_array($baseType, ['array-key', 'float', 'bool']) === true) {
+            $superTypes = ['scalar'];
+        } else if ($baseType === 'array') {
+            $superTypes = ['iterable'];
+        } else if ($baseType === 'static') {
+            $superTypes = [
                 'self',
                 'parent',
                 'object',
             ];
-        } else if ($basetype === 'self') {
-            $supertypes = [
+        } else if ($baseType === 'self') {
+            $superTypes = [
                 'parent',
                 'object',
             ];
-        } else if ($basetype === 'parent') {
-            $supertypes = ['object'];
-        } else if (strpos($basetype, 'static(') === 0 || $basetype[0] === '\\') {
-            if (strpos($basetype, 'static(') === 0) {
-                $supertypes     = [
+        } else if ($baseType === 'parent') {
+            $superTypes = ['object'];
+        } else if (strpos($baseType, 'static(') === 0 || $baseType[0] === '\\') {
+            if (strpos($baseType, 'static(') === 0) {
+                $superTypes     = [
                     'static',
                     'self',
                     'parent',
                     'object',
                 ];
-                $supertypequeue = [substr($basetype, 7, -1)];
+                $superTypeQueue = [substr($baseType, 7, -1)];
                 $ignore         = false;
             } else {
-                $supertypes     = ['object'];
-                $supertypequeue = [$basetype];
+                $superTypes     = ['object'];
+                $superTypeQueue = [$baseType];
                 $ignore         = true;
                 // We don't want to include the class itself, just super types of it.
             }
 
-            while (($supertype = array_shift($supertypequeue)) !== null) {
-                if (in_array($supertype, $supertypes) === true) {
+            while (($superType = array_shift($superTypeQueue)) !== null) {
+                if (in_array($superType, $superTypes) === true) {
                     $ignore = false;
                     continue;
                 }
 
                 if ($ignore === false) {
-                    $supertypes[] = $supertype;
+                    $superTypes[] = $superType;
                 }
 
-                if (($librarysupers = $this->library[$supertype] ?? null) !== null) {
-                    $supertypequeue = array_merge($supertypequeue, $librarysupers);
-                } else if (($supertypeobj = ($this->artifacts[$supertype] ?? null)) !== null) {
-                    if ($supertypeobj->extends !== null) {
-                        $supertypequeue[] = $supertypeobj->extends;
+                if (($librarySupers = $this->library[$superType] ?? null) !== null) {
+                    $superTypeQueue = array_merge($superTypeQueue, $librarySupers);
+                } else if (($superTypeObj = ($this->artifacts[$superType] ?? null)) !== null) {
+                    if ($superTypeObj->extends !== null) {
+                        $superTypeQueue[] = $superTypeObj->extends;
                     }
 
-                    if (count($supertypeobj->implements) > 0) {
-                        foreach ($supertypeobj->implements as $implements) {
-                            $supertypequeue[] = $implements;
+                    if (count($superTypeObj->implements) > 0) {
+                        foreach ($superTypeObj->implements as $implements) {
+                            $superTypeQueue[] = $implements;
                         }
                     }
                 } else if ($ignore === false) {
-                    $supertypes = array_merge($supertypes, $this->superTypes($supertype));
+                    $superTypes = array_merge($superTypes, $this->superTypes($superType));
                 }
 
                 $ignore = false;
             }//end while
 
-            $supertypes = array_unique($supertypes);
+            $superTypes = array_unique($superTypes);
         } else {
-            $supertypes = [];
+            $superTypes = [];
         }//end if
 
-        return $supertypes;
+        return $superTypes;
 
     }//end superTypes()
 
@@ -643,128 +643,128 @@ class PHPDocTypesUtil
     /**
      * Prefetch next token
      *
-     * @param non-negative-int $lookahead How far ahead is the token we want?
+     * @param non-negative-int $lookAhead How far ahead is the token we want?
      *
      * @return         ?string
      * @phpstan-impure
      */
-    protected function next(int $lookahead=0): ?string
+    protected function next(int $lookAhead=0): ?string
     {
 
         // Fetch any more tokens we need.
-        while (count($this->nexts) < ($lookahead + 1)) {
+        while (count($this->nexts) < ($lookAhead + 1)) {
             if (count($this->nexts) > 0) {
-                $startpos = end($this->nexts)->endpos;
+                $startPos = end($this->nexts)->endPos;
             } else {
-                $startpos = 0;
+                $startPos = 0;
             }
 
-            $stringunterminated = false;
+            $stringUnterminated = false;
 
             // Ignore whitespace.
-            while ($startpos < strlen($this->text) && ctype_space($this->text[$startpos]) === true) {
-                $startpos++;
+            while ($startPos < strlen($this->text) && ctype_space($this->text[$startPos]) === true) {
+                $startPos++;
             }
 
-            if ($startpos < strlen($this->text)) {
-                $firstchar = $this->text[$startpos];
+            if ($startPos < strlen($this->text)) {
+                $firstChar = $this->text[$startPos];
             } else {
-                $firstchar = null;
+                $firstChar = null;
             }
 
             // Deal with different types of tokens.
-            if ($firstchar === null) {
+            if ($firstChar === null) {
                 // No more tokens.
-                $endpos = $startpos;
-            } else if (ctype_alpha($firstchar) === true || $firstchar === '_' || $firstchar === '$' || $firstchar === '\\'
-                || ord($firstchar) >= 0x7F
+                $endPos = $startPos;
+            } else if (ctype_alpha($firstChar) === true || $firstChar === '_' || $firstChar === '$' || $firstChar === '\\'
+                || ord($firstChar) >= 0x7F
             ) {
                 // Identifier token.
-                $endpos = $startpos;
+                $endPos = $startPos;
                 do {
-                    $endpos = ($endpos + 1);
-                    if ($endpos < strlen($this->text)) {
-                        $nextchar = $this->text[$endpos];
+                    $endPos = ($endPos + 1);
+                    if ($endPos < strlen($this->text)) {
+                        $nextChar = $this->text[$endPos];
                     } else {
-                        $nextchar = null;
+                        $nextChar = null;
                     }
-                } while ($nextchar !== null && (ctype_alnum($nextchar) === true || $nextchar === '_'
-                                        || ord($nextchar) >= 0x7F
-                                        || ($firstchar !== '$' && ($nextchar === '-' || $nextchar === '\\')))
+                } while ($nextChar !== null && (ctype_alnum($nextChar) === true || $nextChar === '_'
+                                        || ord($nextChar) >= 0x7F
+                                        || ($firstChar !== '$' && ($nextChar === '-' || $nextChar === '\\')))
                 );
-            } else if (ctype_digit($firstchar) === true
-                || ($firstchar === '-' && strlen($this->text) >= ($startpos + 2) && ctype_digit($this->text[($startpos + 1)]) === true)
+            } else if (ctype_digit($firstChar) === true
+                || ($firstChar === '-' && strlen($this->text) >= ($startPos + 2) && ctype_digit($this->text[($startPos + 1)]) === true)
             ) {
                 // Number token.
-                $nextchar  = $firstchar;
-                $havepoint = false;
-                $endpos    = $startpos;
+                $nextChar  = $firstChar;
+                $havePoint = false;
+                $endPos    = $startPos;
                 do {
-                    $havepoint = $havepoint || $nextchar === '.';
-                    $endpos    = ($endpos + 1);
-                    if ($endpos < strlen($this->text)) {
-                        $nextchar = $this->text[$endpos];
+                    $havePoint = $havePoint || $nextChar === '.';
+                    $endPos    = ($endPos + 1);
+                    if ($endPos < strlen($this->text)) {
+                        $nextChar = $this->text[$endPos];
                     } else {
-                        $nextchar = null;
+                        $nextChar = null;
                     }
-                } while ($nextchar !== null && (ctype_digit($nextchar) === true || ($nextchar === '.' && $havepoint === false) || $nextchar === '_'));
-            } else if ($firstchar === '"' || $firstchar === "'") {
+                } while ($nextChar !== null && (ctype_digit($nextChar) === true || ($nextChar === '.' && $havePoint === false) || $nextChar === '_'));
+            } else if ($firstChar === '"' || $firstChar === "'") {
                 // String token.
-                $endpos = ($startpos + 1);
-                if ($endpos < strlen($this->text)) {
-                    $nextchar = $this->text[$endpos];
+                $endPos = ($startPos + 1);
+                if ($endPos < strlen($this->text)) {
+                    $nextChar = $this->text[$endPos];
                 } else {
-                    $nextchar = null;
+                    $nextChar = null;
                 }
 
-                while ($nextchar !== $firstchar && $nextchar !== null) {
+                while ($nextChar !== $firstChar && $nextChar !== null) {
                     // There may be unterminated strings.
-                    if ($nextchar === '\\' && strlen($this->text) >= ($endpos + 2)) {
-                        $endpos = ($endpos + 2);
+                    if ($nextChar === '\\' && strlen($this->text) >= ($endPos + 2)) {
+                        $endPos = ($endPos + 2);
                     } else {
-                        $endpos++;
+                        $endPos++;
                     }
 
-                    if ($endpos < strlen($this->text)) {
-                        $nextchar = $this->text[$endpos];
+                    if ($endPos < strlen($this->text)) {
+                        $nextChar = $this->text[$endPos];
                     } else {
-                        $nextchar = null;
+                        $nextChar = null;
                     }
                 }
 
-                if ($nextchar !== null) {
-                    $endpos++;
+                if ($nextChar !== null) {
+                    $endPos++;
                 } else {
-                    $stringunterminated = true;
+                    $stringUnterminated = true;
                 }
-            } else if (strlen($this->text) >= ($startpos + 3) && substr($this->text, $startpos, 3) === '...') {
+            } else if (strlen($this->text) >= ($startPos + 3) && substr($this->text, $startPos, 3) === '...') {
                 // Splat.
-                $endpos = ($startpos + 3);
-            } else if (strlen($this->text) >= ($startpos + 2) && substr($this->text, $startpos, 2) === '::') {
+                $endPos = ($startPos + 3);
+            } else if (strlen($this->text) >= ($startPos + 2) && substr($this->text, $startPos, 2) === '::') {
                 // Scope resolution operator.
-                $endpos = ($startpos + 2);
+                $endPos = ($startPos + 2);
             } else {
                 // Other symbol token.
-                $endpos = ($startpos + 1);
+                $endPos = ($startPos + 1);
             }//end if
 
             // Store token.
-            $next = substr($this->text, $startpos, ($endpos - $startpos));
+            $next = substr($this->text, $startPos, ($endPos - $startPos));
             assert($next !== false);
-            if ($next === '' || $stringunterminated === true) {
+            if ($next === '' || $stringUnterminated === true) {
                 // If we have an unterminated string, we've reached the end of usable tokens.
                 $next = null;
             }
 
             $this->nexts[] = (object) [
-                'startpos' => $startpos,
-                'endpos'   => $endpos,
+                'startPos' => $startPos,
+                'endPos'   => $endPos,
                 'text'     => $next,
             ];
         }//end while
 
         // Return the needed token.
-        return $this->nexts[$lookahead]->text;
+        return $this->nexts[$lookAhead]->text;
 
     }//end next()
 
@@ -812,7 +812,7 @@ class PHPDocTypesUtil
     {
         if ($correct !== $this->nexts[0]->text) {
             $this->replacements[] = (object) [
-                'pos'         => $this->nexts[0]->startpos,
+                'pos'         => $this->nexts[0]->startPos,
                 'len'         => strlen($this->nexts[0]->text),
                 'replacement' => $correct,
             ];
@@ -832,12 +832,12 @@ class PHPDocTypesUtil
             return null;
         }
 
-        $fixedtext = $this->text;
+        $fixedText = $this->text;
         foreach (array_reverse($this->replacements) as $fix) {
-            $fixedtext = substr($fixedtext, 0, $fix->pos).$fix->replacement.substr($fixedtext, ($fix->pos + $fix->len));
+            $fixedText = substr($fixedText, 0, $fix->pos).$fix->replacement.substr($fixedText, ($fix->pos + $fix->len));
         }
 
-        return $fixedtext;
+        return $fixedText;
 
     }//end getFixed()
 
@@ -845,141 +845,141 @@ class PHPDocTypesUtil
     /**
      * Parse a list of types seperated by | and/or &, single nullable type, or conditional return type
      *
-     * @param bool $inbrackets are we immediately inside brackets?
+     * @param bool $inBrackets are we immediately inside brackets?
      *
      * @return         string the simplified type
      * @phpstan-impure
      */
-    protected function parseAnyType(bool $inbrackets=false): string
+    protected function parseAnyType(bool $inBrackets=false): string
     {
 
-        if ($inbrackets === true && $this->next !== null && $this->next[0] === '$' && $this->next(1) === 'is') {
+        if ($inBrackets === true && $this->next !== null && $this->next[0] === '$' && $this->next(1) === 'is') {
             // Conditional return type.
             $this->phpFig = false;
             $this->parseToken();
             $this->parseToken('is');
             $this->parseAnyType();
             $this->parseToken('?');
-            $firsttype = $this->parseAnyType();
+            $firstType = $this->parseAnyType();
             $this->parseToken(':');
-            $secondtype = $this->parseAnyType();
-            $uniontypes = array_merge(explode('|', $firsttype), explode('|', $secondtype));
+            $secondType = $this->parseAnyType();
+            $unionTypes = array_merge(explode('|', $firstType), explode('|', $secondType));
         } else if ($this->next === '?') {
             // Single nullable type.
             $this->phpFig = false;
             $this->parseToken('?');
-            $uniontypes   = explode('|', $this->parseSingleType());
-            $uniontypes[] = 'null';
+            $unionTypes   = explode('|', $this->parseSingleType());
+            $unionTypes[] = 'null';
         } else {
             // Union list.
-            $uniontypes = [];
+            $unionTypes = [];
             do {
                 // Intersection list.
-                $unioninstead      = null;
-                $intersectiontypes = [];
+                $unionInstead      = null;
+                $intersectionTypes = [];
                 do {
-                    $singletype = $this->parseSingleType();
-                    if (strpos($singletype, '|') !== false) {
-                        $intersectiontypes[] = $this->unknown;
-                        $unioninstead        = $singletype;
+                    $singleType = $this->parseSingleType();
+                    if (strpos($singleType, '|') !== false) {
+                        $intersectionTypes[] = $this->unknown;
+                        $unionInstead        = $singleType;
                     } else {
-                        $intersectiontypes = array_merge($intersectiontypes, explode('&', $singletype));
+                        $intersectionTypes = array_merge($intersectionTypes, explode('&', $singleType));
                     }
 
                     // We have to figure out whether a & is for intersection or pass by reference.
-                    $nextnext = $this->next(1);
-                    $havemoreintersections = $this->next === '&'
-                        && !(in_array($nextnext, ['...', '=', ',', ')', null])
-                            || ($nextnext !== null && $nextnext[0] === '$'));
-                    if ($havemoreintersections === true) {
+                    $nextNext = $this->next(1);
+                    $haveMoreIntersections = $this->next === '&'
+                        && !(in_array($nextNext, ['...', '=', ',', ')', null])
+                            || ($nextNext !== null && $nextNext[0] === '$'));
+                    if ($haveMoreIntersections === true) {
                         $this->parseToken('&');
                     }
-                } while ($havemoreintersections === true);
-                if (count($intersectiontypes) > 1 && $unioninstead !== null) {
+                } while ($haveMoreIntersections === true);
+                if (count($intersectionTypes) > 1 && $unionInstead !== null) {
                     throw new \Exception('Error parsing type, non-DNF.');
-                } else if (count($intersectiontypes) <= 1 && $unioninstead !== null) {
-                    $uniontypes = array_merge($uniontypes, explode('|', $unioninstead));
+                } else if (count($intersectionTypes) <= 1 && $unionInstead !== null) {
+                    $unionTypes = array_merge($unionTypes, explode('|', $unionInstead));
                 } else {
                     // Tidy and store intersection list.
-                    if (count($intersectiontypes) > 1) {
-                        foreach ($intersectiontypes as $intersectiontype) {
-                            assert($intersectiontype !== '');
-                            $supertypes = $this->superTypes($intersectiontype);
-                            if ((in_array($intersectiontype, ['object', 'iterable', 'callable']) === true
-                                || in_array('object', $supertypes) === true) === false
+                    if (count($intersectionTypes) > 1) {
+                        foreach ($intersectionTypes as $intersectionType) {
+                            assert($intersectionType !== '');
+                            $superTypes = $this->superTypes($intersectionType);
+                            if ((in_array($intersectionType, ['object', 'iterable', 'callable']) === true
+                                || in_array('object', $superTypes) === true) === false
                             ) {
                                 throw new \Exception('Error parsing type, intersection can only be used with objects.');
                             }
 
-                            foreach ($supertypes as $supertype) {
-                                $superpos = array_search($supertype, $intersectiontypes);
-                                if ($superpos !== false) {
-                                    unset($intersectiontypes[$superpos]);
+                            foreach ($superTypes as $superType) {
+                                $superPos = array_search($superType, $intersectionTypes);
+                                if ($superPos !== false) {
+                                    unset($intersectionTypes[$superPos]);
                                 }
                             }
                         }
 
-                        sort($intersectiontypes);
-                        $intersectiontypes = array_unique($intersectiontypes);
-                        $neverpos          = array_search('never', $intersectiontypes);
-                        if ($neverpos !== false) {
-                            $intersectiontypes = ['never'];
+                        sort($intersectionTypes);
+                        $intersectionTypes = array_unique($intersectionTypes);
+                        $neverPos          = array_search('never', $intersectionTypes);
+                        if ($neverPos !== false) {
+                            $intersectionTypes = ['never'];
                         }
 
-                        $mixedpos = array_search('mixed', $intersectiontypes);
-                        if ($mixedpos !== false && count($intersectiontypes) > 1) {
-                            unset($intersectiontypes[$mixedpos]);
+                        $mixedPos = array_search('mixed', $intersectionTypes);
+                        if ($mixedPos !== false && count($intersectionTypes) > 1) {
+                            unset($intersectionTypes[$mixedPos]);
                         }
                     }//end if
 
-                    array_push($uniontypes, implode('&', $intersectiontypes));
+                    array_push($unionTypes, implode('&', $intersectionTypes));
                 }//end if
                 // Check for more union items.
-                $havemoreunions = $this->next === '|';
-                if ($havemoreunions === true) {
+                $haveMoreUnions = $this->next === '|';
+                if ($haveMoreUnions === true) {
                     $this->parseToken('|');
                 }
-            } while ($havemoreunions === true);
+            } while ($haveMoreUnions === true);
         }//end if
 
         // Tidy and return union list.
-        if (count($uniontypes) > 1) {
-            if (in_array('int', $uniontypes) === true && in_array('string', $uniontypes) === true) {
-                $uniontypes[] = 'array-key';
+        if (count($unionTypes) > 1) {
+            if (in_array('int', $unionTypes) === true && in_array('string', $unionTypes) === true) {
+                $unionTypes[] = 'array-key';
             }
 
-            if (in_array('bool', $uniontypes) === true && in_array('float', $uniontypes) === true && in_array('array-key', $uniontypes) === true) {
-                $uniontypes[] = 'scalar';
+            if (in_array('bool', $unionTypes) === true && in_array('float', $unionTypes) === true && in_array('array-key', $unionTypes) === true) {
+                $unionTypes[] = 'scalar';
             }
 
-            if (in_array('\\Traversable', $uniontypes) === true && in_array('array', $uniontypes) === true) {
-                $uniontypes[] = 'iterable';
+            if (in_array('\\Traversable', $unionTypes) === true && in_array('array', $unionTypes) === true) {
+                $unionTypes[] = 'iterable';
             }
 
-            sort($uniontypes);
-            $uniontypes = array_unique($uniontypes);
-            $mixedpos   = array_search('mixed', $uniontypes);
-            if ($mixedpos !== false) {
-                $uniontypes = ['mixed'];
+            sort($unionTypes);
+            $unionTypes = array_unique($unionTypes);
+            $mixedPos   = array_search('mixed', $unionTypes);
+            if ($mixedPos !== false) {
+                $unionTypes = ['mixed'];
             }
 
-            $neverpos = array_search('never', $uniontypes);
-            if ($neverpos !== false && count($uniontypes) > 1) {
-                unset($uniontypes[$neverpos]);
+            $neverPos = array_search('never', $unionTypes);
+            if ($neverPos !== false && count($unionTypes) > 1) {
+                unset($unionTypes[$neverPos]);
             }
 
-            foreach ($uniontypes as $uniontype) {
-                assert($uniontype !== '');
-                foreach ($uniontypes as $key => $uniontype2) {
-                    assert($uniontype2 !== '');
-                    if ($uniontype2 !== $uniontype && $this->compareTypes($uniontype, $uniontype2) === true) {
-                        unset($uniontypes[$key]);
+            foreach ($unionTypes as $unionType) {
+                assert($unionType !== '');
+                foreach ($unionTypes as $key => $unionType2) {
+                    assert($unionType2 !== '');
+                    if ($unionType2 !== $unionType && $this->compareTypes($unionType, $unionType2) === true) {
+                        unset($unionTypes[$key]);
                     }
                 }
             }
         }//end if
 
-        $type = implode('|', $uniontypes);
+        $type = implode('|', $unionTypes);
         assert($type !== '');
         return $type;
 
@@ -1028,21 +1028,21 @@ class PHPDocTypesUtil
             throw new \Exception('Error parsing type, expected type, saw end.');
         }
 
-        $lowernext = strtolower($next);
-        $nextchar  = $next[0];
+        $lowerNext = strtolower($next);
+        $nextChar  = $next[0];
 
-        if (in_array($lowernext, ['bool', 'boolean', 'true', 'false']) === true) {
+        if (in_array($lowerNext, ['bool', 'boolean', 'true', 'false']) === true) {
             // Bool.
-            if ($lowernext === 'boolean') {
+            if ($lowerNext === 'boolean') {
                 $this->correctToken('bool');
             } else {
-                $this->correctToken($lowernext);
+                $this->correctToken($lowerNext);
             }
 
             $this->parseToken();
             $type = 'bool';
         } else if (in_array(
-            $lowernext,
+            $lowerNext,
             [
                 'int',
                 'integer',
@@ -1054,21 +1054,21 @@ class PHPDocTypesUtil
                 'int-mask-of',
             ]
         ) === true
-            || ((ctype_digit($nextchar) === true || $nextchar === '-') && strpos($next, '.') === false)
+            || ((ctype_digit($nextChar) === true || $nextChar === '-') && strpos($next, '.') === false)
         ) {
             // Int.
-            if (in_array($lowernext, ['int', 'integer']) === false) {
+            if (in_array($lowerNext, ['int', 'integer']) === false) {
                 $this->phpFig = false;
             }
 
-            if ($lowernext === 'integer') {
+            if ($lowerNext === 'integer') {
                 $this->correctToken('int');
             } else {
-                $this->correctToken($lowernext);
+                $this->correctToken($lowerNext);
             }
 
-            $inttype = strtolower($this->parseToken());
-            if ($inttype === 'int' && $this->next === '<') {
+            $intType = strtolower($this->parseToken());
+            if ($intType === 'int' && $this->next === '<') {
                 // Integer range.
                 $this->phpFig = false;
                 $this->parseToken('<');
@@ -1092,7 +1092,7 @@ class PHPDocTypesUtil
 
                 $this->parseToken();
                 $this->parseToken('>');
-            } else if ($inttype === 'int-mask') {
+            } else if ($intType === 'int-mask') {
                 // Integer mask.
                 $this->parseToken('<');
                 do {
@@ -1101,13 +1101,13 @@ class PHPDocTypesUtil
                         throw new \Exception('Error parsing type, invalid int mask.');
                     }
 
-                    $haveseperator = $this->next === ',';
-                    if ($haveseperator === true) {
+                    $haveSeperator = $this->next === ',';
+                    if ($haveSeperator === true) {
                         $this->parseToken(',');
                     }
-                } while ($haveseperator === true);
+                } while ($haveSeperator === true);
                 $this->parseToken('>');
-            } else if ($inttype === 'int-mask-of') {
+            } else if ($intType === 'int-mask-of') {
                 // Integer mask of.
                 $this->parseToken('<');
                 $mask = $this->parseBasicType();
@@ -1119,24 +1119,24 @@ class PHPDocTypesUtil
             }//end if
 
             $type = 'int';
-        } else if (in_array($lowernext, ['float', 'double']) === true
-            || ((ctype_digit($nextchar) === true || $nextchar === '-') && strpos($next, '.') !== false)
+        } else if (in_array($lowerNext, ['float', 'double']) === true
+            || ((ctype_digit($nextChar) === true || $nextChar === '-') && strpos($next, '.') !== false)
         ) {
             // Float.
-            if (in_array($lowernext, ['float', 'double']) === false) {
+            if (in_array($lowerNext, ['float', 'double']) === false) {
                 $this->phpFig = false;
             }
 
-            if ($lowernext === 'double') {
+            if ($lowerNext === 'double') {
                 $this->correctToken('float');
             } else {
-                $this->correctToken($lowernext);
+                $this->correctToken($lowerNext);
             }
 
             $this->parseToken();
             $type = 'float';
         } else if (in_array(
-            $lowernext,
+            $lowerNext,
             [
                 'string',
                 'class-string',
@@ -1147,22 +1147,22 @@ class PHPDocTypesUtil
                 'truthy-string',
             ]
         ) === true
-            || $nextchar === '"' || $nextchar === "'"
+            || $nextChar === '"' || $nextChar === "'"
         ) {
             // String.
-            if ($lowernext !== 'string') {
+            if ($lowerNext !== 'string') {
                 $this->phpFig = false;
             }
 
-            if ($nextchar !== '"' && $nextchar !== "'") {
-                $this->correctToken($lowernext);
+            if ($nextChar !== '"' && $nextChar !== "'") {
+                $this->correctToken($lowerNext);
             }
 
-            $strtype = strtolower($this->parseToken());
-            if ($strtype === 'class-string' && $this->next === '<') {
+            $strType = strtolower($this->parseToken());
+            if ($strType === 'class-string' && $this->next === '<') {
                 $this->parseToken('<');
-                $stringtype = $this->parseBasicType();
-                if ($this->compareTypes('object', $stringtype) === false) {
+                $objectType = $this->parseBasicType();
+                if ($this->compareTypes('object', $objectType) === false) {
                     throw new \Exception("Error parsing type, class-string type isn't class.");
                 }
 
@@ -1170,31 +1170,31 @@ class PHPDocTypesUtil
             }
 
             $type = 'string';
-        } else if ($lowernext === 'callable-string') {
+        } else if ($lowerNext === 'callable-string') {
             // Callable-string.
             $this->phpFig = false;
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken('callable-string');
             $type = 'callable-string';
-        } else if (in_array($lowernext, ['array', 'non-empty-array', 'list', 'non-empty-list']) === true) {
+        } else if (in_array($lowerNext, ['array', 'non-empty-array', 'list', 'non-empty-list']) === true) {
             // Array.
-            if ($lowernext !== 'array') {
+            if ($lowerNext !== 'array') {
                 $this->phpFig = false;
             }
 
-            $this->correctToken($lowernext);
-            $arraytype = strtolower($this->parseToken());
+            $this->correctToken($lowerNext);
+            $arrayType = strtolower($this->parseToken());
             if ($this->next === '<') {
                 // Typed array.
                 $this->phpFig = false;
                 $this->parseToken('<');
-                $firsttype = $this->parseAnyType();
+                $firstType = $this->parseAnyType();
                 if ($this->next === ',') {
-                    if (in_array($arraytype, ['list', 'non-empty-list']) === true) {
+                    if (in_array($arrayType, ['list', 'non-empty-list']) === true) {
                         throw new \Exception('Error parsing type, lists cannot have keys specified.');
                     }
 
-                    $key = $firsttype;
+                    $key = $firstType;
                     if ($this->compareTypes('array-key', $key) === false) {
                         throw new \Exception('Error parsing type, invalid array key.');
                     }
@@ -1203,14 +1203,14 @@ class PHPDocTypesUtil
                     $value = $this->parseAnyType();
                 } else {
                     $key   = null;
-                    $value = $firsttype;
+                    $value = $firstType;
                 }
 
                 $this->parseToken('>');
             } else if ($this->next === '{') {
                 // Array shape.
                 $this->phpFig = false;
-                if (in_array($arraytype, ['non-empty-array', 'non-empty-list']) === true) {
+                if (in_array($arrayType, ['non-empty-array', 'non-empty-list']) === true) {
                     throw new \Exception('Error parsing type, non-empty-arrays cannot have shapes.');
                 }
 
@@ -1231,18 +1231,18 @@ class PHPDocTypesUtil
                     }
 
                     $this->parseAnyType();
-                    $havecomma = $this->next === ',';
-                    if ($havecomma === true) {
+                    $haveComma = $this->next === ',';
+                    if ($haveComma === true) {
                         $this->parseToken(',');
                     }
-                } while ($havecomma === true);
+                } while ($haveComma === true);
                 $this->parseToken('}');
             }//end if
 
             $type = 'array';
-        } else if ($lowernext === 'object') {
+        } else if ($lowerNext === 'object') {
             // Object.
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken('object');
             if ($this->next === '{') {
                 // Object shape.
@@ -1263,64 +1263,64 @@ class PHPDocTypesUtil
 
                     $this->parseToken(':');
                     $this->parseAnyType();
-                    $havecomma = $this->next === ',';
-                    if ($havecomma === true) {
+                    $haveComma = $this->next === ',';
+                    if ($haveComma === true) {
                         $this->parseToken(',');
                     }
-                } while ($havecomma === true);
+                } while ($haveComma === true);
                 $this->parseToken('}');
             }//end if
 
             $type = 'object';
-        } else if ($lowernext === 'resource') {
+        } else if ($lowerNext === 'resource') {
             // Resource.
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken('resource');
             $type = 'resource';
-        } else if (in_array($lowernext, ['never', 'never-return', 'never-returns', 'no-return']) === true) {
+        } else if (in_array($lowerNext, ['never', 'never-return', 'never-returns', 'no-return']) === true) {
             // Never.
             $this->correctToken('never');
             $this->parseToken();
             $type = 'never';
-        } else if ($lowernext === 'null') {
+        } else if ($lowerNext === 'null') {
             // Null.
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken('null');
             $type = 'null';
-        } else if ($lowernext === 'void') {
+        } else if ($lowerNext === 'void') {
             // Void.
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken('void');
             $type = 'void';
-        } else if ($lowernext === 'self') {
+        } else if ($lowerNext === 'self') {
             // Self.
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken('self');
             $type = ($this->scope->className ?? 'self');
-        } else if ($lowernext === 'parent') {
+        } else if ($lowerNext === 'parent') {
             // Parent.
             $this->phpFig = false;
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken('parent');
             $type = ($this->scope->parentName ?? 'parent');
-        } else if (in_array($lowernext, ['static', '$this']) === true) {
+        } else if (in_array($lowerNext, ['static', '$this']) === true) {
             // Static.
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken();
             if ($this->scope->className !== null) {
                 $type = "static({$this->scope->className})";
             } else {
                 $type = 'static';
             }
-        } else if ($lowernext === 'callable'
+        } else if ($lowerNext === 'callable'
             || $next === '\\Closure' || ($next === 'Closure' && $this->scope->namespace === '')
         ) {
             // Callable.
-            if ($lowernext === 'callable') {
-                $this->correctToken($lowernext);
+            if ($lowerNext === 'callable') {
+                $this->correctToken($lowerNext);
             }
 
-            $callabletype = $this->parseToken();
+            $callableType = $this->parseToken();
             if ($this->next === '(') {
                 $this->phpFig = false;
                 $this->parseToken('(');
@@ -1339,12 +1339,12 @@ class PHPDocTypesUtil
                     }
 
                     if ($this->next !== null) {
-                        $nextchar = $this->next[0];
+                        $nextChar = $this->next[0];
                     } else {
-                        $nextchar = null;
+                        $nextChar = null;
                     }
 
-                    if ($nextchar === '$') {
+                    if ($nextChar === '$') {
                         $this->parseToken();
                     }
 
@@ -1362,53 +1362,53 @@ class PHPDocTypesUtil
                 }
             }//end if
 
-            if (strtolower($callabletype) === 'callable') {
+            if (strtolower($callableType) === 'callable') {
                 $type = 'callable';
             } else {
                 $type = '\\Closure';
             }
-        } else if ($lowernext === 'mixed') {
+        } else if ($lowerNext === 'mixed') {
             // Mixed.
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken('mixed');
             $type = 'mixed';
-        } else if ($lowernext === 'iterable') {
+        } else if ($lowerNext === 'iterable') {
             // Iterable (Traversable|array).
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken('iterable');
             if ($this->next === '<') {
                 $this->phpFig = false;
                 $this->parseToken('<');
-                $firsttype = $this->parseAnyType();
+                $firstType = $this->parseAnyType();
                 if ($this->next === ',') {
-                    $key = $firsttype;
+                    $key = $firstType;
                     $this->parseToken(',');
                     $value = $this->parseAnyType();
                 } else {
                     $key   = null;
-                    $value = $firsttype;
+                    $value = $firstType;
                 }
 
                 $this->parseToken('>');
             }
 
             $type = 'iterable';
-        } else if ($lowernext === 'array-key') {
+        } else if ($lowerNext === 'array-key') {
             // Array-key (int|string).
             $this->phpFig = false;
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken('array-key');
             $type = 'array-key';
-        } else if ($lowernext === 'scalar') {
+        } else if ($lowerNext === 'scalar') {
             // Scalar can be (bool|int|float|string).
             $this->phpFig = false;
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken('scalar');
             $type = 'scalar';
-        } else if ($lowernext === 'key-of') {
+        } else if ($lowerNext === 'key-of') {
             // Key-of.
             $this->phpFig = false;
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken('key-of');
             $this->parseToken('<');
             $iterable = $this->parseAnyType();
@@ -1418,10 +1418,10 @@ class PHPDocTypesUtil
 
             $this->parseToken('>');
             $type = $this->unknown;
-        } else if ($lowernext === 'value-of') {
+        } else if ($lowerNext === 'value-of') {
             // Value-of.
             $this->phpFig = false;
-            $this->correctToken($lowernext);
+            $this->correctToken($lowerNext);
             $this->parseToken('value-of');
             $this->parseToken('<');
             $iterable = $this->parseAnyType();
@@ -1478,17 +1478,17 @@ class PHPDocTypesUtil
             $this->phpFig = false;
             $this->parseToken('::');
             if ($this->next === null) {
-                $nextchar = null;
+                $nextChar = null;
             } else {
-                $nextchar = $this->next[0];
+                $nextChar = $this->next[0];
             }
 
-            $haveconstantname = $nextchar !== null && (ctype_alpha($nextchar) || $nextchar === '_');
-            if ($haveconstantname === true) {
+            $haveConstantName = $nextChar !== null && (ctype_alpha($nextChar) || $nextChar === '_');
+            if ($haveConstantName === true) {
                 $this->parseToken();
             }
 
-            if ($this->next === '*' || $haveconstantname === false) {
+            if ($this->next === '*' || $haveConstantName === false) {
                 $this->parseToken('*');
             }
 

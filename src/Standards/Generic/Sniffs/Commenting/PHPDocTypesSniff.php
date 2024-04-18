@@ -1363,7 +1363,7 @@ class PHPDocTypesSniff implements Sniff
                             }
                         }
 
-                        if ($this->checkPassSplat === true && $paramParsed->passsplat !== $docParamParsed->passsplat) {
+                        if ($this->checkPassSplat === true && $paramParsed->passSplat !== $docParamParsed->passSplat) {
                             $this->file->addError(
                                 'PHPDoc function parameter pass by reference or splat mismatch',
                                 $docParam->ptr,
