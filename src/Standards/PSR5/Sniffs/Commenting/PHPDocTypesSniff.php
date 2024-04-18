@@ -1,6 +1,6 @@
 <?php
 /**
- * Check PHPDoc Types for PSR-5.
+ * Check PHPDoc Types for PHP-FIG PSR-5.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic
