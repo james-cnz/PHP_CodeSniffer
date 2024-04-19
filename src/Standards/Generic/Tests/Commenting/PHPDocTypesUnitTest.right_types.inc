@@ -8,7 +8,7 @@
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2023-2024 Otago Polytechnic
  * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- *            CC BY-SA v4 or later
+ *            CC BY-SA 4.0 or later
  */
 
 use stdClass as MyStdClass;

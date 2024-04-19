@@ -5,7 +5,7 @@
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic
  * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- *            CC BY-SA v4 or later
+ *            CC BY-SA 4.0 or later
  */
 
 declare(strict_types=1);
@@ -21,7 +21,7 @@ class PHPDocTypesSniff extends SniffBase
 {
 
     /**
-     * Check named functions (except void ones with no params), and class variables and constants are documented.
+     * Check named classes and functions (except void ones with no params), and class variables and constants are documented.
      *
      * @var boolean
      */
@@ -42,7 +42,7 @@ class PHPDocTypesSniff extends SniffBase
     public $checkNoMisplaced = true;
 
     /**
-     * Check the types match--isn't aware of class heirarchies from other files.
+     * Check the types match--isn't aware of class heirarchies from other files or global constants.
      *
      * @var boolean
      */
