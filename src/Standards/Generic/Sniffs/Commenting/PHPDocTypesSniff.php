@@ -1058,8 +1058,6 @@ class PHPDocTypesSniff implements Sniff
                 'implements' => $interfaces,
             ];
         } else if ($this->pass === 2) {
-            // Checks.
-
             // Check for missing docs if not anonymous.
             if ($this->checkHasDocBlocks === true && $name !== null && $comment === null) {
                 $this->file->addWarning(
