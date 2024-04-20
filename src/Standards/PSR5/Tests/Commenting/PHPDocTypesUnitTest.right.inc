@@ -45,12 +45,12 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      * @param object     $object
      * @param self       $self
      * @param iterable   $iterable
-     * @param TypesValid $specificclass
+     * @param TypesValid $specificClass
      * @param callable   $callable
      *
      * @return void
      */
-    public function basic_type_equivalence(
+    public function basicTypeEquivalence(
         array $array,
         bool $bool,
         int $int,
@@ -59,11 +59,11 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
         object $object,
         self $self,
         iterable $iterable,
-        TypesValid $specificclass,
+        TypesValid $specificClass,
         callable $callable
     ): void {
 
-    }//end basic_type_equivalence()
+    }//end basicTypeEquivalence()
 
 
     /**
@@ -75,11 +75,11 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return never
      */
-    public function non_native_types($resource, $static, $mixed)
+    public function nonNativeTypes($resource, $static, $mixed)
     {
         throw new \Exception();
 
-    }//end non_native_types()
+    }//end nonNativeTypes()
 
 
     /**
@@ -90,12 +90,12 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function parameter_modifiers(
+    public function parameterModifiers(
         object &$reference,
         int ...$splat
     ): void {
 
-    }//end parameter_modifiers()
+    }//end parameterModifiers()
 
 
     /**
@@ -106,10 +106,10 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function boolean_types(bool $bool, bool $literal): void
+    public function booleanTypes(bool $bool, bool $literal): void
     {
 
-    }//end boolean_types()
+    }//end booleanTypes()
 
 
     /**
@@ -123,29 +123,29 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function object_types(object $object, object $class,
+    public function objectTypes(object $object, object $class,
         object $relative, object $traversable, object $closure
     ): void {
 
-    }//end object_types()
+    }//end objectTypes()
 
 
     /**
      * Null type
      *
-     * @param null     $standalonenull
-     * @param int|null $explicitnullable
-     * @param int|null $implicitnullable
+     * @param null     $standAloneNull
+     * @param int|null $explicitNullable
+     * @param int|null $implicitNullable
      *
      * @return void
      */
-    public function null_type(
-        $standalonenull,
-        ?int $explicitnullable,
-        int $implicitnullable=null
+    public function nullType(
+        $standAloneNull,
+        ?int $explicitNullable,
+        int $implicitNullable=null
     ): void {
 
-    }//end null_type()
+    }//end nullType()
 
 
     /**
@@ -155,10 +155,10 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function user_defined_type(TypesValid $class): void
+    public function userDefinedType(TypesValid $class): void
     {
 
-    }//end user_defined_type()
+    }//end userDefinedType()
 
 
     /**
@@ -169,10 +169,10 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function callable_types(callable $callable, callable $closure): void
+    public function callableTypes(callable $callable, callable $closure): void
     {
 
-    }//end callable_types()
+    }//end callableTypes()
 
 
     /**
@@ -184,10 +184,10 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function iterable_types(iterable $array, iterable $iterable, iterable $traversable): void
+    public function iterableTypes(iterable $array, iterable $iterable, iterable $traversable): void
     {
 
-    }//end iterable_types()
+    }//end iterableTypes()
 
 
     /**
@@ -195,41 +195,41 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @param int|string        $union
      * @param TypesValid&object $intersection
-     * @param int[]             $arraysuffix
+     * @param int[]             $arraySuffix
      *
      * @return void
      */
-    public function basic_structure(
+    public function basicStructure(
         $union,
         object $intersection,
-        array $arraysuffix
+        array $arraySuffix
     ): void {
 
-    }//end basic_structure()
+    }//end basicStructure()
 
 
     /**
      * Structure combinations
      *
-     * @param int|float|string               $multipleunion
-     * @param TypesValid&object&\Traversable $multipleintersection
-     * @param int[][]                        $multiplearray
-     * @param int|int[]                      $unionarray
-     * @param (int)[]                        $bracketarray
+     * @param int|float|string               $multipleUnion
+     * @param TypesValid&object&\Traversable $multipleIntersection
+     * @param int[][]                        $multipleArray
+     * @param int|int[]                      $unionArray
+     * @param (int)[]                        $bracketArray
      * @param int|(TypesValid&object)        $dnf
      *
      * @return void
      */
-    public function structure_combos(
-        $multipleunion,
-        object $multipleintersection,
-        array $multiplearray,
-        $unionarray,
-        array $bracketarray,
+    public function structureCombos(
+        $multipleUnion,
+        object $multipleIntersection,
+        array $multipleArray,
+        $unionArray,
+        array $bracketArray,
         $dnf
     ): void {
 
-    }//end structure_combos()
+    }//end structureCombos()
 
 
     /**
@@ -239,10 +239,10 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function dnf_vs_dnf((TypesValidInterface&TypesValidParent)|int $p): void
+    public function dnfVsDnf((TypesValidInterface&TypesValidParent)|int $p): void
     {
 
-    }//end dnf_vs_dnf()
+    }//end dnfVsDnf()
 
 
     /**
@@ -298,33 +298,33 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      * @param Throwable|Exception|Error                                 $throwable
      * @param Exception|ErrorException                                  $exception
      * @param Error|ArithmeticError|AssertionError|ParseError|TypeError $error
-     * @param ArithmeticError|DivisionByZeroError                       $arithmeticerror
+     * @param ArithmeticError|DivisionByZeroError                       $arithmeticError
      *
      * @return void
      */
-    public function builtin_classes(
+    public function builtinClasses(
         Traversable $traversable, Iterator $iterator,
         Throwable $throwable, Exception $exception, Error $error,
-        ArithmeticError $arithmeticerror
+        ArithmeticError $arithmeticError
     ): void {
 
-    }//end builtin_classes()
+    }//end builtinClasses()
 
 
     /**
      * SPL classes with inheritance (a few examples only)
      *
      * @param Iterator|SeekableIterator|ArrayIterator $iterator
-     * @param SeekableIterator|ArrayIterator          $seekableiterator
+     * @param SeekableIterator|ArrayIterator          $seekableIterator
      * @param Countable|ArrayIterator                 $countable
      *
      * @return void
      */
-    public function spl_classes(
-        Iterator $iterator, SeekableIterator $seekableiterator, Countable $countable
+    public function splClasses(
+        Iterator $iterator, SeekableIterator $seekableIterator, Countable $countable
     ): void {
 
-    }//end spl_classes()
+    }//end splClasses()
 
 
 }//end class

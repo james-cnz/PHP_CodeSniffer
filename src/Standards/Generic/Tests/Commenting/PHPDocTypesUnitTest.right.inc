@@ -11,10 +11,10 @@
  *            CC BY-SA 4.0 or later
  */
 
-namespace MoodleHQ\MoodleCS\moodle\Tests\Sniffs\Commenting\fixtures;
+namespace PHP_CodeSniffer\Standards\Generic\Tests\Commenting;
 
 use stdClass as myStdClass, Exception;
-use MoodleHQ\MoodleCS\moodle\Tests\Sniffs\Commenting\ {PHPDocTypesSniffTest};
+use PHP_CodeSniffer\Standards\Generic\Tests\Commenting\ {PHPDocTypesUnitTest};
 
 ?>
 <?php
@@ -59,7 +59,7 @@ class PhpValid extends PhpValidParent implements PhpValidInterface
     /**
      * Namespaces recognised
      *
-     * @param \MoodleHQ\MoodleCS\moodle\Tests\Sniffs\Commenting\fixtures\PhpValid $x
+     * @param \PHP_CodeSniffer\Standards\Generic\Tests\Commenting\PhpValid $x
      *
      * @return void
      */
@@ -116,10 +116,10 @@ class PhpValid extends PhpValidParent implements PhpValidInterface
      * @template T2 of int
      * @return   void
      */
-    public function function_templates(int $x): void
+    public function functionTemplates(int $x): void
     {
 
-    }//end function_templates()
+    }//end functionTemplates()
 
 
 }//end class
@@ -140,10 +140,10 @@ class PhpValid2
      *
      * @return void
      */
-    public function class_templates(int $x): void
+    public function classTemplates(int $x): void
     {
 
-    }//end class_templates()
+    }//end classTemplates()
 
 
 }//end class

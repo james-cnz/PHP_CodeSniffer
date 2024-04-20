@@ -8,15 +8,15 @@
  *            CC BY-SA 4.0 or later
  */
 
-namespace trailing_backslash\;
+namespace TrailingBackslash\;
 
 // Malformed.
 namespace @
 
-use no_trailing_backslash {something
+use NoTrailingBackslash {Something
 };
 
-use trailing_backslash\;
+use TrailingBackslash\;
 
 // No bracket closer.
 use x\ { ;
@@ -43,7 +43,7 @@ public int $wrongPlace1;
  *
  * @return void
  */
-function wrong_places(): void
+function wrongPlaces(): void
 {
     namespace ns;
     use x;
@@ -62,7 +62,7 @@ function wrong_places(): void
      */
     public int $wrongPlace2;
 
-}//end wrong_places()
+}//end wrongPlaces()
 
 
 /**

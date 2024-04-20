@@ -50,11 +50,11 @@ class WarnStyle
      * @return   Integer PHPDoc function return type doesn't conform to recommended style
      * @template T of Integer PHPDoc tempate type doesn't conform to recommended style
      */
-    public function fun_wrong($p): int
+    public function funWrong($p): int
     {
         return 0;
 
-    }//end fun_wrong()
+    }//end funWrong()
 
 
 }//end class

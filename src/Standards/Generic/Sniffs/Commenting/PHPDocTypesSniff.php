@@ -24,15 +24,15 @@ class PHPDocTypesSniff implements Sniff
 {
 
     /**
-     * Check named classes and functions (except void ones with no params), and class variables and constants have doc blocks.
-     * Unless using this sniff standalone to just check types, probably disable this and use other sniffs for this.
+     * Check named classes and functions and class variables and constants have doc blocks.
+     * Unless using this sniff standalone, probably disable this and use other sniffs for this.
      *
      * @var boolean
      */
     public $checkHasDocBlocks = false;
 
     /**
-     * Check doc blocks, if present, contain appropriate tags.
+     * Check doc blocks, if present, contain appropriate type tags.
      *
      * @var boolean
      */
@@ -1059,6 +1059,16 @@ class PHPDocTypesSniff implements Sniff
             ];
         } else if ($this->pass === 2) {
             // Checks.
+
+            // Check for missing docs if not anonymous.
+            if ($this->checkHasDocBlocks === true && $name !== null && $comment === null) {
+                $this->file->addWarning(
+                    'PHPDoc class is not documented',
+                    $ptr,
+                    'PHPDocClassDocMissing'
+                );
+            }
+
             // Check no misplaced tags.
             if ($comment !== null) {
                 $this->checkNo($comment, ['@param', '@return', '@var']);
@@ -1233,10 +1243,7 @@ class PHPDocTypesSniff implements Sniff
         // Checks.
         if ($this->pass === 2) {
             // Check for missing docs if not anonymous.
-            if ($this->checkHasDocBlocks === true && $name !== null && $comment === null
-                && (count($parameters) > 0
-                || ($name !== '__construct' && strtolower(trim($properties['return_type'])) !== 'void'))
-            ) {
+            if ($this->checkHasDocBlocks === true && $name !== null && $comment === null) {
                 $this->file->addWarning(
                     'PHPDoc function is not documented',
                     $ptr,
@@ -1315,7 +1322,7 @@ class PHPDocTypesSniff implements Sniff
                         $this->file->addError(
                             "PHPDoc function parameter doesn't exist",
                             $docParam->ptr,
-                            'PHPDocFunParamTagMisplaced'
+                            'PHPDocFunParamNameWrong'
                         );
                     } else {
                         // Compare docs against actual parameter.
@@ -1325,7 +1332,7 @@ class PHPDocTypesSniff implements Sniff
                             $this->file->addError(
                                 'PHPDoc function parameter repeated',
                                 $docParam->ptr,
-                                'PHPDocFunParamTagMultiple'
+                                'PHPDocFunParamNameMultiple'
                             );
                         }
 

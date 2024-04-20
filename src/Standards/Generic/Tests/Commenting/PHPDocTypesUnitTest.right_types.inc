@@ -92,12 +92,12 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      * @param object     $object
      * @param self       $self
      * @param parent     $parent
-     * @param TypesValid $specificclass
+     * @param TypesValid $specificClass
      * @param callable   $callable
      *
      * @return void
      */
-    public function basic_type_equivalence(
+    public function basicTypeEquivalence(
         bool $bool,
         int $int,
         float $float,
@@ -105,32 +105,32 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
         object $object,
         self $self,
         parent $parent,
-        TypesValid $specificclass,
+        TypesValid $specificClass,
         callable $callable
     ): void {
 
-    }//end basic_type_equivalence()
+    }//end basicTypeEquivalence()
 
 
     /**
      * Types not supported natively (as of PHP 7.2)
      *
-     * @param array<int>    $parameterisedarray
+     * @param array<int>    $parameterisedArray
      * @param resource      $resource
      * @param static        $static
-     * @param iterable<int> $parameterisediterable
-     * @param array-key     $arraykey
+     * @param iterable<int> $parameterisedIterable
+     * @param array-key     $arrayKey
      * @param scalar        $scalar
      * @param mixed         $mixed
      *
      * @return never
      */
-    public function non_native_types($parameterisedarray, $resource, $static, $parameterisediterable,
-        $arraykey, $scalar, $mixed
+    public function nonNativeTypes($parameterisedArray, $resource, $static, $parameterisedIterable,
+        $arrayKey, $scalar, $mixed
     ) {
         throw new \Exception();
 
-    }//end non_native_types()
+    }//end nonNativeTypes()
 
 
     /**
@@ -141,12 +141,12 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function parameter_modifiers(
+    public function parameterModifiers(
         object &$reference,
         int ...$splat
     ): void {
 
-    }//end parameter_modifiers()
+    }//end parameterModifiers()
 
 
     /**
@@ -157,43 +157,43 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function boolean_types(bool $bool, bool $literal): void
+    public function booleanTypes(bool $bool, bool $literal): void
     {
 
-    }//end boolean_types()
+    }//end booleanTypes()
 
 
     /**
      * Integer types
      *
      * @param int|integer                                                 $int
-     * @param positive-int|negative-int|non-positive-int|non-negative-int $intrange1
-     * @param int<0, 100>|int<min, 100>|int<50, max>|int<-100, max>       $intrange2
+     * @param positive-int|negative-int|non-positive-int|non-negative-int $intRange1
+     * @param int<0, 100>|int<min, 100>|int<50, max>|int<-100, max>       $intRange2
      * @param 234|-234                                                    $literal1
-     * @param int-mask<1, 2, 4>                                           $intmask1
+     * @param int-mask<1, 2, 4>                                           $intMask1
      *
      * @return void
      */
-    public function integer_types(int $int, int $intrange1, int $intrange2,
-        int $literal1, int $intmask1
+    public function integerTypes(int $int, int $intRange1, int $intRange2,
+        int $literal1, int $intMask1
     ): void {
 
-    }//end integer_types()
+    }//end integerTypes()
 
 
     /**
      * Integer types complex
      *
      * @param 1_000|-1_000                                                                $literal2
-     * @param int-mask<TypesValid::INT_ONE, TypesValid::INT_TWO>                          $intmask2
-     * @param int-mask-of<TypesValid::INT_*>|int-mask-of<key-of<TypesValid::ARRAY_CONST>> $intmask3
+     * @param int-mask<TypesValid::INT_ONE, TypesValid::INT_TWO>                          $intMask2
+     * @param int-mask-of<TypesValid::INT_*>|int-mask-of<key-of<TypesValid::ARRAY_CONST>> $intMask3
      *
      * @return void
      */
-    public function integer_types_complex(int $literal2, int $intmask2, int $intmask3): void
+    public function integerTypesComplex(int $literal2, int $intMask2, int $intMask3): void
     {
 
-    }//end integer_types_complex()
+    }//end integerTypesComplex()
 
 
     /**
@@ -204,70 +204,70 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function float_types(float $float, float $literal): void
+    public function floatTypes(float $float, float $literal): void
     {
 
-    }//end float_types()
+    }//end floatTypes()
 
 
     /**
      * String types
      *
      * @param string                                                                                        $string
-     * @param class-string|class-string<TypesValid>                                                         $classstring1
+     * @param class-string|class-string<TypesValid>                                                         $classString1
      * @param callable-string|numeric-string|non-empty-string|non-falsy-string|truthy-string|literal-string $other
      * @param 'foo'|'bar'                                                                                   $literal
      *
      * @return void
      */
-    public function string_types(string $string, string $classstring1, string $other, string $literal): void
+    public function stringTypes(string $string, string $classString1, string $other, string $literal): void
     {
 
-    }//end string_types()
+    }//end stringTypes()
 
 
     /**
      * String types complex
      *
-     * @param '\'' $stringwithescape
+     * @param '\'' $stringWithEscape
      *
      * @return void
      */
-    public function string_types_complex(string $stringwithescape): void
+    public function stringTypesComplex(string $stringWithEscape): void
     {
 
-    }//end string_types_complex()
+    }//end stringTypesComplex()
 
 
     /**
      * Array types
      *
-     * @param TypesValid[]|array<TypesValid>|array<int, string>                                  $genarray1
-     * @param non-empty-array<TypesValid>|non-empty-array<int, TypesValid>                       $genarray2
+     * @param TypesValid[]|array<TypesValid>|array<int, string>                                  $genArray1
+     * @param non-empty-array<TypesValid>|non-empty-array<int, TypesValid>                       $genArray2
      * @param list<TypesValid>|non-empty-list<TypesValid>                                        $list
      * @param array{'foo': int, "bar": string}|array{'foo': int, "bar"?: string}|array{int, int} $shapes1
      * @param array{0: int, 1?: int}|array{foo: int, bar: string}                                $shapes2
      *
      * @return void
      */
-    public function array_types(array $genarray1, array $genarray2, array $list,
+    public function arrayTypes(array $genArray1, array $genArray2, array $list,
         array $shapes1, array $shapes2
     ): void {
 
-    }//end array_types()
+    }//end arrayTypes()
 
 
     /**
      * Array types complex
      *
-     * @param array<array-key, string> $genarray3
+     * @param array<array-key, string> $genArray3
      *
      * @return void
      */
-    public function array_types_complex(array $genarray3): void
+    public function arrayTypesComplex(array $genArray3): void
     {
 
-    }//end array_types_complex()
+    }//end arrayTypesComplex()
 
 
     /**
@@ -283,11 +283,11 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function object_types(object $object, object $shapes1, object $shapes2, object $class,
+    public function objectTypes(object $object, object $shapes1, object $shapes2, object $class,
         object $relative, object $traversable1, object $closure
     ): void {
 
-    }//end object_types()
+    }//end objectTypes()
 
 
     /**
@@ -297,10 +297,10 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function object_types_complex(object $traversable2): void
+    public function objectTypesComplex(object $traversable2): void
     {
 
-    }//end object_types_complex()
+    }//end objectTypesComplex()
 
 
     /**
@@ -308,29 +308,29 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return never|never-return|never-returns|no-return
      */
-    public function never_type()
+    public function neverType()
     {
         throw new \Exception();
 
-    }//end never_type()
+    }//end neverType()
 
 
     /**
      * Null type
      *
-     * @param null $standalonenull
-     * @param ?int $explicitnullable
-     * @param ?int $implicitnullable
+     * @param null $standAloneNull
+     * @param ?int $explicitNullable
+     * @param ?int $implicitNullable
      *
      * @return void
      */
-    public function null_type(
-        $standalonenull,
-        ?int $explicitnullable,
-        int $implicitnullable=null
+    public function nullType(
+        $standAloneNull,
+        ?int $explicitNullable,
+        int $implicitNullable=null
     ): void {
 
-    }//end null_type()
+    }//end nullType()
 
 
     /**
@@ -340,10 +340,10 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function user_defined_type(TypesValid $class): void
+    public function userDefinedType(TypesValid $class): void
     {
 
-    }//end user_defined_type()
+    }//end userDefinedType()
 
 
     /**
@@ -353,15 +353,15 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      * @param callable(int $foo, string $bar): void                           $callable2
      * @param callable(float ...$floats): (int|null)|callable(object&): ?int  $callable3
      * @param \Closure|\Closure(int, int): string                             $closure
-     * @param callable-string                                                 $callablestring
+     * @param callable-string                                                 $callableString
      *
      * @return void
      */
-    public function callable_types(callable $callable1, callable $callable2, callable $callable3,
-        callable $closure, callable $callablestring
+    public function callableTypes(callable $callable1, callable $callable2, callable $callable3,
+        callable $closure, callable $callableString
     ): void {
 
-    }//end callable_types()
+    }//end callableTypes()
 
 
     /**
@@ -373,10 +373,10 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function iterable_types(iterable $array, iterable $iterable1, iterable $traversable1): void
+    public function iterableTypes(iterable $array, iterable $iterable1, iterable $traversable1): void
     {
 
-    }//end iterable_types()
+    }//end iterableTypes()
 
 
     /**
@@ -387,38 +387,38 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function iterable_types_complex(iterable $iterable2, iterable $traversable2): void
+    public function iterableTypesComplex(iterable $iterable2, iterable $traversable2): void
     {
 
-    }//end iterable_types_complex()
+    }//end iterableTypesComplex()
 
 
     /**
      * Key and value of
      *
-     * @param key-of<TypesValid::ARRAY_CONST>   $keyof1
-     * @param value-of<TypesValid::ARRAY_CONST> $valueof1
+     * @param key-of<TypesValid::ARRAY_CONST>   $keyOf1
+     * @param value-of<TypesValid::ARRAY_CONST> $valueOf1
      *
      * @return void
      */
-    public function key_and_value_of(int $keyof1, string $valueof1): void
+    public function keyAndValueOf(int $keyOf1, string $valueOf1): void
     {
 
-    }//end key_and_value_of()
+    }//end keyAndValueOf()
 
 
     /**
      * Key and value of complex
      *
-     * @param key-of<TypesValid::ARRAY_CONST|array<int, string>>   $keyof2
-     * @param value-of<TypesValid::ARRAY_CONST|array<int, string>> $valueof2
+     * @param key-of<TypesValid::ARRAY_CONST|array<int, string>>   $keyOf2
+     * @param value-of<TypesValid::ARRAY_CONST|array<int, string>> $valueOf2
      *
      * @return void
      */
-    public function key_and_value_of_complex(int $keyof2, string $valueof2): void
+    public function keyAndValueOfComplex(int $keyOf2, string $valueOf2): void
     {
 
-    }//end key_and_value_of_complex()
+    }//end keyAndValueOfComplex()
 
 
     /**
@@ -428,7 +428,7 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return ($size is positive-int ? non-empty-array<string> : array<string>)
      */
-    public function conditional_return(int $size): array
+    public function conditionalReturn(int $size): array
     {
         if ($size > 0) {
             return array_fill(0, $size, 'entry');
@@ -436,7 +436,7 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
             return [];
         }
 
-    }//end conditional_return()
+    }//end conditionalReturn()
 
 
     /**
@@ -446,11 +446,11 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return ($x is TypesValid::INT_* ? TypesValid::INT_* : TypesValid::STRING_*)
      */
-    public function conditional_return_complex_1($x)
+    public function conditionalReturnComplex1($x)
     {
         return $x;
 
-    }//end conditional_return_complex_1()
+    }//end conditionalReturnComplex1()
 
 
     /**
@@ -460,11 +460,11 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return ($x is 1|2 ? 1|2 : 'Hello'|'World')
      */
-    public function conditional_return_complex_2($x)
+    public function conditionalReturnComplex2($x)
     {
         return $x;
 
-    }//end conditional_return_complex_2()
+    }//end conditionalReturnComplex2()
 
 
     /**
@@ -481,11 +481,11 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      *
      * @return void
      */
-    public function constant_enumerations(bool $bool, int $int1, int $int2, int $int3, $mixed,
+    public function constantEnumerations(bool $bool, int $int1, int $int2, int $int3, $mixed,
         float $float, string $string, array $array
     ): void {
 
-    }//end constant_enumerations()
+    }//end constantEnumerations()
 
 
     /**
@@ -495,61 +495,61 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      * @param int|string                                    $union
      * @param TypesValid&object{additionalproperty: string} $intersection
      * @param (int)                                         $brackets
-     * @param int[]                                         $arraysuffix
+     * @param int[]                                         $arraySuffix
      *
      * @return void
      */
-    public function basic_structure(
+    public function basicStructure(
         ?int $nullable,
         $union,
         object $intersection,
         int $brackets,
-        array $arraysuffix
+        array $arraySuffix
     ): void {
 
-    }//end basic_structure()
+    }//end basicStructure()
 
 
     /**
      * Structure combinations
      *
-     * @param int|float|string                                                $multipleunion
-     * @param TypesValid&object{additionalproperty: string}&\Traversable<int> $multipleintersection
-     * @param ((int))                                                         $multiplebracket
-     * @param int[][]                                                         $multiplearray
-     * @param ?(int)                                                          $nullablebracket1
-     * @param (?int)                                                          $nullablebracket2
-     * @param ?int[]                                                          $nullablearray
-     * @param (int|float)                                                     $unionbracket1
-     * @param int|(float)                                                     $unionbracket2
-     * @param int|int[]                                                       $unionarray
-     * @param (TypesValid&object{additionalproperty: string})                 $intersectionbracket1
-     * @param TypesValid&(object{additionalproperty: string})                 $intersectionbracket2
-     * @param (int)[]                                                         $bracketarray1
-     * @param (int[])                                                         $bracketarray2
+     * @param int|float|string                                                $multipleUnion
+     * @param TypesValid&object{additionalproperty: string}&\Traversable<int> $multipleIntersection
+     * @param ((int))                                                         $multipleBracket
+     * @param int[][]                                                         $multipleArray
+     * @param ?(int)                                                          $nullableBracket1
+     * @param (?int)                                                          $nullableBracket2
+     * @param ?int[]                                                          $nullableArray
+     * @param (int|float)                                                     $unionBracket1
+     * @param int|(float)                                                     $unionBracket2
+     * @param int|int[]                                                       $unionArray
+     * @param (TypesValid&object{additionalproperty: string})                 $intersectionBracket1
+     * @param TypesValid&(object{additionalproperty: string})                 $intersectionBracket2
+     * @param (int)[]                                                         $bracketArray1
+     * @param (int[])                                                         $bracketArray2
      * @param int|(TypesValid&object{additionalproperty: string})             $dnf
      *
      * @return void
      */
-    public function structure_combos(
-        $multipleunion,
-        object $multipleintersection,
-        int $multiplebracket,
-        array $multiplearray,
-        ?int $nullablebracket1,
-        ?int $nullablebracket2,
-        ?array $nullablearray,
-        $unionbracket1,
-        $unionbracket2,
-        $unionarray,
-        object $intersectionbracket1,
-        object $intersectionbracket2,
-        array $bracketarray1,
-        array $bracketarray2,
+    public function structureCombos(
+        $multipleUnion,
+        object $multipleIntersection,
+        int $multipleBracket,
+        array $multipleArray,
+        ?int $nullableBracket1,
+        ?int $nullableBracket2,
+        ?array $nullableArray,
+        $unionBracket1,
+        $unionBracket2,
+        $unionArray,
+        object $intersectionBracket1,
+        object $intersectionBracket2,
+        array $bracketArray1,
+        array $bracketArray2,
         $dnf
     ): void {
 
-    }//end structure_combos()
+    }//end structureCombos()
 
 
     /**
@@ -605,33 +605,33 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      * @param Throwable|Exception|Error                                 $throwable
      * @param Exception|ErrorException                                  $exception
      * @param Error|ArithmeticError|AssertionError|ParseError|TypeError $error
-     * @param ArithmeticError|DivisionByZeroError                       $arithmeticerror
+     * @param ArithmeticError|DivisionByZeroError                       $arithmeticError
      *
      * @return void
      */
-    public function builtin_classes(
+    public function builtinClasses(
         Traversable $traversable, Iterator $iterator,
         Throwable $throwable, Exception $exception, Error $error,
-        ArithmeticError $arithmeticerror
+        ArithmeticError $arithmeticError
     ): void {
 
-    }//end builtin_classes()
+    }//end builtinClasses()
 
 
     /**
      * SPL classes with inheritance (a few examples only)
      *
      * @param Iterator|SeekableIterator<int, string>|ArrayIterator $iterator
-     * @param SeekableIterator<int, string>|ArrayIterator          $seekableiterator
+     * @param SeekableIterator<int, string>|ArrayIterator          $seekableIterator
      * @param Countable|ArrayIterator                              $countable
      *
      * @return void
      */
-    public function spl_classes(
-        Iterator $iterator, SeekableIterator $seekableiterator, Countable $countable
+    public function splClasses(
+        Iterator $iterator, SeekableIterator $seekableIterator, Countable $countable
     ): void {
 
-    }//end spl_classes()
+    }//end splClasses()
 
 
 }//end class

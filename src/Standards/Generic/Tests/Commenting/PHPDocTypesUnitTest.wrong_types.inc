@@ -25,10 +25,10 @@ class TypesInvalid
      *
      * @return void
      */
-    public function expecting_var_saw_end(int $x): void
+    public function expectingVarSawEnd(int $x): void
     {
 
-    }//end expecting_var_saw_end()
+    }//end expectingVarSawEnd()
 
 
     /**
@@ -38,10 +38,10 @@ class TypesInvalid
      *
      * @return void
      */
-    public function expecting_var_saw_other(int $x): void
+    public function expectingVarSawOther(int $x): void
     {
 
-    }//end expecting_var_saw_other()
+    }//end expectingVarSawOther()
 
 
     /**
@@ -49,132 +49,132 @@ class TypesInvalid
      *
      * @var
      */
-    public $expectingtypesawend;
+    public $expectingTypeSawEnd;
 
     /**
      * Expecting type, saw other
      *
      * @var $varname
      */
-    public $expectingtypesawother;
+    public $expectingTypeSawOther;
 
     /**
      * Unterminated string (passes Psalm)
      *
      * @var "
      */
-    public $unterminatedstring;
+    public $unterminatedString;
 
     /**
      * Unterminated string with escaped quote (passes Psalm)
      *
      * @var "\"
      */
-    public $unterminatedstringwithescapedquote;
+    public $unterminatedStringWithEscapedQuote;
 
     /**
      * String has escape with no following character (passes Psalm)
      *
      * @var "\*/
-    public $stringhasescapewithnofollowingchar;
+    public $stringHasEscapeWithNoFollowingChar;
 
     /**
      * Non-DNF type (passes PHPStan)
      *
      * @var TypesInvalid&(a|b)
      */
-    public $nondnftype;
+    public $nonDnfType;
 
     /**
      * Invalid intersection
      *
      * @var integer&string
      */
-    public $invalidintersection;
+    public $invalidIntersection;
 
     /**
      * Invalid int min
      *
      * @var int<0.0, 1>
      */
-    public $invalidintmin;
+    public $invalidIntMin;
 
     /**
      * Invalid int max
      *
      * @var int<0, 1.0>
      */
-    public $invalidintmax;
+    public $invalidIntMax;
 
     /**
      * Invalid int mask 1
      *
      * @var int-mask<1.0, 2.0>
      */
-    public $invalidintmask1;
+    public $invalidIntMask1;
 
     /**
      * Invalid int mask 2
      *
      * @var int-mask-of<string>
      */
-    public $invalidintmask2;
+    public $invalidIntMask2;
 
     /**
      * Expecting class for class-string, saw end
      *
      * @var class-string<
      */
-    public $expectingclassforclassstringsawend;
+    public $expectingClassForClassStringSawEnd;
 
     /**
      * Expecting class for class-string, saw other
      *
      * @var class-string<int>
      */
-    public $expectingclassforclassstringsawother;
+    public $expectingClassForClassStringSawOther;
 
     /**
      * List key
      *
      * @var list<int, string>
      */
-    public $listkey;
+    public $listKey;
 
     /**
      * Invalid array key (passes Psalm)
      *
      * @var array<object, object>
      */
-    public $invalidarraykey;
+    public $invalidArrayKey;
 
     /**
      * Non-empty-array shape
      *
      * @var non-empty-array{'a': int}
      */
-    public $nonemptyarrayshape;
+    public $nonEmptyArrayShape;
 
     /**
      * Invalid object key (passes Psalm)
      *
      * @var object{0.0: int}
      */
-    public $invalidobjectkey;
+    public $invalidObjectKey;
 
     /**
      * Can't get key of non-iterable
      *
      * @var key-of<int>
      */
-    public $cantgetkeyofnoniterable;
+    public $cantGetKeyOfNonIterable;
 
     /**
      * Can't get value of non-iterable
      *
      * @var value-of<int>
      */
-    public $cantgetvalueofnoniterable;
+    public $cantGetValueOfNonIterable;
 
 
     /**
@@ -184,10 +184,10 @@ class TypesInvalid
      *
      * @return void
      */
-    public function class_name_has_trailing_slash(object $x): void
+    public function classNameHasTrailingSlash(object $x): void
     {
 
-    }//end class_name_has_trailing_slash()
+    }//end classNameHasTrailingSlash()
 
 
     /**
@@ -195,13 +195,13 @@ class TypesInvalid
      *
      * @var (TypesInvalid
      */
-    public $expectingclosingbracketsawend;
+    public $expectingClosingBracketSawEnd;
 
     /**
      * Expecting closing bracket, saw other
      *
      * @var (TypesInvalid int
      */
-    public $expectingclosingbracketsawother;
+    public $expectingClosingBracketSawOther;
 
 }//end class

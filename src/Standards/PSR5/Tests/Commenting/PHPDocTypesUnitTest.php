@@ -55,6 +55,7 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
             return [];
         case 'PHPDocTypesUnitTest.warn_docs_missing.inc':
             return [
+                17 => 1,
                 21 => 1,
                 27 => 2,
                 38 => 1,

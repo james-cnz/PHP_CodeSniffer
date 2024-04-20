@@ -11,27 +11,27 @@
  *            CC BY-SA 4.0 or later
  */
 
-/**
- * A collection of code with missing annotations for testing
- */
+declare(strict_types=1);
+
+// PHPDoc class is not documented.
 class DocsMissing
 {
 
     // PHPDoc function is not documented.
-    public function fun_not_doc(int $p): void
+    public function funNotDoc(int $p): void
     {
 
-    }//end fun_not_doc()
+    }//end funNotDoc()
 
 
     /**
      * PHPDoc function parameter $p not documented and missing function @return tag
      */
-    public function fun_missing_param_ret(int $p): int
+    public function funMissingParamRet(int $p): int
     {
         return $p;
 
-    }//end fun_missing_param_ret()
+    }//end funMissingParamRet()
 
 
     // PHPDoc variable or constant is not documented.

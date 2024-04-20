@@ -21,7 +21,7 @@
  * A collection of invalid types for testing
  *
  * @property int< PHPDoc class property type missing or malformed
- * @property int PHPDoc class property name missing or malformed
+ * @property int  PHPDoc class property name missing or malformed
  */
 class TypesInvalid
 {
@@ -41,10 +41,10 @@ class TypesInvalid
      *
      * @return void
      */
-    public function function_parameter_issues(int $p2, int $p3, int $p4, int $p5): void
+    public function functionParameterIssues(int $p2, int $p3, int $p4, int $p5): void
     {
 
-    }//end function_parameter_issues()
+    }//end functionParameterIssues()
 
 
     /**
@@ -53,11 +53,11 @@ class TypesInvalid
      * @return int
      * @return null
      */
-    public function multiple_returns(): ?int
+    public function multipleReturns(): ?int
     {
         return 0;
 
-    }//end multiple_returns()
+    }//end multipleReturns()
 
 
     /**
@@ -65,10 +65,10 @@ class TypesInvalid
      *
      * @return
      */
-    public function return_malformed(): void
+    public function returnMalformed(): void
     {
 
-    }//end return_malformed()
+    }//end returnMalformed()
 
 
     /**
@@ -76,11 +76,11 @@ class TypesInvalid
      *
      * @return string
      */
-    public function return_mismatch(): int
+    public function returnMismatch(): int
     {
         return 0;
 
-    }//end return_mismatch()
+    }//end returnMismatch()
 
 
     /**
@@ -90,10 +90,10 @@ class TypesInvalid
      * @template T of @ PHPDoc template type missing or malformed
      * @return   void
      */
-    public function template_issues(): void
+    public function templateIssues(): void
     {
 
-    }//end template_issues()
+    }//end templateIssues()
 
 
     /**

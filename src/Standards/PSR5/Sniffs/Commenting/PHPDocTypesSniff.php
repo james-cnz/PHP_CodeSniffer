@@ -21,14 +21,14 @@ class PHPDocTypesSniff extends SniffBase
 {
 
     /**
-     * Check named classes and functions (except void ones with no params), and class variables and constants are documented.
+     * Check named classes and functions and class variables and constants are documented.
      *
      * @var boolean
      */
     public $checkHasDocBlocks = true;
 
     /**
-     * Check doc blocks, if present, contain appropriate param, return, or var tags.
+     * Check doc blocks, if present, contain appropriate type tags.
      *
      * @var boolean
      */
