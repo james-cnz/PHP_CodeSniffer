@@ -1107,7 +1107,7 @@ class PHPDocTypesSniff implements Sniff
                             );
                         } else {
                             if ($this->checkPhpFigTypes === true && $docPropParsed->phpFig === false) {
-                                $this->file->addWarning(
+                                $this->file->addError(
                                     "PHPDoc class property type doesn't conform to PHP-FIG PSR-5",
                                     $docProp->ptr,
                                     'PHPDocClassPropTypePHPFIG'
@@ -1115,7 +1115,7 @@ class PHPDocTypesSniff implements Sniff
                             }
 
                             if ($this->checkStyle === true && $docPropParsed->fixed !== null) {
-                                $fix = $this->file->addFixableWarning(
+                                $fix = $this->file->addFixableError(
                                     "PHPDoc class property type doesn't conform to recommended style",
                                     $docProp->ptr,
                                     'PHPDocClassPropTypeStyle'
@@ -1347,7 +1347,7 @@ class PHPDocTypesSniff implements Sniff
                         }
 
                         if ($this->checkPhpFigTypes === true && $docParamParsed->phpFig === false) {
-                            $this->file->addWarning(
+                            $this->file->addError(
                                 "PHPDoc function parameter type doesn't conform to PHP-FIG PSR-5",
                                 $docParam->ptr,
                                 'PHPDocFunParamTypePHPFIG'
@@ -1355,7 +1355,7 @@ class PHPDocTypesSniff implements Sniff
                         }
 
                         if ($this->checkStyle === true && $docParamParsed->fixed !== null) {
-                            $fix = $this->file->addFixableWarning(
+                            $fix = $this->file->addFixableError(
                                 "PHPDoc function parameter type doesn't conform to recommended style",
                                 $docParam->ptr,
                                 'PHPDocFunParamTypeStyle'
@@ -1474,7 +1474,7 @@ class PHPDocTypesSniff implements Sniff
                         }
 
                         if ($this->checkPhpFigTypes === true && $docRetParsed->phpFig === false) {
-                            $this->file->addWarning(
+                            $this->file->addError(
                                 "PHPDoc function return type doesn't conform to PHP-FIG PSR-5",
                                 $docRet->ptr,
                                 'PHPDocFunRetTypePHPFIG'
@@ -1482,7 +1482,7 @@ class PHPDocTypesSniff implements Sniff
                         }
 
                         if ($this->checkStyle === true && $docRetParsed->fixed !== null) {
-                            $fix = $this->file->addFixableWarning(
+                            $fix = $this->file->addFixableError(
                                 "PHPDoc function return type doesn't conform to recommended style",
                                 $docRet->ptr,
                                 'PHPDocFunRetTypeStyle'
@@ -1542,7 +1542,7 @@ class PHPDocTypesSniff implements Sniff
                 $scope->templates[$docTemplateParsed->name] = $docTemplateParsed->type;
 
                 if ($this->checkPhpFigTypes === true && $docTemplateParsed->phpFig === false) {
-                    $this->file->addWarning(
+                    $this->file->addError(
                         "PHPDoc template type doesn't conform to PHP-FIG PSR-5",
                         $docTemplate->ptr,
                         'PHPDocTemplateTypePHPFIG'
@@ -1550,7 +1550,7 @@ class PHPDocTypesSniff implements Sniff
                 }
 
                 if ($this->checkStyle === true && $docTemplateParsed->fixed !== null) {
-                    $fix = $this->file->addFixableWarning(
+                    $fix = $this->file->addFixableError(
                         "PHPDoc tempate type doesn't conform to recommended style",
                         $docTemplate->ptr,
                         'PHPDocTemplateTypeStyle'
@@ -1697,7 +1697,7 @@ class PHPDocTypesSniff implements Sniff
                         }
 
                         if ($this->checkPhpFigTypes === true && $docVarParsed->phpFig === false) {
-                            $this->file->addWarning(
+                            $this->file->addError(
                                 "PHPDoc var type doesn't conform to PHP-FIG PSR-5",
                                 $docVar->ptr,
                                 'PHPDocVarTypePHPFIG'
@@ -1705,7 +1705,7 @@ class PHPDocTypesSniff implements Sniff
                         }
 
                         if ($this->checkStyle === true && $docVarParsed->fixed !== null) {
-                            $fix = $this->file->addFixableWarning(
+                            $fix = $this->file->addFixableError(
                                 "PHPDoc var type doesn't conform to recommended style",
                                 $docVar->ptr,
                                 'PHPDocVarTypeStyle'
@@ -1777,7 +1777,7 @@ class PHPDocTypesSniff implements Sniff
                         );
                     } else {
                         if ($this->checkPhpFigTypes === true && $docVarParsed->phpFig === false) {
-                            $this->file->addWarning(
+                            $this->file->addError(
                                 "PHPDoc var type doesn't conform to PHP-FIG PSR-5",
                                 $docVar->ptr,
                                 'PHPDocVarTypePHPFIG'
@@ -1785,7 +1785,7 @@ class PHPDocTypesSniff implements Sniff
                         }
 
                         if ($this->checkStyle === true && $docVarParsed->fixed !== null) {
-                            $fix = $this->file->addFixableWarning(
+                            $fix = $this->file->addFixableError(
                                 "PHPDoc var type doesn't conform to recommended style",
                                 $docVar->ptr,
                                 'PHPDocVarTypeStyle'

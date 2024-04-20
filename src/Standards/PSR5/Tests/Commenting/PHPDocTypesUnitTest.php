@@ -33,7 +33,28 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
      */
     public function getErrorList($testFile='')
     {
-        return [];
+        switch ($testFile) {
+        case 'PHPDocTypesUnitTest.wrong_non_php_fig.inc':
+            return [
+                23 => 1,
+                31 => 1,
+                33 => 1,
+                47 => 1,
+            ];
+        case 'PHPDocTypesUnitTest.wrong_style.inc':
+            return [
+                17 => 1,
+                25 => 1,
+                32 => 1,
+                39 => 1,
+                48 => 1,
+                50 => 1,
+                51 => 1,
+                65 => 1,
+            ];
+        default:
+            return [];
+        }//end switch
 
     }//end getErrorList()
 
@@ -60,24 +81,6 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
                 27 => 2,
                 38 => 1,
                 40 => 1,
-            ];
-        case 'PHPDocTypesUnitTest.warn_non_php_fig.inc':
-            return [
-                23 => 1,
-                31 => 1,
-                33 => 1,
-                47 => 1,
-            ];
-        case 'PHPDocTypesUnitTest.warn_style.inc':
-            return [
-                17 => 1,
-                25 => 1,
-                32 => 1,
-                39 => 1,
-                48 => 1,
-                50 => 1,
-                51 => 1,
-                65 => 1,
             ];
         default:
             return [];
