@@ -3,7 +3,7 @@
  * A collection of valid types for testing
  *
  * This file should have no errors when checked with either PHPStan or Psalm.
- * And no errors when checked with the PHPDoc Types sniff.
+ * And no errors when checked with the PHPDoc Types sniff when checkPhpFigTyes and checkStyle are disabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2023-2024 Otago Polytechnic

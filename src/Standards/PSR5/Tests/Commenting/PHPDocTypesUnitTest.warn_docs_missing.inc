@@ -1,9 +1,9 @@
 <?php
 /**
- * A collection code with missing annotations for testing
+ * A collection code with missing PHPDoc blocks for testing
  *
  * These should pass PHPStan and Psalm.
- * But warnings should be given by the PHPDocTypesSniff when checkHasDocBlocks and checkHasTags are enabled.
+ * But warnings should be given by the PHPDocTypesSniff when checkHasDocBlocks is enabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic
@@ -23,23 +23,7 @@ class DocsMissing
 
     }//end funNotDoc()
 
-
-    /**
-     * PHPDoc function parameter $p not documented and missing function @return tag
-     */
-    public function funMissingParamRet(int $p): int
-    {
-        return $p;
-
-    }//end funMissingParamRet()
-
-
     // PHPDoc variable or constant is not documented.
     public int $v1 = 0;
-
-    /**
-     * PHPDoc missing @var tag
-     */
-    public int $v2 = 0;
 
 }//end class

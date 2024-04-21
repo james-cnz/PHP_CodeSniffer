@@ -3,7 +3,7 @@
  * A collection of types not in recommended style for testing
  *
  * These needn't give errors in PHPStan or Psalm.
- * But the PHPDocTypesSniff should give warnings when checkStyle is enabled.
+ * But the PHPDocTypesSniff should give errors when checkStyle is enabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic

@@ -1,6 +1,6 @@
 <?php
 /**
- * A collection of valid types for testing
+ * A collection of valid PHP for testing
  *
  * This file should have no errors when checked with either PHPStan or Psalm (but a warning about an unused var).
  * And no errors when checked with the PHPDoc Types sniff.
@@ -41,7 +41,7 @@ trait PhpValidTrait
 }
 
 /**
- * A collection of valid types for testing
+ * A collection of valid PHP for testing
  */
 class PhpValid extends PhpValidParent implements PhpValidInterface
 {

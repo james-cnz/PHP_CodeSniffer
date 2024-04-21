@@ -34,13 +34,13 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
     public function getErrorList($testFile='')
     {
         switch ($testFile) {
-        case 'PHPDocTypesUnitTest.right.inc':
+        case 'PHPDocTypesUnitTest.right_php.inc':
             return [];
-        case 'PHPDocTypesUnitTest.right_namespace.inc':
+        case 'PHPDocTypesUnitTest.right_php_ns.inc':
             return [];
-        case 'PHPDocTypesUnitTest.right_types.inc':
+        case 'PHPDocTypesUnitTest.right_type_non_php_fig.inc':
             return [];
-        case 'PHPDocTypesUnitTest.wrong.inc':
+        case 'PHPDocTypesUnitTest.wrong_general.inc':
             return [
                 17  => 1,
                 23  => 1,
@@ -60,11 +60,11 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
                 109 => 1,
                 118 => 1,
             ];
-        case 'PHPDocTypesUnitTest.wrong_parse.inc':
+        case 'PHPDocTypesUnitTest.wrong_php_parse.inc':
             return [
-                132 => 1,
+                134 => 1,
             ];
-        case 'PHPDocTypesUnitTest.wrong_types.inc':
+        case 'PHPDocTypesUnitTest.wrong_type_parse.inc':
             return [
                 24  => 1,
                 37  => 1,
@@ -111,19 +111,19 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
     public function getWarningList($testFile='')
     {
         switch ($testFile) {
-        case 'PHPDocTypesUnitTest.right.inc':
+        case 'PHPDocTypesUnitTest.right_php.inc':
             return [];
-        case 'PHPDocTypesUnitTest.right_namespace.inc':
+        case 'PHPDocTypesUnitTest.right_php_ns.inc':
             return [];
-        case 'PHPDocTypesUnitTest.right_types.inc':
+        case 'PHPDocTypesUnitTest.right_type_non_php_fig.inc':
             return [];
-        case 'PHPDocTypesUnitTest.wrong.inc':
+        case 'PHPDocTypesUnitTest.wrong_general.inc':
             return [
                 30 => 1,
             ];
-        case 'PHPDocTypesUnitTest.wrong_parse.inc':
+        case 'PHPDocTypesUnitTest.wrong_php_parse.inc':
             return [];
-        case 'PHPDocTypesUnitTest.wrong_types.inc':
+        case 'PHPDocTypesUnitTest.wrong_type_parse.inc':
             return [];
         default:
             return [];

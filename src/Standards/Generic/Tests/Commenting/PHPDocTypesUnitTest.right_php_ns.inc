@@ -1,6 +1,6 @@
 <?php
 /**
- * A collection of valid types for testing
+ * A collection of valid PHP for testing
  *
  * This file should have no errors when checked with either PHPStan or Psalm.
  * And no errors when checked with the PHPDoc Types sniff.
@@ -14,7 +14,7 @@
 namespace MoodleHQ\MoodleCS\moodle\Tests\Sniffs\Commenting\fixtures {
 
     /**
-     * A collection of valid types for testing
+     * A collection of valid PHP for testing
      */
     class PhpValid
     {
