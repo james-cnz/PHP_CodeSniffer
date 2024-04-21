@@ -78,7 +78,7 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
             return [
                 17 => 1,
                 21 => 1,
-                27 => 2,
+                27 => 1,
             ];
         case 'PHPDocTypesUnitTest.warn_tags_missing.inc':
             return [
