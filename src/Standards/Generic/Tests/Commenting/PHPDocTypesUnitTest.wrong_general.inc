@@ -3,7 +3,7 @@
  * A collection of invalid types for testing
  *
  * Most type annotations give an error either when checked with PHPStan or Psalm.
- * And all should give errors when checked with the PHPDoc Types sniff.
+ * And all should give errors when checked with the PHPDoc Types sniff with checkNoMisplaced, checkTypeMatch, and checkPassSplat enabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic

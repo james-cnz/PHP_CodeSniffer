@@ -1296,6 +1296,7 @@ class PHPDocTypesSniff implements Sniff
 
                 // Check each individual doc parameter.
                 $docParamsMatched = [];
+                $docParamUnrecognisedError = false;
                 foreach ($comment->tags['@param'] as $docParam) {
                     $docParamParsed = $this->typesUtil->parseTypeAndName(
                         $scope,
@@ -1309,19 +1310,22 @@ class PHPDocTypesSniff implements Sniff
                             $docParam->ptr,
                             'PHPDocFunParamType'
                         );
+                        $docParamUnrecognisedError = true;
                     } else if ($docParamParsed->name === null) {
                         $this->file->addError(
                             'PHPDoc function parameter name missing or malformed',
                             $docParam->ptr,
                             'PHPDocFunParamName'
                         );
-                    } else if (isset($paramParsedArray[$docParamParsed->name]) === false) {
+                        $docParamUnrecognisedError = true;
+                    } else if ($this->checkNoMisplaced === true && isset($paramParsedArray[$docParamParsed->name]) === false) {
                         // Function parameter doesn't exist.
                         $this->file->addError(
                             "PHPDoc function parameter doesn't exist",
                             $docParam->ptr,
                             'PHPDocFunParamNameWrong'
                         );
+                        $docParamUnrecognisedError = true;
                     } else {
                         // Compare docs against actual parameter.
                         $paramParsed = $paramParsedArray[$docParamParsed->name];
@@ -1332,6 +1336,7 @@ class PHPDocTypesSniff implements Sniff
                                 $docParam->ptr,
                                 'PHPDocFunParamNameMultiple'
                             );
+                            $docParamUnrecognisedError = true;
                         }
 
                         $docParamsMatched[$docParamParsed->name] = true;
@@ -1378,8 +1383,8 @@ class PHPDocTypesSniff implements Sniff
                     }//end if
                 }//end foreach
 
-                // Check all parameters are documented (if all documented parameters were recognised).
-                if ($this->checkHasTags === true && count($docParamsMatched) === count($comment->tags['@param'])) {
+                // Check all parameters are documented, if we haven't given an error for an unrecognised parameter.
+                if ($this->checkHasTags === true && $docParamUnrecognisedError === false) {
                     foreach ($paramParsedArray as $paramname => $paramParsed) {
                         if (isset($docParamsMatched[$paramname]) === false) {
                             $this->file->addWarning(
