@@ -2,7 +2,7 @@
 /**
  * A collection of misplaced tags for testing
  *
- * These needn't give erros when checked with PHPStan or Psalm.
+ * These needn't give errors when checked with PHPStan or Psalm.
  * But all should give errors when checked with the PHPDoc Types sniff with checkTagsNotMisplaced enabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
@@ -48,7 +48,7 @@ class TagsMisplaced
 }//end class
 
 /**
- * PHPDoc var (not type var) misplaced tags
+ * PHPDoc var (not class var) misplaced tags
  *
  * @param integer $param
  *

@@ -3,7 +3,7 @@
  * A collection of types not conforming to PHP-FIG PSR-5 for testing
  *
  * This file should have no errors when checked with either PHPStan or Psalm.
- * But errors should be given by the PHPDoc types sniff when checkPhpFigTyes is enabled.
+ * But errors should be given by the PHPDoc types sniff when checkTypePhpFig is enabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic

@@ -40,6 +40,7 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
                 18 => 1,
                 26 => 1,
                 34 => 1,
+                35 => 1,
                 38 => 1,
                 39 => 1,
                 53 => 1,

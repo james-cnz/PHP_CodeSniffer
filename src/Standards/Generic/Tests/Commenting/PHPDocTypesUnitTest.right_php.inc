@@ -3,7 +3,7 @@
  * A collection of valid PHP for testing
  *
  * This file should have no errors when checked with either PHPStan or Psalm (but a warning about an unused var).
- * And no errors when checked with the PHPDoc Types sniff.
+ * And no errors when checked with the PHPDoc Types sniff, regardless of setting.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic
@@ -53,7 +53,7 @@ class PhpValid extends PhpValidParent implements PhpValidInterface
      * @var integer
      *      | boolean
      */
-    public int|bool $v2;
+    public int|bool $v2 = 0;
 
 
     /**

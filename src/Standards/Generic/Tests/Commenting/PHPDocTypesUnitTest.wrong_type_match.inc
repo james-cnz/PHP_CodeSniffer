@@ -2,7 +2,7 @@
 /**
  * A collection of mismatched types for testing
  *
- * All type annotations give an error either when checked with PHPStan or Psalm.
+ * All type annotations give an error in both PHPStan and Psalm.
  * And all should give errors when checked with the PHPDoc Types sniff with checkTypeMatch enabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>

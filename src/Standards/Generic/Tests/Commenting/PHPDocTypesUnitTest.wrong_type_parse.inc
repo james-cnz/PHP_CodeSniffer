@@ -2,8 +2,8 @@
 /**
  * A collection of invalid types for testing
  *
- * Every type annotation should give an error either when checked with PHPStan or Psalm.
- * And all should give errors when checked with the PHPDoc Types sniff.
+ * All type annotations should give an error in one of PHPStan or Psalm.
+ * And all should give errors when checked with the PHPDoc Types sniff, regardless of setting.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2023-2024 Otago Polytechnic

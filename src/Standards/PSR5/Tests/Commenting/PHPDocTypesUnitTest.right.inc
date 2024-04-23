@@ -3,7 +3,7 @@
  * A collection of valid types for testing
  *
  * This file should have no errors when checked with either PHPStan or Psalm, other than no value for iterable.
- * And no errors when checked with the PHPDoc Types sniff.
+ * And no errors when checked with the PHPDoc Types sniff, regardless of setting.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2023-2024 Otago Polytechnic

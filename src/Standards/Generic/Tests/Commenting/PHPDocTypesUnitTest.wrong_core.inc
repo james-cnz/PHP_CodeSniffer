@@ -1,8 +1,8 @@
 <?php
 /**
- * A collection of invalid types for testing
+ * A collection of invalid code for testing
  *
- * All type annotations should give an error either when checked with PHPStan or Psalm.
+ * All type annotations should give an error in one of PHPStan or Psalm, except wrong param order.
  * And all should give errors when checked with the PHPDoc Types sniff, regardless of settings.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
@@ -12,12 +12,12 @@
  */
 
 /**
- * A collection of invalid types for testing
+ * A collection of invalid code for testing
  *
  * @property int< PHPDoc class property type missing or malformed
  * @property int  PHPDoc class property name missing or malformed
  */
-class TypesInvalid
+class CoreErrors
 {
 
     /**
@@ -32,7 +32,7 @@ class TypesInvalid
      * Function parameter issues
      *
      * @param int< $p1 PHPDoc function parameter type missing or malformed
-     * @param int  $p2 PHPDoc function parameter name missing or malformed
+     * @param int      PHPDoc function parameter name missing or malformed
      * @param int  $p4 PHPDoc function parameter order wrong
      * @param int  $p3
      * @param int  $p3 PHPDoc function parameter repeated

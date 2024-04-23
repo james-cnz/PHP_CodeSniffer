@@ -21,7 +21,7 @@ class PHPDocTypesSniff extends SniffBase
 {
 
     /**
-     * Check named classes and functions and class variables and constants are documented.
+     * Check named classes and functions, and class variables and constants are documented.
      *
      * @var boolean
      */
@@ -42,7 +42,7 @@ class PHPDocTypesSniff extends SniffBase
     public $checkTagsNotMisplaced = true;
 
     /**
-     * Check the types match--isn't aware of class heirarchies from other files or global constants.
+     * Check the types match--isn't aware of class heirarchies from other files, or global constants.
      *
      * @var boolean
      */
