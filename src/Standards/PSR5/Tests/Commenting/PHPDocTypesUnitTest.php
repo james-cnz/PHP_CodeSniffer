@@ -34,14 +34,14 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
     public function getErrorList($testFile='')
     {
         switch ($testFile) {
-        case 'PHPDocTypesUnitTest.wrong_non_php_fig.inc':
+        case 'PHPDocTypesUnitTest.wrong_type_non_php_fig.inc':
             return [
                 23 => 1,
                 31 => 1,
                 33 => 1,
                 47 => 1,
             ];
-        case 'PHPDocTypesUnitTest.wrong_style.inc':
+        case 'PHPDocTypesUnitTest.wrong_type_style.inc':
             return [
                 17 => 1,
                 25 => 1,
