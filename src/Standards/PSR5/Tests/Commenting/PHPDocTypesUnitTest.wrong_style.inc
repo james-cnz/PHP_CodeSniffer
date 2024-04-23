@@ -2,8 +2,8 @@
 /**
  * A collection of types not in recommended style for testing
  *
- * These needn't give errors in PHPStan or Psalm.
- * But the PHPDocTypesSniff should give errors when checkTypeStyle is enabled.
+ * This file should have no errors when checked with either PHPStan or Psalm (but a warning about an unused var).
+ * But all should give errors when checked with the PHPDoc types sniff with checkTypeStyle enabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic
@@ -14,7 +14,7 @@
 /**
  * A collection of types not in recommended style for testing
  *
- * @property Integer $p PHPDoc class property type doesn't conform to recommended style
+ * @property integer $p PHPDoc class property type doesn't conform to recommended style
  */
 class WarnStyle
 {
@@ -24,14 +24,14 @@ class WarnStyle
      *
      * @var integer
      */
-    public int $v1;
+    public int $v1 = 0;
 
     /**
      * Multiline type, no line break at end
      *
      * @var integer
      *      | boolean */
-    public int|bool $v2;
+    public int|bool $v2 = 0;
 
     /**
      * Multiline type, line break at end
@@ -39,16 +39,16 @@ class WarnStyle
      * @var integer
      *      | boolean
      */
-    public int|bool $v3;
+    public int|bool $v3 = 0;
 
 
     /**
      * Function style
      *
-     * @param Boolean|T $p PHPDoc function parameter type doesn't conform to recommended style
+     * @param Bool|T $p PHPDoc function parameter type doesn't conform to recommended style
      *
-     * @return   Integer PHPDoc function return type doesn't conform to recommended style
-     * @template T of Integer PHPDoc tempate type doesn't conform to recommended style
+     * @return   Int PHPDoc function return type doesn't conform to recommended style
+     * @template T of Int PHPDoc tempate type doesn't conform to recommended style
      */
     public function funWrong($p): int
     {
@@ -62,6 +62,6 @@ class WarnStyle
 /**
  * PHPDoc var type doesn't conform to recommended style (not class var)
  *
- * @var Integer
+ * @var Int
  */
 $v4 = 0;

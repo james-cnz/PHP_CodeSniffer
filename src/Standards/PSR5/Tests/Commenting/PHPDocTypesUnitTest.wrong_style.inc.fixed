@@ -2,8 +2,8 @@
 /**
  * A collection of types not in recommended style for testing
  *
- * These needn't give errors in PHPStan or Psalm.
- * But the PHPDocTypesSniff should give errors when checkTypeStyle is enabled.
+ * This file should have no errors when checked with either PHPStan or Psalm (but a warning about an unused var).
+ * But all should give errors when checked with the PHPDoc types sniff with checkTypeStyle enabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic
@@ -24,14 +24,14 @@ class WarnStyle
      *
      * @var int
      */
-    public int $v1;
+    public int $v1 = 0;
 
     /**
      * Multiline type, no line break at end
      *
      * @var int
      *      | bool */
-    public int|bool $v2;
+    public int|bool $v2 = 0;
 
     /**
      * Multiline type, line break at end
@@ -39,7 +39,7 @@ class WarnStyle
      * @var int
      *      | bool
      */
-    public int|bool $v3;
+    public int|bool $v3 = 0;
 
 
     /**

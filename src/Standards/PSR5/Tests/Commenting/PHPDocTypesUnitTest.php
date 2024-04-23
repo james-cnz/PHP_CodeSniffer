@@ -72,8 +72,6 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
     public function getWarningList($testFile='')
     {
         switch ($testFile) {
-        case 'PHPDocTypesUnitTest.right.inc':
-            return [];
         case 'PHPDocTypesUnitTest.warn_docs_missing.inc':
             return [
                 17 => 1,

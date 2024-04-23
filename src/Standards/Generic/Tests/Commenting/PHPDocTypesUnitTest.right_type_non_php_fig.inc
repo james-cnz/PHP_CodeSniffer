@@ -2,8 +2,8 @@
 /**
  * A collection of valid types for testing
  *
- * This file should have no errors when checked with either PHPStan or Psalm.
- * And no errors when checked with the PHPDoc Types sniff when checkTypePhpFig and checkTypeStyle are disabled.
+ * This file should have no errors for PHP 8 when checked with either PHPStan or Psalm.
+ * And no errors when checked with the PHPDoc types sniff when checkTypePhpFig and checkTypeStyle are disabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2023-2024 Otago Polytechnic
@@ -550,6 +550,19 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
     ): void {
 
     }//end structureCombos()
+
+
+    /**
+     * DocType DNF vs Native DNF
+     *
+     * @param int|(TypesValidParent&TypesValidInterface) $p
+     *
+     * @return void
+     */
+    public function dnfVsDnf((TypesValidInterface&TypesValidParent)|int $p): void
+    {
+
+    }//end dnfVsDnf()
 
 
     /**

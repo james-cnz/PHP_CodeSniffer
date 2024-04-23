@@ -3,7 +3,7 @@
  * A collection of misplaced tags for testing
  *
  * These needn't give errors when checked with PHPStan or Psalm.
- * But all should give errors when checked with the PHPDoc Types sniff with checkTagsNotMisplaced enabled.
+ * But all should give errors when checked with the PHPDoc types sniff with checkTagsNotMisplaced enabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic

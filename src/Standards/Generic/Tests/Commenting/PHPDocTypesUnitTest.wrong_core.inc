@@ -3,7 +3,7 @@
  * A collection of invalid code for testing
  *
  * All type annotations should give an error in one of PHPStan or Psalm, except wrong param order.
- * And all should give errors when checked with the PHPDoc Types sniff, regardless of settings.
+ * And all should give errors or warnings when checked with the PHPDoc types sniff, regardless of settings.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic

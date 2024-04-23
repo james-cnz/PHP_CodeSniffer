@@ -2,8 +2,8 @@
 /**
  * A collection of types not conforming to PHP-FIG PSR-5 for testing
  *
- * This file should have no errors when checked with either PHPStan or Psalm.
- * But errors should be given by the PHPDoc types sniff when checkTypePhpFig is enabled.
+ * This file should have no errors when checked with either PHPStan or Psalm (but a warning about an unused var).
+ * But all should give errors when checked with the PHPDoc types sniff with checkTypePhpFig enabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic
@@ -22,7 +22,7 @@ class NonPhpFig
      *
      * @var ?int
      */
-    public ?int $v;
+    public ?int $v = 0;
 
 
     /**

@@ -3,7 +3,7 @@
  * A function with mismatched pass by reference and splat for testing
  *
  * These needn't give errors when checked with PHPStan or Psalm.
- * But both should give errors when checked with the PHPDoc Types sniff with checkPassSplat enabled.
+ * But both should give errors when checked with the PHPDoc types sniff with checkPassSplat enabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic

@@ -2,7 +2,7 @@
 /**
  * A collection of PHP parse errors for testing
  *
- * With debugMode disabled, the PHPDoc type parser should give no errors, except the type error near the end.
+ * With debugMode disabled, the PHPDoc type sniff should give no errors, except the type error near the end.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic

@@ -2,8 +2,8 @@
 /**
  * A collection code with missing PHPDoc tags for testing
  *
- * These should pass PHPStan and Psalm.
- * But warnings should be given by the PHPDocTypesSniff when checkHasTags is enabled.
+ * This file should have no errors when checked with either PHPStan or Psalm.
+ * But all should give warnings when checked with the PHPDoc types sniff with checkHasTags enabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic
