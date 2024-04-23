@@ -305,28 +305,28 @@ class PHPDocTypesSniff implements Sniff
             try {
                 // Skip irrelevant tokens.
                 while (in_array(
-                        $this->token['code'],
-                        array_merge(
-                            [
-                                T_NAMESPACE,
-                                T_USE,
-                            ],
-                            Tokens::$methodPrefixes,
-                            [
-                                T_ATTRIBUTE,
-                                T_READONLY,
-                            ],
-                            Tokens::$ooScopeTokens,
-                            [
-                                T_FUNCTION,
-                                T_CLOSURE,
-                                T_FN,
-                                T_VAR,
-                                T_CONST,
-                                null,
-                            ]
-                        )
-                    ) === false
+                    $this->token['code'],
+                    array_merge(
+                        [
+                            T_NAMESPACE,
+                            T_USE,
+                        ],
+                        Tokens::$methodPrefixes,
+                        [
+                            T_ATTRIBUTE,
+                            T_READONLY,
+                        ],
+                        Tokens::$ooScopeTokens,
+                        [
+                            T_FUNCTION,
+                            T_CLOSURE,
+                            T_FN,
+                            T_VAR,
+                            T_CONST,
+                            null,
+                        ]
+                    )
+                ) === false
                     && ($this->filePtr < $scope->closer)
                 ) {
                     $this->advance();
@@ -345,23 +345,23 @@ class PHPDocTypesSniff implements Sniff
                     // Class trait use.
                     $this->processClassTraitUse();
                 } else if (in_array(
-                        $this->token['code'],
-                        array_merge(
-                            Tokens::$methodPrefixes,
-                            [
-                                T_ATTRIBUTE,
-                                T_READONLY,
-                            ],
-                            Tokens::$ooScopeTokens,
-                            [
-                                T_FUNCTION,
-                                T_CLOSURE,
-                                T_FN,
-                                T_CONST,
-                                T_VAR,
-                            ]
-                        )
-                    ) === true
+                    $this->token['code'],
+                    array_merge(
+                        Tokens::$methodPrefixes,
+                        [
+                            T_ATTRIBUTE,
+                            T_READONLY,
+                        ],
+                        Tokens::$ooScopeTokens,
+                        [
+                            T_FUNCTION,
+                            T_CLOSURE,
+                            T_FN,
+                            T_CONST,
+                            T_VAR,
+                        ]
+                    )
+                ) === true
                 ) {
                     // Maybe declaration.
                     // Fetch comment, if any.
@@ -378,20 +378,20 @@ class PHPDocTypesSniff implements Sniff
 
                     // Check this still looks like a declaration.
                     if (in_array(
-                            $this->token['code'],
-                            array_merge(
-                                Tokens::$methodPrefixes,
-                                [T_READONLY],
-                                Tokens::$ooScopeTokens,
-                                [
-                                    T_FUNCTION,
-                                    T_CLOSURE,
-                                    T_FN,
-                                    T_CONST,
-                                    T_VAR,
-                                ]
-                            )
-                        ) === false
+                        $this->token['code'],
+                        array_merge(
+                            Tokens::$methodPrefixes,
+                            [T_READONLY],
+                            Tokens::$ooScopeTokens,
+                            [
+                                T_FUNCTION,
+                                T_CLOSURE,
+                                T_FN,
+                                T_CONST,
+                                T_VAR,
+                            ]
+                        )
+                    ) === false
                     ) {
                         // It's not a declaration, possibly an enum case.
                         $this->processPossVarComment($scope, $comment);
@@ -399,12 +399,12 @@ class PHPDocTypesSniff implements Sniff
                     }
 
                     // Ignore other preceding stuff, and gather info to check for static late bindings.
-                    $static              = false;
+                    $static = false;
                     $staticprecededbynew = ($this->tokenPrevious['code'] === T_NEW);
                     while (in_array(
-                            $this->token['code'],
-                            array_merge(Tokens::$methodPrefixes, [T_READONLY])
-                        ) === true
+                        $this->token['code'],
+                        array_merge(Tokens::$methodPrefixes, [T_READONLY])
+                    ) === true
                     ) {
                         $static = $static || ($this->token['code'] === T_STATIC);
                         $this->advance();
@@ -714,7 +714,7 @@ class PHPDocTypesSniff implements Sniff
      */
     protected function fixCommentTag(object $tag, string $replacement): void
     {
-        $replacementArray   = explode("\n", $replacement);
+        $replacementArray = explode("\n", $replacement);
         // Place in the replacement array.
         $replacementCounter = 0;
         // Have we done the replacement at the current position in the array?
@@ -789,15 +789,15 @@ class PHPDocTypesSniff implements Sniff
         // Fetch the namespace.
         $namespace = '';
         while (in_array(
-                $this->token['code'],
-                [
-                    T_NAME_FULLY_QUALIFIED,
-                    T_NAME_QUALIFIED,
-                    T_NAME_RELATIVE,
-                    T_NS_SEPARATOR,
-                    T_STRING,
-                ]
-            ) === true
+            $this->token['code'],
+            [
+                T_NAME_FULLY_QUALIFIED,
+                T_NAME_QUALIFIED,
+                T_NAME_RELATIVE,
+                T_NS_SEPARATOR,
+                T_STRING,
+            ]
+        ) === true
         ) {
             $namespace .= $this->token['content'];
             $this->advance();
@@ -860,15 +860,15 @@ class PHPDocTypesSniff implements Sniff
             // Get what's being imported.
             $namespace = '';
             while (in_array(
-                    $this->token['code'],
-                    [
-                        T_NAME_FULLY_QUALIFIED,
-                        T_NAME_QUALIFIED,
-                        T_NAME_RELATIVE,
-                        T_NS_SEPARATOR,
-                        T_STRING,
-                    ]
-                ) === true
+                $this->token['code'],
+                [
+                    T_NAME_FULLY_QUALIFIED,
+                    T_NAME_QUALIFIED,
+                    T_NAME_RELATIVE,
+                    T_NS_SEPARATOR,
+                    T_STRING,
+                ]
+            ) === true
             ) {
                 $namespace .= $this->token['content'];
                 $this->advance();
@@ -905,15 +905,15 @@ class PHPDocTypesSniff implements Sniff
                     // Get what's being imported.
                     $namespace = $namespaceStart;
                     while (in_array(
-                            $this->token['code'],
-                            [
-                                T_NAME_FULLY_QUALIFIED,
-                                T_NAME_QUALIFIED,
-                                T_NAME_RELATIVE,
-                                T_NS_SEPARATOR,
-                                T_STRING,
-                            ]
-                        ) === true
+                        $this->token['code'],
+                        [
+                            T_NAME_FULLY_QUALIFIED,
+                            T_NAME_QUALIFIED,
+                            T_NAME_RELATIVE,
+                            T_NS_SEPARATOR,
+                            T_STRING,
+                        ]
+                    ) === true
                     ) {
                         $namespace .= $this->token['content'];
                         $this->advance();
@@ -1164,15 +1164,15 @@ class PHPDocTypesSniff implements Sniff
         $more = false;
         do {
             while (in_array(
-                    $this->token['code'],
-                    [
-                        T_NAME_FULLY_QUALIFIED,
-                        T_NAME_QUALIFIED,
-                        T_NAME_RELATIVE,
-                        T_NS_SEPARATOR,
-                        T_STRING,
-                    ]
-                ) === true
+                $this->token['code'],
+                [
+                    T_NAME_FULLY_QUALIFIED,
+                    T_NAME_QUALIFIED,
+                    T_NAME_RELATIVE,
+                    T_NS_SEPARATOR,
+                    T_STRING,
+                ]
+            ) === true
             ) {
                 $this->advance();
             }
@@ -1586,29 +1586,29 @@ class PHPDocTypesSniff implements Sniff
         // Parse type.
         $varType = '';
         while (in_array(
-                $this->token['code'],
-                [
-                    T_TYPE_UNION,
-                    T_TYPE_INTERSECTION,
-                    T_NULLABLE,
-                    T_OPEN_PARENTHESIS,
-                    T_CLOSE_PARENTHESIS,
-                    T_NAME_FULLY_QUALIFIED,
-                    T_NAME_QUALIFIED,
-                    T_NAME_RELATIVE,
-                    T_NS_SEPARATOR,
-                    T_STRING,
-                    T_NULL,
-                    T_ARRAY,
-                    T_OBJECT,
-                    T_SELF,
-                    T_PARENT,
-                    T_FALSE,
-                    T_TRUE,
-                    T_CALLABLE,
-                    T_STATIC,
-                ]
-            ) === true
+            $this->token['code'],
+            [
+                T_TYPE_UNION,
+                T_TYPE_INTERSECTION,
+                T_NULLABLE,
+                T_OPEN_PARENTHESIS,
+                T_CLOSE_PARENTHESIS,
+                T_NAME_FULLY_QUALIFIED,
+                T_NAME_QUALIFIED,
+                T_NAME_RELATIVE,
+                T_NS_SEPARATOR,
+                T_STRING,
+                T_NULL,
+                T_ARRAY,
+                T_OBJECT,
+                T_SELF,
+                T_PARENT,
+                T_FALSE,
+                T_TRUE,
+                T_CALLABLE,
+                T_STATIC,
+            ]
+        ) === true
             && ($const === false || $this->lookAhead()['code'] !== T_EQUAL)
         ) {
             $varType .= $this->token['content'];
