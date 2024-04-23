@@ -1295,7 +1295,7 @@ class PHPDocTypesSniff implements Sniff
                 }
 
                 // Check each individual doc parameter.
-                $docParamsMatched          = [];
+                $docParamsMatched = [];
                 foreach ($comment->tags['@param'] as $docParam) {
                     $docParamParsed = $this->typesUtil->parseTypeAndName(
                         $scope,
