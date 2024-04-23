@@ -43,7 +43,7 @@ class PHPDocTypesSniff implements Sniff
      *
      * @var boolean
      */
-    public $checkNoMisplaced = true;
+    public $checkTagsNotMisplaced = true;
 
     /**
      * Check the types match--isn't aware of class heirarchies from other files or global constants.
@@ -57,14 +57,14 @@ class PHPDocTypesSniff implements Sniff
      *
      * @var boolean
      */
-    public $checkStyle = false;
+    public $checkTypeStyle = false;
 
     /**
      * Check the types used conform to the PHP-FIG PSR-5 PHPDoc standard.
      *
      * @var boolean
      */
-    public $checkPhpFigTypes = false;
+    public $checkTypePhpFig = false;
 
     /**
      * Check pass by reference and splat usage matches for param tags.
@@ -689,7 +689,7 @@ class PHPDocTypesSniff implements Sniff
      */
     protected function checkNo(object $comment, array $tagNames): void
     {
-        if ($this->checkNoMisplaced === false) {
+        if ($this->checkTagsNotMisplaced === false) {
             return;
         }
 
@@ -1106,7 +1106,7 @@ class PHPDocTypesSniff implements Sniff
                                 'PHPDocClassPropName'
                             );
                         } else {
-                            if ($this->checkPhpFigTypes === true && $docPropParsed->phpFig === false) {
+                            if ($this->checkTypePhpFig === true && $docPropParsed->phpFig === false) {
                                 $this->file->addError(
                                     "PHPDoc class property type doesn't conform to PHP-FIG PSR-5",
                                     $docProp->ptr,
@@ -1114,7 +1114,7 @@ class PHPDocTypesSniff implements Sniff
                                 );
                             }
 
-                            if ($this->checkStyle === true && $docPropParsed->fixed !== null) {
+                            if ($this->checkTypeStyle === true && $docPropParsed->fixed !== null) {
                                 $fix = $this->file->addFixableError(
                                     "PHPDoc class property type doesn't conform to recommended style",
                                     $docProp->ptr,
@@ -1296,7 +1296,6 @@ class PHPDocTypesSniff implements Sniff
 
                 // Check each individual doc parameter.
                 $docParamsMatched          = [];
-                $docParamUnrecognisedError = false;
                 foreach ($comment->tags['@param'] as $docParam) {
                     $docParamParsed = $this->typesUtil->parseTypeAndName(
                         $scope,
@@ -1310,33 +1309,29 @@ class PHPDocTypesSniff implements Sniff
                             $docParam->ptr,
                             'PHPDocFunParamType'
                         );
-                        $docParamUnrecognisedError = true;
                     } else if ($docParamParsed->name === null) {
                         $this->file->addError(
                             'PHPDoc function parameter name missing or malformed',
                             $docParam->ptr,
                             'PHPDocFunParamName'
                         );
-                        $docParamUnrecognisedError = true;
-                    } else if ($this->checkNoMisplaced === true && isset($paramParsedArray[$docParamParsed->name]) === false) {
+                    } else if (isset($paramParsedArray[$docParamParsed->name]) === false) {
                         // Function parameter doesn't exist.
                         $this->file->addError(
                             "PHPDoc function parameter doesn't exist",
                             $docParam->ptr,
                             'PHPDocFunParamNameWrong'
                         );
-                        $docParamUnrecognisedError = true;
                     } else {
                         // Compare docs against actual parameter.
                         $paramParsed = $paramParsedArray[$docParamParsed->name];
 
-                        if ($this->checkNoMisplaced === true && isset($docParamsMatched[$docParamParsed->name]) === true) {
+                        if (isset($docParamsMatched[$docParamParsed->name]) === true) {
                             $this->file->addError(
                                 'PHPDoc function parameter repeated',
                                 $docParam->ptr,
                                 'PHPDocFunParamNameMultiple'
                             );
-                            $docParamUnrecognisedError = true;
                         }
 
                         $docParamsMatched[$docParamParsed->name] = true;
@@ -1351,7 +1346,7 @@ class PHPDocTypesSniff implements Sniff
                             );
                         }
 
-                        if ($this->checkPhpFigTypes === true && $docParamParsed->phpFig === false) {
+                        if ($this->checkTypePhpFig === true && $docParamParsed->phpFig === false) {
                             $this->file->addError(
                                 "PHPDoc function parameter type doesn't conform to PHP-FIG PSR-5",
                                 $docParam->ptr,
@@ -1359,7 +1354,7 @@ class PHPDocTypesSniff implements Sniff
                             );
                         }
 
-                        if ($this->checkStyle === true && $docParamParsed->fixed !== null) {
+                        if ($this->checkTypeStyle === true && $docParamParsed->fixed !== null) {
                             $fix = $this->file->addFixableError(
                                 "PHPDoc function parameter type doesn't conform to recommended style",
                                 $docParam->ptr,
@@ -1383,8 +1378,8 @@ class PHPDocTypesSniff implements Sniff
                     }//end if
                 }//end foreach
 
-                // Check all parameters are documented, if we haven't given an error for an unrecognised parameter.
-                if ($this->checkHasTags === true && $docParamUnrecognisedError === false) {
+                // Check all parameters are documented (if all documented parameters were recognised).
+                if ($this->checkHasTags === true && count($docParamsMatched) === count($comment->tags['@param'])) {
                     foreach ($paramParsedArray as $paramname => $paramParsed) {
                         if (isset($docParamsMatched[$paramname]) === false) {
                             $this->file->addWarning(
@@ -1398,23 +1393,21 @@ class PHPDocTypesSniff implements Sniff
                 }
 
                 // Check parameters are in the correct order.
-                if ($this->checkNoMisplaced === true) {
-                    reset($paramParsedArray);
-                    reset($docParamsMatched);
-                    while (key($paramParsedArray) !== null || key($docParamsMatched) !== null) {
-                        if (key($docParamsMatched) === key($paramParsedArray)) {
-                            next($paramParsedArray);
-                            next($docParamsMatched);
-                        } else if (key($paramParsedArray) !== null && isset($docParamsMatched[key($paramParsedArray)]) === false) {
-                            next($paramParsedArray);
-                        } else {
-                            $this->file->addWarning(
-                                'PHPDoc function parameter order wrong',
-                                $comment->ptr,
-                                'PHPDocFunParamTagOrder'
-                            );
-                            break;
-                        }
+                reset($paramParsedArray);
+                reset($docParamsMatched);
+                while (key($paramParsedArray) !== null || key($docParamsMatched) !== null) {
+                    if (key($docParamsMatched) === key($paramParsedArray)) {
+                        next($paramParsedArray);
+                        next($docParamsMatched);
+                    } else if (key($paramParsedArray) !== null && isset($docParamsMatched[key($paramParsedArray)]) === false) {
+                        next($paramParsedArray);
+                    } else {
+                        $this->file->addWarning(
+                            'PHPDoc function parameter order wrong',
+                            $comment->ptr,
+                            'PHPDocFunParamTagOrder'
+                        );
+                        break;
                     }
                 }
             }//end if
@@ -1444,7 +1437,7 @@ class PHPDocTypesSniff implements Sniff
                         $comment->ptr,
                         'PHPDocFunRetTagMissing'
                     );
-                } else if ($this->checkNoMisplaced === true && count($comment->tags['@return']) > 1) {
+                } else if (count($comment->tags['@return']) > 1) {
                     $this->file->addError(
                         'PHPDoc multiple function @return tags--Put in one tag, seperated by vertical bars |',
                         $comment->tags['@return'][1]->ptr,
@@ -1478,7 +1471,7 @@ class PHPDocTypesSniff implements Sniff
                             );
                         }
 
-                        if ($this->checkPhpFigTypes === true && $docRetParsed->phpFig === false) {
+                        if ($this->checkTypePhpFig === true && $docRetParsed->phpFig === false) {
                             $this->file->addError(
                                 "PHPDoc function return type doesn't conform to PHP-FIG PSR-5",
                                 $docRet->ptr,
@@ -1486,7 +1479,7 @@ class PHPDocTypesSniff implements Sniff
                             );
                         }
 
-                        if ($this->checkStyle === true && $docRetParsed->fixed !== null) {
+                        if ($this->checkTypeStyle === true && $docRetParsed->fixed !== null) {
                             $fix = $this->file->addFixableError(
                                 "PHPDoc function return type doesn't conform to recommended style",
                                 $docRet->ptr,
@@ -1546,7 +1539,7 @@ class PHPDocTypesSniff implements Sniff
             } else {
                 $scope->templates[$docTemplateParsed->name] = $docTemplateParsed->type;
 
-                if ($this->checkPhpFigTypes === true && $docTemplateParsed->phpFig === false) {
+                if ($this->checkTypePhpFig === true && $docTemplateParsed->phpFig === false) {
                     $this->file->addError(
                         "PHPDoc template type doesn't conform to PHP-FIG PSR-5",
                         $docTemplate->ptr,
@@ -1554,7 +1547,7 @@ class PHPDocTypesSniff implements Sniff
                     );
                 }
 
-                if ($this->checkStyle === true && $docTemplateParsed->fixed !== null) {
+                if ($this->checkTypeStyle === true && $docTemplateParsed->fixed !== null) {
                     $fix = $this->file->addFixableError(
                         "PHPDoc tempate type doesn't conform to recommended style",
                         $docTemplate->ptr,
@@ -1701,7 +1694,7 @@ class PHPDocTypesSniff implements Sniff
                             );
                         }
 
-                        if ($this->checkPhpFigTypes === true && $docVarParsed->phpFig === false) {
+                        if ($this->checkTypePhpFig === true && $docVarParsed->phpFig === false) {
                             $this->file->addError(
                                 "PHPDoc var type doesn't conform to PHP-FIG PSR-5",
                                 $docVar->ptr,
@@ -1709,7 +1702,7 @@ class PHPDocTypesSniff implements Sniff
                             );
                         }
 
-                        if ($this->checkStyle === true && $docVarParsed->fixed !== null) {
+                        if ($this->checkTypeStyle === true && $docVarParsed->fixed !== null) {
                             $fix = $this->file->addFixableError(
                                 "PHPDoc var type doesn't conform to recommended style",
                                 $docVar->ptr,
@@ -1781,7 +1774,7 @@ class PHPDocTypesSniff implements Sniff
                             'PHPDocVarType'
                         );
                     } else {
-                        if ($this->checkPhpFigTypes === true && $docVarParsed->phpFig === false) {
+                        if ($this->checkTypePhpFig === true && $docVarParsed->phpFig === false) {
                             $this->file->addError(
                                 "PHPDoc var type doesn't conform to PHP-FIG PSR-5",
                                 $docVar->ptr,
@@ -1789,7 +1782,7 @@ class PHPDocTypesSniff implements Sniff
                             );
                         }
 
-                        if ($this->checkStyle === true && $docVarParsed->fixed !== null) {
+                        if ($this->checkTypeStyle === true && $docVarParsed->fixed !== null) {
                             $fix = $this->file->addFixableError(
                                 "PHPDoc var type doesn't conform to recommended style",
                                 $docVar->ptr,

@@ -39,7 +39,7 @@ class PHPDocTypesSniff extends SniffBase
      *
      * @var boolean
      */
-    public $checkNoMisplaced = true;
+    public $checkTagsNotMisplaced = true;
 
     /**
      * Check the types match--isn't aware of class heirarchies from other files or global constants.
@@ -53,14 +53,14 @@ class PHPDocTypesSniff extends SniffBase
      *
      * @var boolean
      */
-    public $checkStyle = true;
+    public $checkTypeStyle = true;
 
     /**
      * Check the types used conform to the PHP-FIG PSR-5 standard.
      *
      * @var boolean
      */
-    public $checkPhpFigTypes = true;
+    public $checkTypePhpFig = true;
 
     /**
      * Check pass by reference and splat usage matches for param tags.

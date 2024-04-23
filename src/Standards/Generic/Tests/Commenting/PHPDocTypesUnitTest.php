@@ -34,35 +34,49 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
     public function getErrorList($testFile='')
     {
         switch ($testFile) {
-        case 'PHPDocTypesUnitTest.right_php.inc':
-            return [];
-        case 'PHPDocTypesUnitTest.right_php_ns.inc':
-            return [];
-        case 'PHPDocTypesUnitTest.right_type_non_php_fig.inc':
-            return [];
-        case 'PHPDocTypesUnitTest.wrong_general.inc':
+        case 'PHPDocTypesUnitTest.wrong_core.inc':
             return [
                 17  => 1,
-                23  => 1,
-                24  => 1,
-                33  => 1,
+                18  => 1,
+                26  => 1,
                 34  => 1,
-                35  => 1,
-                37  => 1,
                 38  => 1,
                 39  => 1,
-                54  => 1,
-                66  => 1,
+                53  => 1,
+                65  => 1,
+                76  => 1,
                 77  => 1,
-                89  => 1,
-                90  => 1,
-                102 => 1,
-                109 => 1,
-                118 => 1,
+                91  => 1,
+            ];
+        case 'PHPDocTypesUnitTest.wrong_pass_splat.inc':
+            return [
+                24  => 1,
+                25  => 1,
             ];
         case 'PHPDocTypesUnitTest.wrong_php_parse.inc':
             return [
                 134 => 1,
+            ];
+        case 'PHPDocTypesUnitTest.wrong_tags_misplaced.inc':
+            return [
+                17  => 1,
+                19  => 1,
+                27  => 1,
+                29  => 1,
+                30  => 1,
+                31  => 1,
+                39  => 1,
+                40  => 1,
+                53  => 1,
+                55  => 1,
+                56  => 1,
+                57  => 1,
+            ];
+        case 'PHPDocTypesUnitTest.wrong_type_match.inc':
+            return [
+                23  => 1,
+                31  => 1,
+                33  => 1,
             ];
         case 'PHPDocTypesUnitTest.wrong_type_parse.inc':
             return [
@@ -111,20 +125,10 @@ final class PHPDocTypesUnitTest extends AbstractSniffUnitTest
     public function getWarningList($testFile='')
     {
         switch ($testFile) {
-        case 'PHPDocTypesUnitTest.right_php.inc':
-            return [];
-        case 'PHPDocTypesUnitTest.right_php_ns.inc':
-            return [];
-        case 'PHPDocTypesUnitTest.right_type_non_php_fig.inc':
-            return [];
-        case 'PHPDocTypesUnitTest.wrong_general.inc':
+        case 'PHPDocTypesUnitTest.wrong_core.inc':
             return [
-                30 => 1,
+                31 => 1,
             ];
-        case 'PHPDocTypesUnitTest.wrong_php_parse.inc':
-            return [];
-        case 'PHPDocTypesUnitTest.wrong_type_parse.inc':
-            return [];
         default:
             return [];
         }//end switch

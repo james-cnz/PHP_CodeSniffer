@@ -3,7 +3,7 @@
  * A collection of valid types for testing
  *
  * This file should have no errors when checked with either PHPStan or Psalm.
- * And no errors when checked with the PHPDoc Types sniff when checkPhpFigTyes and checkStyle are disabled.
+ * And no errors when checked with the PHPDoc Types sniff when checkTypePhpFig and checkTypeStyle are disabled.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2023-2024 Otago Polytechnic
@@ -38,7 +38,7 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      */
     public const ARRAY_CONST = [
         1 => 'one',
-        2 => 'two'
+        2 => 'two',
     ];
 
     /**

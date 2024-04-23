@@ -2,19 +2,13 @@
 /**
  * A collection of invalid types for testing
  *
- * Most type annotations give an error either when checked with PHPStan or Psalm.
- * And all should give errors when checked with the PHPDoc Types sniff with checkNoMisplaced, checkTypeMatch, and checkPassSplat enabled.
+ * All type annotations should give an error either when checked with PHPStan or Psalm.
+ * And all should give errors when checked with the PHPDoc Types sniff, regardless of settings.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2024 Otago Polytechnic
  * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  *            CC BY-SA 4.0 or later
- */
-
-/**
- * PHPDoc misplaced tag
- *
- * @property int $p
  */
 
 /**
@@ -26,22 +20,27 @@
 class TypesInvalid
 {
 
+    /**
+     * PHPDoc var type missing or malformed
+     *
+     * @var @
+     */
+    public int $varTypeMalformed;
+
 
     /**
      * Function parameter issues
      *
-     * @param int<           PHPDoc function parameter type missing or malformed
-     * @param integer        PHPDoc function parameter name missing or malformed
-     * @param integer $p1    PHPDoc function parameter doesn't exist
-     * @param integer $p2
-     * @param integer $p2    PHPDoc function parameter repeated
-     * @param string  $p3    PHPDoc function parameter type mismatch
-     * @param integer ...$p5 PHPDoc function parameter splat mismatch
-     * @param integer $p4    PHPDoc function parameter order wrong
+     * @param int< $p1 PHPDoc function parameter type missing or malformed
+     * @param int  $p2 PHPDoc function parameter name missing or malformed
+     * @param int  $p4 PHPDoc function parameter order wrong
+     * @param int  $p3
+     * @param int  $p3 PHPDoc function parameter repeated
+     * @param int  $p5 PHPDoc function parameter doesn't exist
      *
      * @return void
      */
-    public function functionParameterIssues(int $p2, int $p3, int $p4, int $p5): void
+    public function functionParameterIssues(int $p1, int $p2, int $p3, int $p4): void
     {
 
     }//end functionParameterIssues()
@@ -72,18 +71,6 @@ class TypesInvalid
 
 
     /**
-     * PHPDoc function return type mismatch
-     *
-     * @return string
-     */
-    public function returnMismatch(): int
-    {
-        return 0;
-
-    }//end returnMismatch()
-
-
-    /**
      * Template issues
      *
      * @template @      PHPDoc template name missing or malformed
@@ -95,20 +82,6 @@ class TypesInvalid
 
     }//end templateIssues()
 
-
-    /**
-     * PHPDoc var type missing or malformed
-     *
-     * @var @
-     */
-    public int $varTypeMalformed;
-
-    /**
-     * PHPDoc var type mismatch
-     *
-     * @var string
-     */
-    public int $varTypeMismatch;
 
 }//end class
 
