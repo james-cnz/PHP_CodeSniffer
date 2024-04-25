@@ -1036,7 +1036,7 @@ class PHPDocTypesSniff implements Sniff
         }
 
         foreach ($interfaces as $index => $interface) {
-            if ($interface[0] !== '\\') {
+            if ($interface !== '' && $interface[0] !== '\\') {
                 if (isset($scope->uses[$interface]) === true) {
                     $interfaces[$index] = $scope->uses[$interface];
                 } else {
