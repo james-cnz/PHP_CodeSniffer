@@ -313,9 +313,9 @@ class PHPDocTypesUtil
                 throw new \Exception('Warning parsing type, no space after type.');
             }
         } catch (\Exception $e) {
-            $this->nexts  = $savedNexts;
-            $this->next   = $this->next();
-            $type         = null;
+            $this->nexts = $savedNexts;
+            $this->next  = $this->next();
+            $type        = null;
         }
 
         // Try to parse pass by reference and splat.
@@ -453,9 +453,9 @@ class PHPDocTypesUtil
                     throw new \Exception('Warning parsing type, no space after type.');
                 }
             } catch (\Exception $e) {
-                $this->nexts  = $savedNexts;
-                $this->next   = $this->next();
-                $type         = null;
+                $this->nexts = $savedNexts;
+                $this->next  = $this->next();
+                $type        = null;
             }
         } else {
             $type = 'mixed';
