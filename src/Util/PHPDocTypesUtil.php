@@ -967,12 +967,12 @@ class PHPDocTypesUtil
                 unset($unionTypes[$neverPos]);
             }
 
-            foreach ($unionTypes as $unionType) {
-                assert($unionType !== '');
-                foreach ($unionTypes as $key => $unionType2) {
+            foreach ($unionTypes as $key1 => $unionType1) {
+                assert($unionType1 !== '');
+                foreach ($unionTypes as $key2 => $unionType2) {
                     assert($unionType2 !== '');
-                    if ($unionType2 !== $unionType && $this->compareTypes($unionType, $unionType2) === true) {
-                        unset($unionTypes[$key]);
+                    if ($key2 !== $key1 && $this->compareTypes($unionType1, $unionType2) === true) {
+                        unset($unionTypes[$key2]);
                     }
                 }
             }
