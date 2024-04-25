@@ -1,9 +1,10 @@
 <?php
 /**
- * PHPDoc type parser
+ * PHPDoc types utility
  *
  * Checks that PHPDoc types are well formed, and returns a simplified version if so, or null otherwise.
- * Global constants and the Collection|Type[] construct aren't supported.
+ * Global constants and aren't supported.
+ * Simplified types can be compared.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2023-2024 Otago Polytechnic
@@ -16,7 +17,7 @@ declare(strict_types=1);
 namespace PHP_CodeSniffer\Util;
 
 /**
- * PHPDoc type parser
+ * PHPDoc types utility
  */
 class PHPDocTypesUtil
 {
@@ -304,9 +305,9 @@ class PHPDocTypesUtil
         $savedNexts = $this->nexts;
         try {
             $type = $this->parseAnyType();
-            if (($this->next === null
-                || ctype_space(substr($this->text, ($this->nexts[0]->startPos - 1), 1)) === true
-                || in_array($this->next, [',', ';', ':', '.']) === true) === false
+            if ($this->next !== null
+                && ctype_space(substr($this->text, ($this->nexts[0]->startPos - 1), 1)) === false
+                && in_array($this->next, [',', ';', ':', '.']) === false
             ) {
                 // Code smell check.
                 throw new \Exception('Warning parsing type, no space after type.');
@@ -315,7 +316,6 @@ class PHPDocTypesUtil
             $this->nexts  = $savedNexts;
             $this->next   = $this->next();
             $type         = null;
-            $this->phpFig = true;
         }
 
         // Try to parse pass by reference and splat.
@@ -334,15 +334,15 @@ class PHPDocTypesUtil
         if ($getWhat >= 1) {
             $savedNexts = $this->nexts;
             try {
-                if (($this->next !== null && $this->next[0] === '$') === false) {
+                if ($this->next === null || $this->next[0] !== '$') {
                     throw new \Exception("Error parsing type, expected variable, saw \"{$this->next}\".");
                 }
 
                 $name = $this->parseToken();
-                if (($this->next === null
-                    || ($getWhat >= 3 && $this->next === '=')
-                    || ctype_space(substr($this->text, ($this->nexts[0]->startPos - 1), 1)) === true
-                    || in_array($this->next, [',', ';', ':', '.']) === true) === false
+                if ($this->next !== null
+                    && ($getWhat < 3 || $this->next !== '=')
+                    && ctype_space(substr($this->text, ($this->nexts[0]->startPos - 1), 1)) === false
+                    && in_array($this->next, [',', ';', ':', '.']) === false
                 ) {
                     // Code smell check.
                     throw new \Exception('Warning parsing type, no space after variable name.');
@@ -421,14 +421,14 @@ class PHPDocTypesUtil
         // Try to parse template name.
         $savedNexts = $this->nexts;
         try {
-            if (($this->next !== null && (ctype_alpha($this->next[0]) === true || $this->next[0] === '_')) === false) {
+            if ($this->next === null || (ctype_alpha($this->next[0]) === false && $this->next[0] !== '_')) {
                 throw new \Exception("Error parsing type, expected variable, saw \"{$this->next}\".");
             }
 
             $name = $this->parseToken();
-            if (($this->next === null
-                || ctype_space(substr($this->text, ($this->nexts[0]->startPos - 1), 1)) === true
-                || in_array($this->next, [',', ';', ':', '.']) === true) === false
+            if ($this->next !== null
+                && ctype_space(substr($this->text, ($this->nexts[0]->startPos - 1), 1)) === false
+                && in_array($this->next, [',', ';', ':', '.']) === false
             ) {
                 // Code smell check.
                 throw new \Exception('Warning parsing type, no space after variable name.');
@@ -445,9 +445,9 @@ class PHPDocTypesUtil
             $savedNexts = $this->nexts;
             try {
                 $type = $this->parseAnyType();
-                if (($this->next === null
-                    || ctype_space(substr($this->text, ($this->nexts[0]->startPos - 1), 1)) === true
-                    || in_array($this->next, [',', ';', ':', '.']) === true) === false
+                if ($this->next !== null
+                    && ctype_space(substr($this->text, ($this->nexts[0]->startPos - 1), 1)) === false
+                    && in_array($this->next, [',', ';', ':', '.']) === false
                 ) {
                     // Code smell check.
                     throw new \Exception('Warning parsing type, no space after type.');
@@ -456,7 +456,6 @@ class PHPDocTypesUtil
                 $this->nexts  = $savedNexts;
                 $this->next   = $this->next();
                 $type         = null;
-                $this->phpFig = true;
             }
         } else {
             $type = 'mixed';
@@ -905,8 +904,8 @@ class PHPDocTypesUtil
                         foreach ($intersectionTypes as $intersectionType) {
                             assert($intersectionType !== '');
                             $superTypes = $this->superTypes($intersectionType);
-                            if ((in_array($intersectionType, ['object', 'iterable', 'callable']) === true
-                                || in_array('object', $superTypes) === true) === false
+                            if (in_array($intersectionType, ['object', 'iterable', 'callable']) === false
+                                && in_array('object', $superTypes) === false
                             ) {
                                 throw new \Exception('Error parsing type, intersection can only be used with objects.');
                             }
@@ -1074,8 +1073,8 @@ class PHPDocTypesUtil
                 $this->parseToken('<');
                 $next = $this->next;
                 if ($next === null
-                    || (strtolower($next) === 'min'
-                    || ((ctype_digit($next[0]) === true || $next[0] === '-') && strpos($next, '.') === false)) === false
+                    || (strtolower($next) !== 'min'
+                    && ((ctype_digit($next[0]) === false && $next[0] !== '-') || strpos($next, '.') !== false))
                 ) {
                     throw new \Exception("Error parsing type, expected int min, saw \"{$next}\".");
                 }
@@ -1084,8 +1083,8 @@ class PHPDocTypesUtil
                 $this->parseToken(',');
                 $next = $this->next;
                 if ($next === null
-                    || (strtolower($next) === 'max'
-                    || ((ctype_digit($next[0]) === true || $next[0] === '-') && strpos($next, '.') === false)) === false
+                    || (strtolower($next) !== 'max'
+                    && ((ctype_digit($next[0]) === false && $next[0] !== '-') || strpos($next, '.') !== false))
                 ) {
                     throw new \Exception("Error parsing type, expected int max, saw \"{$next}\".");
                 }
@@ -1251,7 +1250,7 @@ class PHPDocTypesUtil
                 do {
                     $next = $this->next;
                     if ($next === null
-                        || (ctype_alpha($next) === true || $next[0] === '_' || $next[0] === "'" || $next[0] === '"') === false
+                        || (ctype_alpha($next) === false && $next[0] !== '_' && $next[0] !== "'" && $next[0] !== '"')
                     ) {
                         throw new \Exception('Error parsing type, invalid object key.');
                     }
@@ -1412,7 +1411,7 @@ class PHPDocTypesUtil
             $this->parseToken('key-of');
             $this->parseToken('<');
             $iterable = $this->parseAnyType();
-            if (($this->compareTypes('iterable', $iterable) === true || $this->compareTypes('object', $iterable) === true) === false) {
+            if ($this->compareTypes('iterable', $iterable) === false && $this->compareTypes('object', $iterable) === false) {
                 throw new \Exception("Error parsing type, can't get key of non-iterable.");
             }
 
@@ -1425,7 +1424,7 @@ class PHPDocTypesUtil
             $this->parseToken('value-of');
             $this->parseToken('<');
             $iterable = $this->parseAnyType();
-            if (($this->compareTypes('iterable', $iterable) === true || $this->compareTypes('object', $iterable) === true) === false) {
+            if ($this->compareTypes('iterable', $iterable) === false && $this->compareTypes('object', $iterable) === false) {
                 throw new \Exception("Error parsing type, can't get value of non-iterable.");
             }
 
