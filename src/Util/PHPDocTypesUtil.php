@@ -249,11 +249,11 @@ class PHPDocTypesUtil
     /**
      * Constructor
      *
-     * @param ?array<string, object{extends: ?string, implements: string[]}> $artifacts Classish things
+     * @param array<string, object{extends: ?string, implements: string[]}> $artifacts Classish things
      */
-    public function __construct(?array $artifacts=null)
+    public function __construct(array $artifacts=[])
     {
-        $this->artifacts = ($artifacts ?? []);
+        $this->artifacts = $artifacts;
 
     }//end __construct()
 
@@ -349,7 +349,7 @@ class PHPDocTypesUtil
                 // Implicit nullable.
                 if ($getWhat >= 3) {
                     if ($this->next === '='
-                        && strtolower(($this->next(1) ?? '')) === 'null'
+                        && strtolower(($this->next(1))) === 'null'
                         && strtolower(trim(substr($text, $this->nexts[1]->startPos))) === 'null'
                         && $type !== null && $type !== 'mixed'
                     ) {
@@ -608,9 +608,21 @@ class PHPDocTypesUtil
                     $superTypes[] = $superType;
                 }
 
-                if (($librarySupers = $this->library[$superType] ?? null) !== null) {
+                if (isset($this->library[$superType])) {
+                    $librarySupers = $this->library[$superType];
+                } else {
+                    $librarySupers = null;
+                }
+
+                if (isset($this->artifacts[$superType])) {
+                    $superTypeObj = $this->artifacts[$superType];
+                } else {
+                    $superTypeObj = null;
+                }
+
+                if ($librarySupers !== null) {
                     $superTypeQueue = array_merge($superTypeQueue, $librarySupers);
-                } else if (($superTypeObj = ($this->artifacts[$superType] ?? null)) !== null) {
+                } else if ($superTypeObj !== null) {
                     if ($superTypeObj->extends !== null) {
                         $superTypeQueue[] = $superTypeObj->extends;
                     }
@@ -1293,13 +1305,21 @@ class PHPDocTypesUtil
             // Self.
             $this->correctToken($lowerNext);
             $this->parseToken('self');
-            $type = ($this->scope->className ?? 'self');
+            if ($this->scope->className !== null) {
+                $type = $this->scope->className;
+            } else {
+                $type = 'self';
+            }
         } else if ($lowerNext === 'parent') {
             // Parent.
             $this->phpFig = false;
             $this->correctToken($lowerNext);
             $this->parseToken('parent');
-            $type = ($this->scope->parentName ?? 'parent');
+            if ($this->scope->parentName !== null) {
+                $type = $this->scope->parentName;
+            } else {
+                $type = 'parent';
+            }
         } else if (in_array($lowerNext, ['static', '$this']) === true) {
             // Static.
             $this->correctToken($lowerNext);

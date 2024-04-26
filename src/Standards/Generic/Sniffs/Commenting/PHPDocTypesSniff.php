@@ -924,7 +924,9 @@ class PHPDocTypesSniff implements Sniff
                     }
 
                     $asAlias = $this->processUseAsAlias();
-                    $alias   = ($asAlias ?? $alias);
+                    if ($asAlias !== null) {
+                        $alias = $asAlias;
+                    }
 
                     // Store it.
                     if ($type === 'class') {
@@ -951,7 +953,9 @@ class PHPDocTypesSniff implements Sniff
                 }
 
                 $asAlias = $this->processUseAsAlias();
-                $alias   = ($asAlias ?? $alias);
+                if ($asAlias !== null) {
+                    $alias = $asAlias;
+                }
 
                 // Store it.
                 if ($type === 'class') {
@@ -1128,8 +1132,17 @@ class PHPDocTypesSniff implements Sniff
             }//end if
         }//end if
 
-        $parametersPtr = ($token['parenthesis_opener'] ?? null);
-        $blockPtr      = ($token['scope_opener'] ?? null);
+        if (isset($token['parenthesis_opener'])) {
+            $parametersPtr = $token['parenthesis_opener'];
+        } else {
+            $parametersPtr = null;
+        }
+
+        if (isset($token['scope_opener'])) {
+            $blockPtr = $token['scope_opener'];
+        } else {
+            $blockPtr = null;
+        }
 
         // If it's an anonymous class, it could have parameters.
         // And those parameters could have other anonymous classes or functions in them.
@@ -1221,8 +1234,18 @@ class PHPDocTypesSniff implements Sniff
             $name = null;
         }
 
-        $parametersPtr = ($token['parenthesis_opener'] ?? null);
-        $blockPtr      = ($token['scope_opener'] ?? null);
+        if (isset($token['parenthesis_opener'])) {
+            $parametersPtr = $token['parenthesis_opener'];
+        } else {
+            $parametersPtr = null;
+        }
+
+        if (isset($token['scope_opener'])) {
+            $blockPtr = $token['scope_opener'];
+        } else {
+            $blockPtr = null;
+        }
+
         if ($parametersPtr === null
             || isset($this->tokens[$parametersPtr]['parenthesis_opener']) === false
             || isset($this->tokens[$parametersPtr]['parenthesis_closer']) === false
