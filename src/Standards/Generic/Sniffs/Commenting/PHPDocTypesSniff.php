@@ -1760,7 +1760,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processPossVarComment(?object $scope, $comment)
+    protected function processPossVarComment($scope, $comment)
     {
         if ($this->pass === 2 && $comment !== null) {
             $this->checkNo(
