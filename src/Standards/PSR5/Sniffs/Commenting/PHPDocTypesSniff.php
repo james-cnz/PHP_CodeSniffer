@@ -8,8 +8,6 @@
  *            CC BY-SA 4.0 or later
  */
 
-declare(strict_types=1);
-
 namespace PHP_CodeSniffer\Standards\PSR5\Sniffs\Commenting;
 
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Commenting\PHPDocTypesSniff as SniffBase;

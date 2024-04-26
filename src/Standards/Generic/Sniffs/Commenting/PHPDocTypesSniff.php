@@ -229,7 +229,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processPass(int $stackPtr)
+    protected function processPass($stackPtr)
     {
         $scope         = (object) [
             'namespace'  => '',
@@ -262,7 +262,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processBlock(object $scope, int $type)
+    protected function processBlock($scope, $type)
     {
 
         // Check we are at the start of a scope, and store scope closer.
@@ -560,7 +560,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function advanceTo(int $newPtr)
+    protected function advanceTo($newPtr)
     {
         while ($this->filePtr < $newPtr) {
             $this->advance();
@@ -682,7 +682,7 @@ class PHPDocTypesSniff implements Sniff
      *
      * @return void
      */
-    protected function checkNo(object $comment, array $tagNames)
+    protected function checkNo($comment, $tagNames)
     {
         if ($this->checkTagsNotMisplaced === false) {
             return;
@@ -710,7 +710,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function fixCommentTag(object $tag, string $replacement)
+    protected function fixCommentTag($tag, $replacement)
     {
         $replacementArray = explode("\n", $replacement);
         // Place in the replacement array.
@@ -779,7 +779,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processNamespace(object $scope)
+    protected function processNamespace($scope)
     {
 
         $this->advance(T_NAMESPACE);
@@ -837,7 +837,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processUse(object $scope)
+    protected function processUse($scope)
     {
 
         $this->advance(T_USE);
@@ -1003,7 +1003,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processClassish(object $scope, $comment)
+    protected function processClassish($scope, $comment)
     {
 
         $ptr   = $this->filePtr;
@@ -1215,7 +1215,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processFunction(object $scope, $comment)
+    protected function processFunction($scope, $comment)
     {
 
         $ptr   = $this->filePtr;
@@ -1537,7 +1537,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processTemplates(object $scope, $comment)
+    protected function processTemplates($scope, $comment)
     {
         foreach ($comment->tags['@template'] as $docTemplate) {
             $docTemplateParsed = $this->typesUtil->parseTemplate($scope, $docTemplate->content);
@@ -1593,7 +1593,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processVariable(object $scope, $comment)
+    protected function processVariable($scope, $comment)
     {
 
         // Parse var/const token.

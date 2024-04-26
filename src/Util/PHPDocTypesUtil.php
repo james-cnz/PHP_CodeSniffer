@@ -251,7 +251,7 @@ class PHPDocTypesUtil
      *
      * @param array<string, object{extends: ?string, implements: string[]}> $artifacts Classish things
      */
-    public function __construct(array $artifacts=[])
+    public function __construct($artifacts=[])
     {
         $this->artifacts = $artifacts;
 
@@ -271,7 +271,7 @@ class PHPDocTypesUtil
      *              rem: string, fixed: ?string, phpFig: bool
      *          } the simplified type, pass by reference & splat, variable name, remaining text, fixed text, and whether PHP-FIG
      */
-    public function parseTypeAndName($scope, string $text, int $getWhat, bool $goWide)
+    public function parseTypeAndName($scope, $text, $getWhat, $goWide)
     {
 
         // Initialise variables.
@@ -393,7 +393,7 @@ class PHPDocTypesUtil
      *              type: ?string, name: ?string, rem: string, fixed: ?string, phpFig: bool
      *          } the simplified type, template name, remaining text, fixed text, and whether PHP-FIG
      */
-    public function parseTemplate($scope, string $text)
+    public function parseTemplate($scope, $text)
     {
 
         // Initialise variables.
@@ -550,7 +550,7 @@ class PHPDocTypesUtil
      *
      * @return string[] super types
      */
-    protected function superTypes(string $baseType)
+    protected function superTypes($baseType)
     {
         if (in_array($baseType, ['int', 'string']) === true) {
             $superTypes = [
@@ -657,7 +657,7 @@ class PHPDocTypesUtil
      * @return         ?string
      * @phpstan-impure
      */
-    protected function next(int $lookAhead=0)
+    protected function next($lookAhead=0)
     {
 
         // Fetch any more tokens we need.
@@ -817,7 +817,7 @@ class PHPDocTypesUtil
      * @return         void
      * @phpstan-impure
      */
-    protected function correctToken(string $correct)
+    protected function correctToken($correct)
     {
         if ($correct !== $this->nexts[0]->text) {
             $this->replacements[] = (object) [
@@ -859,7 +859,7 @@ class PHPDocTypesUtil
      * @return         string the simplified type
      * @phpstan-impure
      */
-    protected function parseAnyType(bool $inBrackets=false)
+    protected function parseAnyType($inBrackets=false)
     {
 
         if ($inBrackets === true && $this->next !== null && $this->next[0] === '$' && $this->next(1) === 'is') {
