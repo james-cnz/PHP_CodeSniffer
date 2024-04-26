@@ -12,8 +12,6 @@
  *            CC BY-SA v4 or later
  */
 
-declare(strict_types=1);
-
 namespace PHP_CodeSniffer\Util;
 
 /**
@@ -273,7 +271,7 @@ class PHPDocTypesUtil
      *              rem: string, fixed: ?string, phpFig: bool
      *          } the simplified type, pass by reference & splat, variable name, remaining text, fixed text, and whether PHP-FIG
      */
-    public function parseTypeAndName(?object $scope, string $text, int $getWhat, bool $goWide): object
+    public function parseTypeAndName(?object $scope, string $text, int $getWhat, bool $goWide)
     {
 
         // Initialise variables.
@@ -395,7 +393,7 @@ class PHPDocTypesUtil
      *              type: ?string, name: ?string, rem: string, fixed: ?string, phpFig: bool
      *          } the simplified type, template name, remaining text, fixed text, and whether PHP-FIG
      */
-    public function parseTemplate(?object $scope, string $text): object
+    public function parseTemplate(?object $scope, string $text)
     {
 
         // Initialise variables.
@@ -486,7 +484,7 @@ class PHPDocTypesUtil
      *
      * @return bool whether $narrowType has the same or narrower scope as $wideType
      */
-    public function compareTypes(?string $wideType, ?string $narrowType): bool
+    public function compareTypes(?string $wideType, ?string $narrowType)
     {
         if ($narrowType === null) {
             return false;
@@ -552,7 +550,7 @@ class PHPDocTypesUtil
      *
      * @return string[] super types
      */
-    protected function superTypes(string $baseType): array
+    protected function superTypes(string $baseType)
     {
         if (in_array($baseType, ['int', 'string']) === true) {
             $superTypes = [
@@ -647,7 +645,7 @@ class PHPDocTypesUtil
      * @return         ?string
      * @phpstan-impure
      */
-    protected function next(int $lookAhead=0): ?string
+    protected function next(int $lookAhead=0)
     {
 
         // Fetch any more tokens we need.
@@ -776,7 +774,7 @@ class PHPDocTypesUtil
      * @return         string
      * @phpstan-impure
      */
-    protected function parseToken(?string $expect=null): string
+    protected function parseToken(?string $expect=null)
     {
 
         $next = $this->next;
@@ -807,7 +805,7 @@ class PHPDocTypesUtil
      * @return         void
      * @phpstan-impure
      */
-    protected function correctToken(string $correct): void
+    protected function correctToken(string $correct)
     {
         if ($correct !== $this->nexts[0]->text) {
             $this->replacements[] = (object) [
@@ -825,7 +823,7 @@ class PHPDocTypesUtil
      *
      * @return ?string
      */
-    protected function getFixed(): ?string
+    protected function getFixed()
     {
         if (count($this->replacements) === 0) {
             return null;
@@ -849,7 +847,7 @@ class PHPDocTypesUtil
      * @return         string the simplified type
      * @phpstan-impure
      */
-    protected function parseAnyType(bool $inBrackets=false): string
+    protected function parseAnyType(bool $inBrackets=false)
     {
 
         if ($inBrackets === true && $this->next !== null && $this->next[0] === '$' && $this->next(1) === 'is') {
@@ -991,7 +989,7 @@ class PHPDocTypesUtil
      * @return         string the simplified type
      * @phpstan-impure
      */
-    protected function parseSingleType(): string
+    protected function parseSingleType()
     {
         if ($this->next === '(') {
             $this->parseToken('(');
@@ -1019,7 +1017,7 @@ class PHPDocTypesUtil
      * @return         string the simplified type
      * @phpstan-impure
      */
-    protected function parseBasicType(): string
+    protected function parseBasicType()
     {
 
         $next = $this->next;

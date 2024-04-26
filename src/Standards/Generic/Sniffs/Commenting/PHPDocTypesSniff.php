@@ -8,8 +8,6 @@
  *            CC BY-SA 4.0 or later
  */
 
-declare(strict_types=1);
-
 namespace PHP_CodeSniffer\Standards\Generic\Sniffs\Commenting;
 
 use PHP_CodeSniffer\Sniffs\Sniff;
@@ -175,7 +173,7 @@ class PHPDocTypesSniff implements Sniff
      *
      * @return array-key[]
      */
-    public function register(): array
+    public function register()
     {
         return [T_OPEN_TAG];
 
@@ -190,7 +188,7 @@ class PHPDocTypesSniff implements Sniff
      *
      * @return int returns pointer to end of file to avoid being called further
      */
-    public function process(File $phpcsFile, $stackPtr): int
+    public function process(File $phpcsFile, $stackPtr)
     {
 
         try {
@@ -231,7 +229,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processPass(int $stackPtr): void
+    protected function processPass(int $stackPtr)
     {
         $scope         = (object) [
             'namespace'  => '',
@@ -264,7 +262,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processBlock(object $scope, int $type): void
+    protected function processBlock(object $scope, int $type)
     {
 
         // Check we are at the start of a scope, and store scope closer.
@@ -452,7 +450,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function fetchToken(): void
+    protected function fetchToken()
     {
         if ($this->filePtr < count($this->tokens)) {
             $this->token = $this->tokens[$this->filePtr];
@@ -474,7 +472,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function advance($expectedCode=null): void
+    protected function advance($expectedCode=null)
     {
 
         // Check we have something to fetch, and it's what's expected.
@@ -531,7 +529,7 @@ class PHPDocTypesSniff implements Sniff
      *      'comment_tags'?: array<int>, 'comment_closer'?: int
      *  }
      */
-    protected function lookAhead(): array
+    protected function lookAhead()
     {
         $filePtr = ($this->filePtr + 1);
 
@@ -562,7 +560,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function advanceTo(int $newPtr): void
+    protected function advanceTo(int $newPtr)
     {
         while ($this->filePtr < $newPtr) {
             $this->advance();
@@ -581,7 +579,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processComment(): void
+    protected function processComment()
     {
         $commentPtr           = $this->filePtr;
         $this->commentPending = (object) [
@@ -684,7 +682,7 @@ class PHPDocTypesSniff implements Sniff
      *
      * @return void
      */
-    protected function checkNo(object $comment, array $tagNames): void
+    protected function checkNo(object $comment, array $tagNames)
     {
         if ($this->checkTagsNotMisplaced === false) {
             return;
@@ -712,7 +710,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function fixCommentTag(object $tag, string $replacement): void
+    protected function fixCommentTag(object $tag, string $replacement)
     {
         $replacementArray = explode("\n", $replacement);
         // Place in the replacement array.
@@ -781,7 +779,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processNamespace(object $scope): void
+    protected function processNamespace(object $scope)
     {
 
         $this->advance(T_NAMESPACE);
@@ -839,7 +837,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processUse(object $scope): void
+    protected function processUse(object $scope)
     {
 
         $this->advance(T_USE);
@@ -978,7 +976,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         ?string
      * @phpstan-impure
      */
-    protected function processUseAsAlias(): ?string
+    protected function processUseAsAlias()
     {
         $alias = null;
         if ($this->token['code'] === T_AS) {
@@ -1001,7 +999,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processClassish(object $scope, ?object $comment): void
+    protected function processClassish(object $scope, ?object $comment)
     {
 
         $ptr   = $this->filePtr;
@@ -1157,7 +1155,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processClassTraitUse(): void
+    protected function processClassTraitUse()
     {
         $this->advance(T_USE);
 
@@ -1204,7 +1202,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processFunction(object $scope, ?object $comment): void
+    protected function processFunction(object $scope, ?object $comment)
     {
 
         $ptr   = $this->filePtr;
@@ -1516,7 +1514,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processTemplates(object $scope, ?object $comment): void
+    protected function processTemplates(object $scope, ?object $comment)
     {
         foreach ($comment->tags['@template'] as $docTemplate) {
             $docTemplateParsed = $this->typesUtil->parseTemplate($scope, $docTemplate->content);
@@ -1572,7 +1570,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processVariable(object $scope, ?object $comment): void
+    protected function processVariable(object $scope, ?object $comment)
     {
 
         // Parse var/const token.
@@ -1739,7 +1737,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processPossVarComment(?object $scope, ?object $comment): void
+    protected function processPossVarComment(?object $scope, ?object $comment)
     {
         if ($this->pass === 2 && $comment !== null) {
             $this->checkNo(
