@@ -271,7 +271,7 @@ class PHPDocTypesUtil
      *              rem: string, fixed: ?string, phpFig: bool
      *          } the simplified type, pass by reference & splat, variable name, remaining text, fixed text, and whether PHP-FIG
      */
-    public function parseTypeAndName(?object $scope, string $text, int $getWhat, bool $goWide)
+    public function parseTypeAndName($scope, string $text, int $getWhat, bool $goWide)
     {
 
         // Initialise variables.
@@ -393,7 +393,7 @@ class PHPDocTypesUtil
      *              type: ?string, name: ?string, rem: string, fixed: ?string, phpFig: bool
      *          } the simplified type, template name, remaining text, fixed text, and whether PHP-FIG
      */
-    public function parseTemplate(?object $scope, string $text)
+    public function parseTemplate($scope, string $text)
     {
 
         // Initialise variables.
@@ -484,7 +484,7 @@ class PHPDocTypesUtil
      *
      * @return bool whether $narrowType has the same or narrower scope as $wideType
      */
-    public function compareTypes(?string $wideType, ?string $narrowType)
+    public function compareTypes($wideType, $narrowType)
     {
         if ($narrowType === null) {
             return false;
@@ -786,7 +786,7 @@ class PHPDocTypesUtil
      * @return         string
      * @phpstan-impure
      */
-    protected function parseToken(?string $expect=null)
+    protected function parseToken($expect=null)
     {
 
         $next = $this->next;

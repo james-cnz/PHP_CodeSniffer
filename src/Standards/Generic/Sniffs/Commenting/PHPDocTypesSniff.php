@@ -1003,7 +1003,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processClassish(object $scope, ?object $comment)
+    protected function processClassish(object $scope, $comment)
     {
 
         $ptr   = $this->filePtr;
@@ -1215,7 +1215,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processFunction(object $scope, ?object $comment)
+    protected function processFunction(object $scope, $comment)
     {
 
         $ptr   = $this->filePtr;
@@ -1537,7 +1537,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processTemplates(object $scope, ?object $comment)
+    protected function processTemplates(object $scope, $comment)
     {
         foreach ($comment->tags['@template'] as $docTemplate) {
             $docTemplateParsed = $this->typesUtil->parseTemplate($scope, $docTemplate->content);
@@ -1593,7 +1593,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processVariable(object $scope, ?object $comment)
+    protected function processVariable(object $scope, $comment)
     {
 
         // Parse var/const token.
@@ -1760,7 +1760,7 @@ class PHPDocTypesSniff implements Sniff
      * @return         void
      * @phpstan-impure
      */
-    protected function processPossVarComment(?object $scope, ?object $comment)
+    protected function processPossVarComment(?object $scope, $comment)
     {
         if ($this->pass === 2 && $comment !== null) {
             $this->checkNo(
