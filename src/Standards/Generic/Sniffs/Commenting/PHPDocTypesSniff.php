@@ -1132,13 +1132,13 @@ class PHPDocTypesSniff implements Sniff
             }//end if
         }//end if
 
-        if (isset($token['parenthesis_opener'])) {
+        if (isset($token['parenthesis_opener']) === true) {
             $parametersPtr = $token['parenthesis_opener'];
         } else {
             $parametersPtr = null;
         }
 
-        if (isset($token['scope_opener'])) {
+        if (isset($token['scope_opener']) === true) {
             $blockPtr = $token['scope_opener'];
         } else {
             $blockPtr = null;
@@ -1234,13 +1234,13 @@ class PHPDocTypesSniff implements Sniff
             $name = null;
         }
 
-        if (isset($token['parenthesis_opener'])) {
+        if (isset($token['parenthesis_opener']) === true) {
             $parametersPtr = $token['parenthesis_opener'];
         } else {
             $parametersPtr = null;
         }
 
-        if (isset($token['scope_opener'])) {
+        if (isset($token['scope_opener']) === true) {
             $blockPtr = $token['scope_opener'];
         } else {
             $blockPtr = null;

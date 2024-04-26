@@ -608,13 +608,13 @@ class PHPDocTypesUtil
                     $superTypes[] = $superType;
                 }
 
-                if (isset($this->library[$superType])) {
+                if (isset($this->library[$superType]) === true) {
                     $librarySupers = $this->library[$superType];
                 } else {
                     $librarySupers = null;
                 }
 
-                if (isset($this->artifacts[$superType])) {
+                if (isset($this->artifacts[$superType]) === true) {
                     $superTypeObj = $this->artifacts[$superType];
                 } else {
                     $superTypeObj = null;
