@@ -1012,12 +1012,18 @@ class PHPDocTypesUtil
      */
     protected function parseSingleType()
     {
+        $hasBrackets = false;
         if ($this->next === '(') {
+            $hasBrackets = true;
             $this->parseToken('(');
             $type = $this->parseAnyType(true);
             $this->parseToken(')');
         } else {
             $type = $this->parseBasicType();
+        }
+
+        if ($hasBrackets === true && $this->next !== '[') {
+            $this->phpFig = false;
         }
 
         while ($this->next === '[' && $this->next(1) === ']') {
