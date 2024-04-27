@@ -3,8 +3,8 @@
  * PHPDoc types utility
  *
  * Checks that PHPDoc types are well formed, and returns a simplified version if so, or null otherwise.
- * Global constants and aren't supported.
- * Simplified types can be compared.
+ * Global constants aren't supported.
+ * Simplified types can then be compared.
  *
  * @author    James Calder <jeg+accounts.github@cloudy.kiwi.nz>
  * @copyright 2023-2024 Otago Polytechnic

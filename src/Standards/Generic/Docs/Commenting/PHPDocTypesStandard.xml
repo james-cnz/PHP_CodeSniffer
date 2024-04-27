@@ -1,7 +1,10 @@
 <documentation title="PHPDoc Types">
     <standard>
     <![CDATA[
-    PHPDoc types should be correct.
+    This sniff aims to check that PHPDoc types will be parsed by both PHPStan and Psalm.
+    Type checking checks only that the PHPDoc type and native type (if any)
+    for function parameters and return values, and class properties match.
+    Type checking is not aware of class heirarchies from other files, or global constants.
     ]]>
     </standard>
     <code_comparison>

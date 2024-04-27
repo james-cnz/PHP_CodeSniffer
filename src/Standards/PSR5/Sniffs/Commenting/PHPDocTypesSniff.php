@@ -40,7 +40,7 @@ class PHPDocTypesSniff extends SniffBase
     public $checkTagsNotMisplaced = true;
 
     /**
-     * Check the types match--isn't aware of class heirarchies from other files, or global constants.
+     * Check PHPDoc types and native types match--isn't aware of class heirarchies from other files, or global constants.
      *
      * @var boolean
      */

@@ -1,7 +1,10 @@
 <documentation title="PHPDoc Types">
     <standard>
     <![CDATA[
-    PHPDoc types should be correct and conform to PHP-FIG PSR-5.
+    PHPDoc types should conform to PHP-FIG PSR-5.
+    Type checking checks only that the PHPDoc type and native type (if any)
+    for function parameters and return values, and class properties match.
+    Type checking does not recognise class heirarchies from other files, or global constants.
     ]]>
     </standard>
     <code_comparison>
