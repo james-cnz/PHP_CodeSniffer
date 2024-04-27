@@ -421,7 +421,7 @@ class PHPDocTypesUtil
         $this->phpFig       = true;
         $this->nexts        = [];
         $this->next         = $this->next();
-        $err                = null;
+        $err = null;
 
         // Try to parse template name.
         $savedNexts = $this->nexts;
