@@ -270,7 +270,7 @@ class PHPDocTypesSniff implements Sniff
             // File.
             if ($this->debugMode === true && $this->token['code'] !== T_OPEN_TAG) {
                 // We shouldn't ever end up here.
-                throw new \Exception('Expected PHP open tag');
+                throw new \Exception('Expected PHP open tag.');
             }
 
             $scope->closer = count($this->tokens);
@@ -280,7 +280,7 @@ class PHPDocTypesSniff implements Sniff
                 || $this->token['scope_opener'] !== $this->filePtr
                 || isset($this->token['scope_closer']) === false
             ) {
-                throw new \Exception('Malformed block');
+                throw new \Exception('Malformed block.');
             }
 
             $scope->closer = $this->token['scope_closer'];
@@ -290,7 +290,7 @@ class PHPDocTypesSniff implements Sniff
                 || $this->token['parenthesis_opener'] !== $this->filePtr
                 || isset($this->token['parenthesis_closer']) === false
             ) {
-                throw new \Exception('Malformed parameters');
+                throw new \Exception('Malformed parameters.');
             }
 
             $scope->closer = $this->token['parenthesis_closer'];
@@ -426,7 +426,7 @@ class PHPDocTypesSniff implements Sniff
                 } else {
                     // We got something unrecognised.
                     $this->advance();
-                    throw new \Exception('Unrecognised construct');
+                    throw new \Exception('Unrecognised construct.');
                 }//end if
             } catch (\Exception $e) {
                 // Just give up on whatever we're doing and try again, unless in debug mode.
@@ -438,7 +438,7 @@ class PHPDocTypesSniff implements Sniff
 
         // Check we are at the end of the scope.
         if (($type !== 0 || $this->debugMode === true) && $this->filePtr !== $scope->closer) {
-            throw new \Exception('Malformed scope closer');
+            throw new \Exception('Malformed scope closer.');
         }
 
     }//end processBlock()
@@ -477,7 +477,7 @@ class PHPDocTypesSniff implements Sniff
 
         // Check we have something to fetch, and it's what's expected.
         if (($expectedCode !== null && $this->token['code'] !== $expectedCode) || $this->token['code'] === null) {
-            throw new \Exception("Unexpected token, saw: {$this->token['content']}");
+            throw new \Exception("Unexpected token, saw: \"{$this->token['content']}\".");
         }
 
         // Dispose of unused comment, if any.
@@ -567,7 +567,7 @@ class PHPDocTypesSniff implements Sniff
         }
 
         if ($this->filePtr !== $newPtr) {
-            throw new \Exception('Malformed code');
+            throw new \Exception('Malformed code.');
         }
 
     }//end advanceTo()
@@ -590,7 +590,7 @@ class PHPDocTypesSniff implements Sniff
         $this->fetchToken();
 
         if (isset($this->tokens[$commentPtr]['comment_tags']) === false) {
-            throw new \Exception('Comment tags not found');
+            throw new \Exception('Comment tags not found.');
         }
 
         // For each tag.
@@ -659,13 +659,13 @@ class PHPDocTypesSniff implements Sniff
         }//end foreach
 
         if (isset($this->tokens[$commentPtr]['comment_closer']) === false) {
-            throw new \Exception('End of PHPDoc comment not found');
+            throw new \Exception('End of PHPDoc comment not found.');
         }
 
         $this->filePtr = $this->tokens[$commentPtr]['comment_closer'];
         $this->fetchToken();
         if ($this->token['code'] !== T_DOC_COMMENT_CLOSE_TAG) {
-            throw new \Exception('End of PHPDoc comment not found');
+            throw new \Exception('End of PHPDoc comment not found.');
         }
 
         $this->filePtr++;
@@ -731,7 +731,7 @@ class PHPDocTypesSniff implements Sniff
                 if ($newline === false) {
                     if ($doneReplacement === true || $replacementArray[$replacementCounter] === '') {
                         // We shouldn't ever end up here.
-                        throw new \Exception('Error during replacement');
+                        throw new \Exception('Error during replacement.');
                     }
 
                     $this->file->fixer->replaceToken($ptr, $replacementArray[$replacementCounter]);
@@ -739,7 +739,7 @@ class PHPDocTypesSniff implements Sniff
                 } else {
                     if (($doneReplacement === true || $replacementArray[$replacementCounter] === '') === false) {
                         // We shouldn't ever end up here.
-                        throw new \Exception('Error during replacement');
+                        throw new \Exception('Error during replacement.');
                     }
 
                     $replacementCounter++;
@@ -763,7 +763,7 @@ class PHPDocTypesSniff implements Sniff
             && ($doneReplacement === true || $replacementArray[(count($replacementArray) - 1)] === '')) === false
         ) {
             // We shouldn't ever end up here.
-            throw new \Exception('Error during replacement');
+            throw new \Exception('Error during replacement.');
         }
 
         $this->file->fixer->endChangeset();
@@ -803,7 +803,7 @@ class PHPDocTypesSniff implements Sniff
 
         // Check it's right.
         if ($namespace !== '' && $namespace[(strlen($namespace) - 1)] === '\\') {
-            throw new \Exception('Namespace trailing backslash');
+            throw new \Exception('Namespace trailing backslash.');
         }
 
         // Check it's fully qualified.
@@ -812,7 +812,7 @@ class PHPDocTypesSniff implements Sniff
         }
 
         if (in_array($this->token['code'], [T_OPEN_CURLY_BRACKET, T_SEMICOLON]) === false) {
-            throw new \Exception('Namespace malformed');
+            throw new \Exception('Namespace malformed.');
         }
 
         // What kind of namespace is it?
@@ -881,7 +881,7 @@ class PHPDocTypesSniff implements Sniff
                 // It's a group.
                 $namespaceStart = $namespace;
                 if ($namespaceStart !== '' && strrpos($namespaceStart, '\\') !== (strlen($namespaceStart) - 1)) {
-                    throw new \Exception('Malformed use statement');
+                    throw new \Exception("Namespace for use group doesn't have trailing back slash.");
                 }
 
                 $typeStart = $type;
@@ -919,8 +919,8 @@ class PHPDocTypesSniff implements Sniff
 
                     // Figure out the alias.
                     $alias = substr($namespace, (strrpos($namespace, '\\') + 1));
-                    if ($alias === '') {
-                        throw new \Exception('Malformed use statement');
+                    if ($alias === false || $alias === '') {
+                        throw new \Exception('Use item has trailing back slash.');
                     }
 
                     $asAlias = $this->processUseAsAlias();
@@ -948,8 +948,8 @@ class PHPDocTypesSniff implements Sniff
                     $alias = $namespace;
                 }
 
-                if ($alias === '') {
-                    throw new \Exception('Malformed use statement');
+                if ($alias === false || $alias === '') {
+                    throw new \Exception('Use name has trailing back slash.');
                 }
 
                 $asAlias = $this->processUseAsAlias();
@@ -1094,7 +1094,7 @@ class PHPDocTypesSniff implements Sniff
                         );
                         if ($docPropParsed->type === null) {
                             $this->file->addError(
-                                'PHPDoc class property type missing or malformed',
+                                'PHPDoc class property type error: '.$docPropParsed->err,
                                 $docProp->ptr,
                                 'PHPDocClassPropType'
                             );
@@ -1190,7 +1190,7 @@ class PHPDocTypesSniff implements Sniff
 
             if ($this->token['code'] === T_OPEN_CURLY_BRACKET) {
                 if (isset($this->token['bracket_opener']) === false || isset($this->token['bracket_closer']) === false) {
-                    throw new \Exception('Malformed class trait use.');
+                    throw new \Exception('Malformed class trait use group.');
                 }
 
                 $this->advanceTo($this->token['bracket_closer']);
@@ -1250,7 +1250,7 @@ class PHPDocTypesSniff implements Sniff
             || isset($this->tokens[$parametersPtr]['parenthesis_opener']) === false
             || isset($this->tokens[$parametersPtr]['parenthesis_closer']) === false
         ) {
-            throw new \Exception('Malformed function parameters');
+            throw new \Exception('Malformed function parameters.');
         }
 
         $parameters = $this->file->getMethodParameters($ptr);
@@ -1323,7 +1323,7 @@ class PHPDocTypesSniff implements Sniff
                     );
                     if ($docParamParsed->type === null) {
                         $this->file->addError(
-                            'PHPDoc function parameter type missing or malformed',
+                            'PHPDoc function parameter type error: '.$docParamParsed->err,
                             $docParam->ptr,
                             'PHPDocFunParamType'
                         );
@@ -1474,7 +1474,7 @@ class PHPDocTypesSniff implements Sniff
 
                     if ($docRetParsed->type === null) {
                         $this->file->addError(
-                            'PHPDoc function return type missing or malformed',
+                            'PHPDoc function return type error: '.$docRetParsed->err,
                             $docRet->ptr,
                             'PHPDocFunRetType'
                         );
@@ -1549,7 +1549,7 @@ class PHPDocTypesSniff implements Sniff
                 );
             } else if ($docTemplateParsed->type === null) {
                 $this->file->addError(
-                    'PHPDoc template type missing or malformed',
+                    'PHPDoc template type error: '.$docTemplateParsed->err,
                     $docTemplate->ptr,
                     'PHPDocTemplateType'
                 );
@@ -1640,7 +1640,7 @@ class PHPDocTypesSniff implements Sniff
         if (($const === true && $this->token['code'] !== T_STRING)
             || ($const === false && $this->token['code'] !== T_VARIABLE)
         ) {
-            throw new \Exception('Expected declaration.');
+            throw new \Exception('Expected variable or constant name.');
         }
 
         // Checking.
@@ -1697,7 +1697,7 @@ class PHPDocTypesSniff implements Sniff
 
                     if ($docVarParsed->type === null) {
                         $this->file->addError(
-                            'PHPDoc var type missing or malformed',
+                            'PHPDoc var type error: '.$docVarParsed->err,
                             $docVar->ptr,
                             'PHPDocVarType'
                         );
@@ -1741,7 +1741,7 @@ class PHPDocTypesSniff implements Sniff
         $this->advance();
 
         if (in_array($this->token['code'], [T_EQUAL, T_COMMA, T_SEMICOLON, T_CLOSE_PARENTHESIS]) === false) {
-            throw new \Exception('Expected one of: = , ; )');
+            throw new \Exception('Malformed variable or function declaration.');
         }
 
     }//end processVariable()
@@ -1754,8 +1754,8 @@ class PHPDocTypesSniff implements Sniff
      * If we find a PHPDoc var comment that's not attached to something we're looking for,
      * we'll just check the type is well formed, and assume it's otherwise OK.
      *
-     * @param \stdClass&object{namespace: string, uses: array<string, string>, templates: array<string, string>, className: ?string, parentName: ?string, type: string, closer: ?int} $scope   We don't actually need the scope, because we're not doing a type comparison.
-     * @param ?(\stdClass&object{ptr: int, tags: array<string, object{ptr: int, content: string, cStartPtr: ?int, cEndPtr: ?int}[]>})                                                 $comment PHPDoc block
+     * @param ?(\stdClass&object{namespace: string, uses: array<string, string>, templates: array<string, string>, className: ?string, parentName: ?string, type: string, closer: ?int}) $scope   We don't actually need the scope, because we're not doing a type comparison.
+     * @param ?(\stdClass&object{ptr: int, tags: array<string, object{ptr: int, content: string, cStartPtr: ?int, cEndPtr: ?int}[]>})                                                    $comment PHPDoc block
      *
      * @return         void
      * @phpstan-impure
@@ -1787,7 +1787,7 @@ class PHPDocTypesSniff implements Sniff
 
                     if ($docVarParsed->type === null) {
                         $this->file->addError(
-                            'PHPDoc var type missing or malformed',
+                            'PHPDoc var type error: '.$docVarParsed->err,
                             $docVar->ptr,
                             'PHPDocVarType'
                         );

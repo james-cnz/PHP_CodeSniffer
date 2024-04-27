@@ -1,0 +1,63 @@
+<documentation title="PHPDoc Types">
+    <standard>
+    <![CDATA[
+    PHPDoc types should be correct and conform to PHP-FIG PSR-5.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Valid: Correct PHPDoc types.">
+        <![CDATA[
+/**
+ * A class
+ */
+class C {
+
+    /**
+     * A property
+     *
+     * @var int|null
+     */
+    public ?int $prop = 0;
+
+    /**
+     * A function
+     *
+     * @param int $p
+     * @return string
+     */
+    public function f(int $p): string {
+        return strval($p);
+    }
+
+}
+        ]]>
+        </code>
+        <code title="Invalid: Incorrect PHPDoc types.">
+        <![CDATA[
+/**
+ * A class
+ */
+class C {
+
+    /**
+     * A property not conforming to PHP-FIG PSR-5
+     *
+     * @var ?int
+     */
+    public ?int $prop = 0;
+
+    /**
+     * A function
+     *
+     * @param $p missing parameter type
+     * @return int mismatched return type
+     */
+    public function f(int $p): string {
+        return strval($p);
+    }
+
+}
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
