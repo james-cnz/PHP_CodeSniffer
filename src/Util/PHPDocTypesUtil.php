@@ -759,8 +759,7 @@ class PHPDocTypesUtil
 
             // Store token.
             $next = substr($this->text, $startPos, ($endPos - $startPos));
-            assert($next !== false);
-            if ($next === '' || $stringUnterminated === true) {
+            if ($next === false || $next === '' || $stringUnterminated === true) {
                 // If we have an unterminated string, we've reached the end of usable tokens.
                 $next = null;
             }
