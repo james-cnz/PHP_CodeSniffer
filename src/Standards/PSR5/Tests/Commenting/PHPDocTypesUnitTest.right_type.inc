@@ -216,7 +216,7 @@ class TypesValid extends TypesValidParent implements TypesValidInterface
      * @param int[][]                        $multipleArray
      * @param int|int[]                      $unionArray
      * @param (int)[]                        $bracketArray
-     * @param int|(TypesValid&object)        $dnf
+     * @param int|TypesValid&object          $dnf
      *
      * @return void
      */
